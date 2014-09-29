@@ -5,11 +5,11 @@ var PointCtrl = {
 
     addPoint : function(event) {
         var point;
-        var contains = PaintPanel.containsPoint(event);
+        var contains = app.paintPanel.containsPoint(event);
         if(!contains) {
-            var coordinates = PaintPanel.getUsrCoordinatesOfMouse(event);
-            point = new ModelPoint(coordinates[0], coordinates[1]);
-            Model.points.push(point);
+            var coordinates = app.paintPanel.getUsrCoordinatesOfMouse(event);
+            point = new Point(coordinates[0], coordinates[1]);
+            app.model.points.push(point);
             point.draw();
         }
     },

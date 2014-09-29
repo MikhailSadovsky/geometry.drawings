@@ -10,6 +10,8 @@ var app = {
     changeElement : null,
     history : [],
     index : 0,
+    model : new Model(),
+    paintPanel : new PaintPanel("paintpanel",this.model),
 
     setLineMode : function() {
         this.clearCtrlPoints();

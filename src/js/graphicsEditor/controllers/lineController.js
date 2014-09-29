@@ -8,14 +8,14 @@ var LineCtrl = {
 
     addPoint: function (event) {
         var point;
-        var contains = PaintPanel.containsPoint(event);
+        var contains = app.paintPanel.containsPoint(event);
         if(!contains) {
-            var coordinates = PaintPanel.getUsrCoordinatesOfMouse(event);
-            point = new ModelPoint(coordinates[0], coordinates[1]);
+            var coordinates = app.paintPanel.getUsrCoordinatesOfMouse(event);
+            point = new Point(coordinates[0], coordinates[1]);
             point.draw();
         } else {
-            var pointName = PaintPanel.getExistPointName();
-            point = Model.getPoint(pointName);
+            var pointName = app.paintPanel.getExistPointName();
+            point = app.model.getPoint(pointName);
         }
         this.addLinePoint(point);
         this.setTooltipText();
@@ -27,7 +27,7 @@ var LineCtrl = {
             var linePoints = [this.points[0], this.points[1]];
             var line = new Line(linePoints);
             line.draw();
-            Model.addShape(line)
+            app.model.addShape(line)
             this.points.length = 0;
         }
     },

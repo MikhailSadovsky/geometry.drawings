@@ -6,19 +6,20 @@
     <script src="js\libs\jquery-1.11.1.min.js"  type="text/javascript"></script>
     <script src ="js\libs\jsxgraphcore.js" type ="text/javascript"></script>
     <script src ="js\libs\jsxgraphsrc.js"  type = "text/javascript"></script>
-    <script src ="js\graphicsEditor\controllers\mainController.js" type = "text/javascript"></script>
-    <script src ="js\graphicsEditor\controllers\lineController.js" type= "text/javascript"></script>
-    <script src = "js\graphicsEditor\controllers\pointController.js" type="text/javascript"></script>
-    <script src = "js\graphicsEditor\controllers\segmentController.js" type="text/javascript"></script>
+
     <script src = "js\model\point.js" type = "text/javascript"></script>
     <script src = "js\model\shape.js" type = "text/javascript"></script>
     <script src = "js\model\line.js" type = "text/javascript"></script>
     <script src = "js\model\segment.js" type = "text/javascript"></script>
     <script src = "js\model\model.js" type = "text/javascript"></script>
-
-
-
     <script src ="js\graphicsEditor\paintpanel.js"   type = "text/javascript"></script>
+
+    <script src ="js\graphicsEditor\controllers\mainController.js" type = "text/javascript"></script>
+    <script src ="js\graphicsEditor\controllers\lineController.js" type= "text/javascript"></script>
+    <script src = "js\graphicsEditor\controllers\pointController.js" type="text/javascript"></script>
+    <script src = "js\graphicsEditor\controllers\segmentController.js" type="text/javascript"></script>
+
+
     <link type="text/css" rel="stylesheet" href="style/style.css" />
 </head>
 <body>
@@ -63,10 +64,10 @@
                             <span class="button" id="segment-button" onclick="app.setSegmentMode()">
                                 <img src="style/images/segment.jpg">
                             </span>
-                            <span class="button" id="clear-button" onclick="PaintPanel.clear()">
+                            <span class="button" id="clear-button" onclick="app.paintPanel.clear()">
                                 <img src="style/images/cl.gif">
                             </span>
-                            <span class="button" id="web-button" onclick="PaintPanel.grid()">
+                            <span class="button" id="web-button" onclick="app.paintPanel.grid()">
                                 <img src="style/images/web.gif">
                             </span>
                         </div>
@@ -82,7 +83,7 @@
 
 </body>
 <script type="text/javascript">
-    PaintPanel.createBoard();
+    app.paintPanel.createBoard();
     var field = document.getElementById("parameters");
     field.style.display = 'none';
 </script>

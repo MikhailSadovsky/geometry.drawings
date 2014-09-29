@@ -8,7 +8,7 @@ function Segment(points) {
 Segment.prototype.draw = function() {
     var startPoint = this.points[0];
     var endPoint = this.points[1];
-    var segment = PaintPanel.board.create('line', [[startPoint.x, startPoint.y], [endPoint.x, endPoint.y]],
+    var segment = app.paintPanel.board.create('line', [[startPoint.x, startPoint.y], [endPoint.x, endPoint.y]],
         {straightFirst:false, straightLast:false});
     segment.setAttribute({
         fixed: true

@@ -53,21 +53,21 @@ var app = {
         this.index++;
     },
 
-    undo : function() {
-        if(this.index > -1) {
-            this.history[--this.index].unExecute();
-        } else {
-            this.controller.clearPoints();
-        }
-        this.controller.setTooltipText();
-    },
+    //undo : function() {
+    //    if(this.index > -1) {
+    //        this.history[--this.index].unExecute();
+    //    } else {
+    //        this.controller.clearPoints();
+    //    }
+    //    this.controller.setTooltipText();
+    //},
 
-    redo : function() {
-        if(this.index < this.history.length) {
-            this.history[this.index++].execute();
-        }
-        this.controller.setTooltipText();
-    },
+    //redo : function() {
+    //    if(this.index < this.history.length) {
+    //        this.history[this.index++].execute();
+    //    }
+    //    this.controller.setTooltipText();
+    //},
 
     clearHistory : function() {
         if (this.history.length != 0){

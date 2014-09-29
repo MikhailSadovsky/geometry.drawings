@@ -10,7 +10,14 @@
     <script src ="js\graphicsEditor\controllers\lineController.js" type= "text/javascript"></script>
     <script src = "js\graphicsEditor\controllers\pointController.js" type="text/javascript"></script>
     <script src = "js\graphicsEditor\controllers\segmentController.js" type="text/javascript"></script>
+    <script src = "js\model\point.js" type = "text/javascript"></script>
+    <script src = "js\model\shape.js" type = "text/javascript"></script>
+    <script src = "js\model\line.js" type = "text/javascript"></script>
+    <script src = "js\model\segment.js" type = "text/javascript"></script>
     <script src = "js\model\model.js" type = "text/javascript"></script>
+
+
+
     <script src ="js\graphicsEditor\paintpanel.js"   type = "text/javascript"></script>
     <link type="text/css" rel="stylesheet" href="style/style.css" />
 </head>
@@ -34,13 +41,7 @@
                         <div id="header">
                             <h1>ONLINE GEOMETRY</h1>
                             <hr>
-                            <a href="#" onclick="window.open('help.html','test', 'width=450,height=450,status=no,resizable=no,top=200,left=100'); return false;">Справка</a>
                         </div>
-                        <p style="font-size: 10pt"> Информация о графическом объекте </p>
-                        <p style="font-size: 10pt" id ="polygonInfo"> </p>
-                        <p style="font-size: 10pt" id = "info"> </p>
-                        <p style="font-size: 10pt" id = "containsInfo"> </p>
-                        <p style="font-size: 10pt" id = "containsPointInfo"> </p>
                         <fieldset id = "parameters">
                             <div align = "left">
                                 <p style="font-size: 10pt"> Введите значение </p>
@@ -67,12 +68,6 @@
                             </span>
                             <span class="button" id="web-button" onclick="PaintPanel.grid()">
                                 <img src="style/images/web.gif">
-                            </span>
-                            <span class="button" id="undo-button" onclick="app.undo()">
-                                <img src="style/images/undo.png">
-                            </span>
-                            <span class="button" class="left" id="redo-button" onclick="app.redo()">
-                                <img src="style/images/redo.png">
                             </span>
                         </div>
                         <div id="tooltip"></div>

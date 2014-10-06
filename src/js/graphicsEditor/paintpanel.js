@@ -6,9 +6,13 @@ function PaintPanel (parpaintpanel,parmodel) {
 }
 
 PaintPanel.prototype.createBoard = function() {
+<<<<<<< HEAD
     this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid});
     this.showGrid = true;
     this.model = null;
+=======
+    this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid, axis: []});
+>>>>>>> origin/master
 };
 
 PaintPanel.prototype.getUsrCoordinatesOfMouse = function(event) {

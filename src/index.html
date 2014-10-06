@@ -13,6 +13,7 @@
     <script src = "js\model\segment.js" type = "text/javascript"></script>
     <script src = "js\model\model.js" type = "text/javascript"></script>
     <script src ="js\graphicsEditor\paintpanel.js"   type = "text/javascript"></script>
+    <script src ="js\graphicsEditor\init.js"   type = "text/javascript"></script>
 
     <script src ="js\graphicsEditor\controllers\mainController.js" type = "text/javascript"></script>
     <script src ="js\graphicsEditor\controllers\lineController.js" type= "text/javascript"></script>
@@ -23,69 +24,9 @@
     <link type="text/css" rel="stylesheet" href="style/style.css" />
 </head>
 <body>
-    <div id="container">
-        <div id="body">
-            <table class="features-table" border="1">
-                <tr>
-                    <td rowspan="2">
-                        <div id="board" class="jxgbox" style="width: 600px; height: 600px; -moz-user-select: none; overflow: hidden; position: relative;">
-                            <svg style="overflow: hidden; width: 600px; height: 600px;"><defs><filter filterUnits="userSpaceOnUse" height="300%" width="300%" id="jxgbox2_f1">
-                                <feOffset dy="5" dx="5" in="SourceAlpha" result="offOut"></feOffset>
-                                <feGaussianBlur stdDeviation="3" in="offOut" result="blurOut"></feGaussianBlur>
-                                <feBlend mode="normal" in2="blurOut" in="SourceGraphic"></feBlend></filter></defs>
-                            </svg>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top">
-                        <div id="header">
-                            <h1>ONLINE GEOMETRY</h1>
-                            <hr>
-                        </div>
-                        <fieldset id = "parameters">
-                            <div align = "left">
-                                <p style="font-size: 10pt"> Введите значение </p>
-                                <input id ="p" type = "text" name="param " size="15">
-                                <button onclick="app.saveChanges()">Сохранить</button>
-                            </div>
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div>
-                            <span class="button" id="point-button" onclick="app.setPointMode()">
-                                <img src="style/images/point.gif">
-                            </span>
-                            <span class="button" id="line-button" onclick="app.setLineMode()">
-                                <img src="style/images/line.gif">
-                            </span>
-                            <span class="button" id="segment-button" onclick="app.setSegmentMode()">
-                                <img src="style/images/segment.jpg">
-                            </span>
-                            <span class="button" id="clear-button" onclick="app.paintPanel.clear()">
-                                <img src="style/images/cl.gif">
-                            </span>
-                            <span class="button" id="web-button" onclick="app.paintPanel.grid()">
-                                <img src="style/images/web.gif">
-                            </span>
-                        </div>
-                        <div id="tooltip"></div>
-                    </td>
-                    <td  id="modeInfo" style="font-size: 10pt" >
-                        Выберите режим
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div class="header"></div>
+    <div class="editor">
+        <div class="board"></div>
     </div>
-
 </body>
-<script type="text/javascript">
-    app.paintPanel.createBoard();
-    var field = document.getElementById("parameters");
-    field.style.display = 'none';
-</script>
-
 </html>

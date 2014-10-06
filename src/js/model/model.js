@@ -38,3 +38,24 @@ Model.prototype. addShape = function(shape) {
         this.shapes.push(shape)
 
 };
+
+Shape.prototype.addPoint = function(point) {
+    for(var i = 0; i < this.points.length; i++) {
+        if(this.points[i].name == point.name) {
+            return;
+        }
+    }
+    this.points.push(point);
+}
+Shape.prototype.Initialize = function(parmodel) {
+    this.clear();
+    for(var i = 0; i < parmodel.points.length; i++) {
+        this.points.push(parmodel.points[i])
+        this.points[this.points.length-1].draw();
+    }
+    for(var i = 0; i < parmodel.shapes.length; i++) {
+        this.shapes.push(parmodel.shapes[i])
+        this.shapes[this.shapes.length-1].draw();
+    }
+    //TODO: When insert other types of figure we must add other cycles
+}

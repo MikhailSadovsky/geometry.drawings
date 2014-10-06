@@ -7,6 +7,8 @@ function PaintPanel (parpaintpanel,parmodel) {
 
 PaintPanel.prototype.createBoard = function() {
     this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid});
+    this.showGrid = true;
+    this.model = null;
 };
 
 PaintPanel.prototype.getUsrCoordinatesOfMouse = function(event) {
@@ -42,6 +44,7 @@ PaintPanel.prototype.clear = function() {
         zoomX : zoomX, zoomY : zoomY });
     app.controller.clearPoints();
     app.clearHistory();
+    this.model.clear();
     app.model.clear();
     this.elements.length = 0;
 };
@@ -54,4 +57,8 @@ PaintPanel.prototype.grid = function() {
         this.board.create('grid', []);
         this.showGrid = true;
     }
+}
+PaintPanel.prototype.initialize = function() {
+    this.clear();
+
 }

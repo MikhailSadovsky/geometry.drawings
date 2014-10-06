@@ -27,9 +27,16 @@ Point.prototype.equals = function(point) {
     }
     return result;
 }
-Point.prototype.draw = function() {
+Point.prototype.draw = function(parpoint) {
     var point = app.paintPanel.board.create('point', [this.x, this.y]);
-    this.name = point.getName();
+   // if(parpoint.name) {
+   //     var point = app.paintPanel.board.create('point', [this.x, this.y],{name: parpoint.name});
+   // }
+   // else {
+   //     var point = app.paintPanel.board.create('point', [this.x, this.y]);
+   //     this.name = point.getName();
+   // }
+
     point.setAttribute({
         fixed: true
     });

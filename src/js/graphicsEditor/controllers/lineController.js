@@ -15,7 +15,7 @@ var LineCtrl = {
             point.draw();
         } else {
             var pointName = app.paintPanel.getExistPointName();
-            point = app.model.getPoint(pointName);
+            point = app.paintPanel.model.getPoint(pointName);
         }
         this.addLinePoint(point);
         this.setTooltipText();
@@ -27,7 +27,7 @@ var LineCtrl = {
             var linePoints = [this.points[0], this.points[1]];
             var line = new Line(linePoints);
             line.draw();
-            app.model.addShape(line)
+            app.paintPanel.model.addShape(line)
             this.points.length = 0;
         }
     },

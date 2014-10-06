@@ -11,7 +11,7 @@ var SegmentCtrl = {
             point.draw();
         } else {
             var pointName = app.paintPanel.getExistPointName();
-            point = app.model.getPoint(pointName);
+            point = app.paintPanel.model.getPoint(pointName);
         }
         this.addSegmentPoint(point);
         this.setTooltipText();
@@ -23,7 +23,7 @@ var SegmentCtrl = {
             var segmentPoints = [this.points[0], this.points[1]];
             var segment = new Segment(segmentPoints);
             segment.draw();
-            app.model.addShape(segment)
+            app.paintPanel.model.addShape(segment)
             this.points.length = 0;
         }
     },

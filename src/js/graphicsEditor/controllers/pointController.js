@@ -9,7 +9,7 @@ var PointCtrl = {
         if(!contains) {
             var coordinates = app.paintPanel.getUsrCoordinatesOfMouse(event);
             point = new Point(coordinates[0], coordinates[1]);
-            app.model.points.push(point);
+            app.paintPanel.model.points.push(point);
             point.draw();
         }
     },

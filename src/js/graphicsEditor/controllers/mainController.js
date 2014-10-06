@@ -11,7 +11,7 @@ var app = {
     history : [],
     index : 0,
     model : new Model(),
-    paintPanel : new PaintPanel("paintpanel",this.model),
+    paintPanel : new PaintPanel("paintpanel",new Model()),
 
     setLineMode : function() {
         this.clearCtrlPoints();

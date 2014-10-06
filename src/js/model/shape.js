@@ -23,6 +23,14 @@ Shape.prototype.getPoint = function(pointName) {
     }
     return point;
 }
+Shape.prototype.addPoint = function(point) {
+    for(var i = 0; i < this.points.length; i++) {
+        if(this.points[i].name == point.name) {
+            return;
+        }
+    }
+    this.points.push(point);
+}
 
 
 

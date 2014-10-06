@@ -6,13 +6,7 @@ function PaintPanel (parpaintpanel,parmodel) {
 }
 
 PaintPanel.prototype.createBoard = function() {
-<<<<<<< HEAD
-    this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid});
-    this.showGrid = true;
-    this.model = null;
-=======
     this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid, axis: []});
->>>>>>> origin/master
 };
 
 PaintPanel.prototype.getUsrCoordinatesOfMouse = function(event) {
@@ -45,10 +39,9 @@ PaintPanel.prototype.clear = function() {
     var zoomX = this.board.applyZoom().zoomX;
     var zoomY = this.board.applyZoom().zoomY;
     this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid,
-        zoomX : zoomX, zoomY : zoomY });
+        zoomX : zoomX, zoomY : zoomY, axis: []});
     app.controller.clearPoints();
     app.clearHistory();
-    this.model.clear();
     app.model.clear();
     this.elements.length = 0;
 };
@@ -61,8 +54,4 @@ PaintPanel.prototype.grid = function() {
         this.board.create('grid', []);
         this.showGrid = true;
     }
-}
-PaintPanel.prototype.initialize = function() {
-    this.clear();
-
 }

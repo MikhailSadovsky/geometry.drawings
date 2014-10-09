@@ -22,6 +22,7 @@ var LineCtrl = {
     },
 
     addLinePoint : function(point) {
+        app.paintPanel.model.points.push(point);
         this.points.push(point);
         if(this.points.length == 2) {
             var linePoints = [this.points[0], this.points[1]];

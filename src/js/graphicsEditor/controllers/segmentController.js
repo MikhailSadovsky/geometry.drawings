@@ -19,10 +19,14 @@ var SegmentCtrl = {
 
     addSegmentPoint : function(point) {
         this.points.push(point);
+        app.paintPanel.model.points.push(point);
+
         if(this.points.length == 2) {
             var segmentPoints = [this.points[0], this.points[1]];
+
             var segment = new Segment(segmentPoints);
             segment.draw();
+
             app.paintPanel.model.addShape(segment)
             this.points.length = 0;
         }

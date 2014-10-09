@@ -30,8 +30,8 @@ Model.prototype.getInfo = function() {
     };
 
 Model.prototype.clear = function() {
-        this.shapes.length = 0;
-        this.points.length = 0;
+        this.shapes = [];
+        this.points = [];
     };
 
 Model.prototype. addShape = function(shape) {
@@ -39,7 +39,7 @@ Model.prototype. addShape = function(shape) {
 
 };
 
-Shape.prototype.addPoint = function(point) {
+Model.prototype.addPoint = function(point) {
     for(var i = 0; i < this.points.length; i++) {
         if(this.points[i].name == point.name) {
             return;
@@ -47,7 +47,7 @@ Shape.prototype.addPoint = function(point) {
     }
     this.points.push(point);
 }
-Shape.prototype.Initialize = function(parmodel) {
+Model.prototype.Initialize = function(parmodel) {
     this.clear();
     for(var i = 0; i < parmodel.points.length; i++) {
         this.points.push(parmodel.points[i])

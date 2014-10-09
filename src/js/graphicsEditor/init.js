@@ -5,6 +5,7 @@ $(document).ready(function () {
         ' {"buttonId" :"line-button", "onclick" : "app.setLineMode()", "image" : "style/images/line.gif"},' +
         ' {"buttonId" :"segment-button", "onclick" : "app.setSegmentMode()", "image" : "style/images/segment.jpg"},' +
         ' {"buttonId" :"clear-button", "onclick" : "app.paintPanel.clear()", "image" : "style/images/cl.gif"},' +
+        ' {"buttonId" :"clear-button", "onclick" : "app.paintPanel.Initialize()", "image" : "style/images/cl.gif"},' +
         ' {"buttonId" :"web-button", "onclick" : "app.paintPanel.grid()", "image" : "style/images/web.gif"}]}')
 
     var image, id, onclick;

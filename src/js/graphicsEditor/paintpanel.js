@@ -40,18 +40,23 @@ PaintPanel.prototype.clear = function() {
     var zoomY = this.board.applyZoom().zoomY;
     this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright : false, grid : this.showGrid,
         zoomX : zoomX, zoomY : zoomY, axis: []});
-    app.controller.clearPoints();
+    //app.controller.clearPoints();
+    app.model = cloneModel(app.paintPanel.model);
     app.clearHistory();
-    app.model.clear();
-    this.elements.length = 0;
+    app.paintPanel.model.clear();
+    //app.model.clear();
+    //this.elements.length = 0;
 };
 
-PaintPanel.prototype.grid = function() {
-    if(this.showGrid == true) {
-        this.board.removeGrids();
-        this.showGrid = false;
-    }  else {
-        this.board.create('grid', []);
-        this.showGrid = true;
-    }
+PaintPanel.prototype.Initialize = function() {
+    //this.clear();
+    //app.model;
+    app.paintPanel.model.Initialize(app.model);
+
+}
+
+function cloneModel(model) {
+    var model2 = {};
+    for(var key in model) model2[key] = model[key];
+    return model2;
 }

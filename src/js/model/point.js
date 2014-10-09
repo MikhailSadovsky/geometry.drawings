@@ -27,16 +27,15 @@ Point.prototype.equals = function(point) {
     }
     return result;
 }
-Point.prototype.draw = function(parpoint) {
-    var point = app.paintPanel.board.create('point', [this.x, this.y]);
-   // if(parpoint.name) {
-   //     var point = app.paintPanel.board.create('point', [this.x, this.y],{name: parpoint.name});
-   // }
-   // else {
-   //     var point = app.paintPanel.board.create('point', [this.x, this.y]);
-   //     this.name = point.getName();
-   // }
+Point.prototype.draw = function() {
+    //var point = app.paintPanel.board.create('point', [this.x, this.y]);
+   if(this.name) {
+        var point = app.paintPanel.board.create('point', [this.x, this.y],{name: this.name});
+    } else {
+        var point = app.paintPanel.board.create('point', [this.x, this.y]);
 
+    }
+    this.name = point.getName();
     point.setAttribute({
         fixed: true
     });

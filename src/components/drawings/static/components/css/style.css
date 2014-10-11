@@ -1,267 +1,37 @@
-
-html { font-size: 100%; }
-
-
-/* ---------------------------------------------------------------- **
-** Body
-** ---------------------------------------------------------------- */
-body {
-    background: #333 url("../images/bg.gif");
-    font-family: "Trebuchet MS", Tahoma, Verdana, Arial, Helvetica, sans-serif;
-    font-size: 1.1em;
-    line-height: 1.5em;
-    color: #333;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    height: 600px;
+.toolbar {
+    width: 80px;
+    height: inherit;
+    position: absolute;
 }
 
-
-/* ---------------------------------------------------------------- **
-** Headers
-** ---------------------------------------------------------------- */
-h2, h3, h4, h5, h6 {
-    color: #099;
-    margin: 0;
-    font-weight: normal;
-    font-family: "Trebuchet MS", Tahoma, Verdana, Arial, Helvetica, sans-serif; letter-spacing: -1px;
-}
-
-h2 { font-size: 1.8em; margin: 25px 0 15px; }
-
-h3 { font-size: 1.6em; margin: 25px 0 15px; }
-
-h4 { font-size: 1.4em; margin: 20px 0 10px; }
-
-h5 { font-size: 1.2em; margin: 20px 0 5px; }
-
-h6 { font-size: 1em; margin: 20px 0 0; }
-
-
-/* ---------------------------------------------------------------- **
-** BlockQuote
-** ---------------------------------------------------------------- */
-blockquote {
-    font-family: "Trebuchet MS", Tahoma, Verdana, Arial, Helvetica, sans-serif; border: 1px solid #ddd;
-    padding: 0 15px 0 15px;
-    background-color: #eee;
-    min-height: 60px;
-}
-* html blockquote { height: 60px; }
-
-#tooltip {
-    position:absolute;
-    top:0; left:0;
-    width:50px;
-
-    font-size:10px;
-    opacity:0.6;
-}
-
-/* ---------------------------------------------------------------- **
-** Images
-** ---------------------------------------------------------------- */
-img { border: 1px solid #ddd; padding: 1px; background-color: #fff; }
-a img { }
-a:hover img { border-color: #eee; }
-img.right { margin: 0 0 20px 20px; }
-img.left { margin: 0 20px 20px 0; }
-
-form p select { width: 57.5%; }
-form ul.fieldlist { margin: -30px 0 10px 33%; padding: 0; list-style-type: none; }
-form ul.fieldlist li { color: #333; padding: 0 30px 5px 0; white-space: nowrap; }
-
-
-/* ---------------------------------------------------------------- **
-** Horizontal Rule
-** ---------------------------------------------------------------- */
-hr { border: 0; height: 1px; background-color: #ddd; color: #ddd; margin: 30px 0 0; }
-
-
-/* ---------------------------------------------------------------- **
-** Classes
-** ---------------------------------------------------------------- */
-.left { float: left; }
-.right {float: right; }
-.hide { display: none; }
-
-
-/* ---------------------------------------------------------------- **
-** Buttons
-** ---------------------------------------------------------------- */
-.button{
+.toolbar .button {
     width: 40px;
     height: 40px;
-    margin-bottom: 3px;
-    margin-top: 3px;
-    margin-right: 1px;
+    margin: 0 20px 20px;
 }
 
-
-/* ---------------------------------------------------------------- **
-** Container
-** ---------------------------------------------------------------- */
-#container {
-    margin: 0 auto;
-    width: 950px;
+.toolbar .button.point {
+    background: url("../images/point.gif") no-repeat;
+    background-size: cover;
 }
 
-
-/* ---------------------------------------------------------------- **
-** Header
-** ---------------------------------------------------------------- */
-#header { background: url("../images/header_.gif") no-repeat; }
-
-/* ---------------------------------------------------------------- **
-** Logo
-** ---------------------------------------------------------------- */
-#header h1 {
-    font-family: "Trebuchet MS", Tahoma, Verdana, Arial, Helvetica, sans-serif;
-    font-size: 1.5em;
-    font-weight: normal;
-    color: #099;
-    margin: 0;
-    padding: 20px 0;
-    letter-spacing: -1px;
-}
-#header h1 a { text-decoration: none; color: #099; }
-#header h1 a:hover { text-decoration: none; }
-#header h1 span { color: #fff; }
-
-
-/* ---------------------------------------------------------------- **
-** Body
-** ---------------------------------------------------------------- */
-/*#body { padding: 20px; background: #222 url("../images/body_.png") repeat-x; }*/
-
-
-/* ---------------------------------------------------------------- **
-** Footer
-** ---------------------------------------------------------------- */
-#footer {
-    padding: 0 20px;
-    background-color: #222;
-    height: 1%;
-    font-size: 0.9em;
-    color: #ccc;
-    margin-top: -20px;
-}
-#footer:after {
-    content: ".";
-    clear: both;
-    visibility: hidden;
-    display: block;
-    height: 0;
+.toolbar .button.line {
+    background: url("../images/line.gif") no-repeat;
+    background-size: cover;
 }
 
-
-/* ---------------------------------------------------------------- **
-** Do not forget to describe the styles for:focus!
-** ---------------------------------------------------------------- */
-:focus {
-    outline:0;
-}
-body {
-    line-height:1;
-}
-ol, ul {
-    list-style:none;
+.toolbar .button.segment {
+    background: url("../images/segment.jpg") no-repeat;
+    background-size: cover;
 }
 
-
-/* ---------------------------------------------------------------- **
-** Do not forget to describe the styles for:focus!
-** ---------------------------------------------------------------- */
-table {
-    border-collapse:collapse;
-    border-spacing:0;
-}
-caption, th, td {
-    text-align:left;
-    font-weight:normal;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content:"";
-}
-blockquote, q {
-    quotes:"" "";
+.toolbar .button.clear {
+    background: url("../images/clear.gif") no-repeat;
+    background-size: cover;
 }
 
-
-/* ---------------------------------------------------------------- **
-** Table
-** ---------------------------------------------------------------- */
-body {
-    font-family:Tahoma, Verdana, Arial, 'Sans Serif';
-    margin:20px;
-}
-
-.features-table
-{
+.jxgbox {
     width: 100%;
-    margin: 0 auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    text-shadow: 0 1px 0 #fff;
-    color: #2a2a2a;
-    background: #fafafa;
-    background-image: -moz-linear-gradient(top, #fff, #eaeaea, #fff); /* Firefox 3.6 */
-    background-image: -webkit-gradient(linear,center bottom,center top,from(#fff),color-stop(0.5, #eaeaea),to(#fff));
-    margin-top:20px;
-    margin-bottom:20px;
-}
-
-.features-table td
-{
-    height: 50px;
-    padding: 0 20px;
-    border-bottom: 1px solid #cdcdcd;
-    box-shadow: 0 1px 0 white;
-    -moz-box-shadow: 0 1px 0 white;
-    -webkit-box-shadow: 0 1px 0 white;
-    text-align: center;
-    vertical-align: middle;
-
-    display: table-cell;
-}
-
-.features-table tbody td
-{
-    text-align: center;
-    width: 150px;
-}
-
-
-.features-table td.grey
-{
-    background: #efefef;
-    background: rgba(144,144,144,0.15);
-    border-right: 1px solid white;
-}
-
-.features-table td.green
-{
-    background: #e7f3d4;
-    background: rgba(184,243,85,0.3);
-}
-
-/*link*/
-
-a {
-    color:#099;
-    text-decoration:none
-}
-a:active {
-    color:#099;
-    text-decoration:none
-}
-a:visited {
-    color:#666666;
-    text-decoration:none
-}
-a:hover {
-    color:#111;
-    text-decoration: underline
+    height: 100%;
+    margin-left: 80px;
 }

@@ -3,6 +3,7 @@
  */
 
 Drawings.app = {
+
     controller: null,
     drawer: null,
     parametersDoc: null,

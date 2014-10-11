@@ -23,5 +23,4 @@ Drawings.Shape.prototype.addPoint = function (point) {
             return;
         }
     }
-    this.points.push(point);
 };

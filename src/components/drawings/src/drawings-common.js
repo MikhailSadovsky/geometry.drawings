@@ -1,4 +1,4 @@
-var Drawings = Drawings || {};
+var Drawings = {};
 
 function extend(child, parent) {
     var F = function () {

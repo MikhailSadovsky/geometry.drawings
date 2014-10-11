@@ -1,5 +1,7 @@
 {
     "sources": [
+        "src/drawings-common.js",
+
         "src/model/drawings-shape.js",
         "src/model/drawings-point.js",
         "src/model/drawings-line.js",

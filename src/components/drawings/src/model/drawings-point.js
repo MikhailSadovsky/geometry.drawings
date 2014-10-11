@@ -1,42 +1,47 @@
 /**
- * Created by Ruslan on 27.09.14.
+ * Point model.
  */
-function Point(x, y){
 
+Drawings.Point = function (x, y) {
     this.x = x;
     this.y = y;
     this.name = "";
-}
-Point.prototype.getX = function() {
+};
+
+Drawings.Point.prototype.getX = function () {
     return this.x;
 };
-Point.prototype.getY = function() {
 
+Drawings.Point.prototype.getY = function () {
     return this.y;
 };
-Point.prototype.setName = function(name) {
+
+Drawings.Point.prototype.setName = function (name) {
     this.name = name;
-}
-Point.prototype.getName = function() {
+};
+
+Drawings.Point.prototype.getName = function () {
     return this.name;
-}
-Point.prototype.equals = function(point) {
+};
+
+Drawings.Point.prototype.equals = function (point) {
     var result = false;
-    if(this.x == point.x && this.y == point.y) {
+    if (this.x == point.x && this.y == point.y) {
         result = true;
     }
     return result;
-}
-Point.prototype.draw = function() {
+};
+
+Drawings.Point.prototype.draw = function () {
     //var point = app.paintPanel.board.create('point', [this.x, this.y]);
-   if(this.name) {
-        var point = app.paintPanel.board.create('point', [this.x, this.y],{name: this.name});
+    if (this.name) {
+        var point = Drawings.app.paintPanel.board.create('point', [this.x, this.y], {name: this.name});
     } else {
-        var point = app.paintPanel.board.create('point', [this.x, this.y]);
+        var point = Drawings.app.paintPanel.board.create('point', [this.x, this.y]);
 
     }
     this.name = point.getName();
     point.setAttribute({
         fixed: true
     });
-}
+};

@@ -12,24 +12,24 @@ $(document).ready(function () {
     toolbar.append('<div id="clearButton" class="button clear"></div>');
 
     $('#pointButton').click(function () {
-        app.setPointMode();
+        Drawings.app.setPointMode();
     });
 
     $('#lineButton').click(function () {
-        app.setLineMode();
+        Drawings.app.setLineMode();
     });
 
     $('#segmentButton').click(function () {
-        app.setSegmentMode();
+        Drawings.app.setSegmentMode();
     });
 
     $('#clearButton').click(function () {
-        app.paintPanel.clear();
+        Drawings.app.paintPanel.clear();
     });
 
     // initialize board
     container.append('<div id="board" class="jxgbox"></div>');
 
     // initialize paint panel
-    app.paintPanel.createBoard();
+    Drawings.app.paintPanel.createBoard();
 });

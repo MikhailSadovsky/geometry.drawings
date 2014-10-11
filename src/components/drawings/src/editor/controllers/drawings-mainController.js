@@ -1,35 +1,34 @@
 /**
- * Created by Администратор on 07.12.13.
+ * Main controller.
  */
 
-var app = {
-
+Drawings.app = {
     controller: null,
     drawer: null,
     parametersDoc: null,
     changeElement: null,
     history: [],
     index: 0,
-    model: new Model(),
-    paintPanel: new PaintPanel("paintpanel", new Model()),
+    model: new Drawings.Model(),
+    paintPanel: new Drawings.PaintPanel("paintpanel", new Drawings.Model()),
 
     setLineMode: function () {
         this.clearCtrlPoints();
-        this.controller = LineCtrl;
+        this.controller = Drawings.LineCtrl;
         this.controller.setTooltipText();
         $("#modeInfo").text("Рисование линий");
     },
 
     setSegmentMode: function () {
         this.clearCtrlPoints();
-        this.controller = SegmentCtrl;
+        this.controller = Drawings.SegmentCtrl;
         this.controller.setTooltipText();
         $("#modeInfo").text("Рисование отрезков");
     },
 
     setPointMode: function () {
         this.clearCtrlPoints();
-        this.controller = PointCtrl;
+        this.controller = Drawings.PointCtrl;
         this.controller.setTooltipText();
         $("#modeInfo").text("Рисование точек");
     },
@@ -55,19 +54,19 @@ var app = {
             this.index = 0;
         }
     }
-}
+};
 
 document.addEventListener("DOMContentLoaded", function () {
     $("#tooltip").text("Нажмите для нарисования точки");
     $("#tooltip").hide();
     var board = document.getElementById("board");
-    app.setPointMode();
+    Drawings.app.setPointMode();
 
     board.addEventListener("mousedown", function (event) {
         var LEFT_MOUSE_BUTTON = 1;
         switch (event.which) {
             case LEFT_MOUSE_BUTTON:
-                app.controller.addPoint(event);
+                Drawings.app.controller.addPoint(event);
         }
     });
     board.addEventListener("mouseleave", function (event) {

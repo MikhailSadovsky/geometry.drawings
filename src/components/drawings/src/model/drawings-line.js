@@ -1,16 +1,21 @@
 /**
- * Created by Ruslan on 27.09.14.
+ * Line model.
  */
-extend(Line, Shape);
-function Line(points) {
-    Line.superclass.constructor.apply(this, arguments);
-}
-Line.prototype.draw = function() {
+
+Drawings.Line = function (points) {
+    Drawings.Line.superclass.constructor.apply(this, arguments);
+};
+
+extend(Drawings.Line, Drawings.Shape);
+
+Drawings.Line.prototype.draw = function () {
     var startPoint = this.points[0];
     var endPoint = this.points[1];
-    var line = app.paintPanel.board.create('line', [[startPoint.x, startPoint.y], [endPoint.x, endPoint.y]]);
+    var line = Drawings.app.paintPanel.board.create('line', [
+        [startPoint.x, startPoint.y],
+        [endPoint.x, endPoint.y]
+    ]);
     line.setAttribute({
         fixed: true
     });
-}
-
+};

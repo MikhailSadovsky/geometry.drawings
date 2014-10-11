@@ -1,33 +1,37 @@
-var SegmentCtrl = {
+/**
+ * Segment controller.
+ */
+
+Drawings.SegmentCtrl = {
 
     points: [],
 
     addPoint: function (event) {
         var point;
-        var contains = app.paintPanel.containsPoint(event);
-        if(!contains) {
-            var coordinates = app.paintPanel.getUsrCoordinatesOfMouse(event);
-            point = new Point(coordinates[0], coordinates[1]);
+        var contains = Drawings.app.paintPanel.containsPoint(event);
+        if (!contains) {
+            var coordinates = Drawings.app.paintPanel.getUsrCoordinatesOfMouse(event);
+            point = new Drawings.Point(coordinates[0], coordinates[1]);
             point.draw();
         } else {
-            var pointName = app.paintPanel.getExistPointName();
-            point = app.paintPanel.model.getPoint(pointName);
+            var pointName = Drawings.app.paintPanel.getExistPointName();
+            point = Drawings.app.paintPanel.model.getPoint(pointName);
         }
         this.addSegmentPoint(point);
         this.setTooltipText();
     },
 
-    addSegmentPoint : function(point) {
+    addSegmentPoint: function (point) {
         this.points.push(point);
-        app.paintPanel.model.points.push(point);
+        Drawings.app.paintPanel.model.points.push(point);
 
-        if(this.points.length == 2) {
+        if (this.points.length == 2) {
             var segmentPoints = [this.points[0], this.points[1]];
 
-            var segment = new Segment(segmentPoints);
+            var segment = new Drawings.Segment(segmentPoints);
             segment.draw();
 
-            app.paintPanel.model.addShape(segment)
+            Drawings.app.paintPanel.model.addShape(segment);
             this.points.length = 0;
         }
     },
@@ -36,7 +40,7 @@ var SegmentCtrl = {
         this.points.length = 0;
     },
 
-    setTooltipText : function() {
+    setTooltipText: function () {
         var info = "";
         switch (this.points.length) {
             case 0 :

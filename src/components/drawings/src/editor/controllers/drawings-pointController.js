@@ -1,23 +1,24 @@
 /**
- * Created by Администратор on 30.03.14.
+ * Point controller.
  */
-var PointCtrl = {
 
-    addPoint : function(event) {
+Drawings.PointCtrl = {
+
+    addPoint: function (event) {
         var point;
-        var contains = app.paintPanel.containsPoint(event);
-        if(!contains) {
-            var coordinates = app.paintPanel.getUsrCoordinatesOfMouse(event);
-            point = new Point(coordinates[0], coordinates[1]);
-            app.paintPanel.model.points.push(point);
+        var contains = Drawings.app.paintPanel.containsPoint(event);
+        if (!contains) {
+            var coordinates = Drawings.app.paintPanel.getUsrCoordinatesOfMouse(event);
+            point = new Drawings.Point(coordinates[0], coordinates[1]);
+            Drawings.app.paintPanel.model.points.push(point);
             point.draw();
         }
     },
 
-    clearPoints : function() {
+    clearPoints: function () {
     },
 
-    setTooltipText : function() {
+    setTooltipText: function () {
         $("#tooltip").text("Нажмите для нарисования точки");
     }
-}
+};

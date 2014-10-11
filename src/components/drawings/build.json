@@ -1,0 +1,20 @@
+{
+    "sources": [
+        "src/model/drawings-model.js",
+        "src/model/drawings-shape.js",
+        "src/model/drawings-point.js",
+        "src/model/drawings-line.js",
+        "src/model/drawings-segment.js",
+
+        "src/editor/drawings-init.js",
+        "src/editor/drawings-paintPanel.js",
+        "src/editor/controllers/drawings-mainController.js",
+        "src/editor/controllers/drawings-pointController.js",
+        "src/editor/controllers/drawings-lineController.js",
+        "src/editor/controllers/drawings-segmentController.js"
+    ],
+
+    "component": "src/drawings-component.js",
+
+    "target": "static/components/js/drawings/drawings.js"
+}

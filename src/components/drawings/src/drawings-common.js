@@ -8,3 +8,9 @@ function extend(child, parent) {
     child.prototype.constructor = child;
     child.superclass = parent.prototype;
 }
+
+Drawings.DrawingMode = {
+    POINT: 1,
+    LINE: 2,
+    SEGMENT: 3
+};

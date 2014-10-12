@@ -1,57 +1,183 @@
-Drawings.PaintPanel = function (parpaintpanel, parmodel) {
+Drawings.PaintPanel = function (containerId, model) {
+    this.containerId = containerId;
+    this.model = model;
+
+    this.controller = null;
+
     this.board = null;
-    this.showGrid = true;
-    this.model = parmodel;
 };
 
 Drawings.PaintPanel.prototype = {
 
-    createBoard: function () {
-        this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: this.showGrid, axis: []});
+    init: function () {
+        this._initMarkup(this.containerId);
+
+        this.board = this._createBoard();
+
+        this._configureModel();
+
+        this.controller = new Drawings.Controller(this, this.model);
     },
 
-    getUsrCoordinatesOfMouse: function (event) {
-        var pointInBoard = this.board.getUsrCoordsOfMouse(event);
-        return [pointInBoard[0], pointInBoard[1]];
+    getMouseCoordinates: function (event) {
+        var coordinates = this.board.getUsrCoordsOfMouse(event);
+        return [coordinates[0], coordinates[1]];
     },
 
-    containsPoint: function (event) {
-        var contains = false;
-        var elements = this.board.getAllUnderMouse(event);
-        if (elements.length > 1) {
-            contains = true;
-        }
-        return contains;
+    isPointExists: function (event) {
+        return this._getJxgPoints(event).length > 1;
     },
 
-    getExistPointName: function (event) {
-        var pointName = null;
-        var elements = this.board.getAllUnderMouse(event);
-        var element = elements[0];
-        if (element instanceof JXG.Point) {
-            pointName = element.getName();
-        }
-        if (pointName == null) throw TypeError();
-        return pointName;
+    getFirstPointName: function (event) {
+        var jxgPoints = this._getJxgPoints(event);
+        return jxgPoints.length > 0 ? jxgPoints[0] : null;
     },
 
-    clear: function () {
+    _initMarkup: function (containerId) {
+        var container = $('#' + containerId);
+        var paintPanel = this;
+
+        // initialize toolbar markup
+        container.append('<div id="toolbar" class="toolbar"></div>');
+
+        var toolbar = $('#toolbar');
+        toolbar.append('<div id="pointButton" class="button point"></div>');
+        toolbar.append('<div id="lineButton" class="button line"></div>');
+        toolbar.append('<div id="segmentButton" class="button segment"></div>');
+        toolbar.append('<div id="clearButton" class="button clear"></div>');
+
+        $('#pointButton').click(function () {
+            paintPanel._setPointMode();
+        });
+
+        $('#lineButton').click(function () {
+            paintPanel._setLineMode();
+        });
+
+        $('#segmentButton').click(function () {
+            paintPanel._setSegmentMode();
+        });
+
+        $('#clearButton').click(function () {
+            paintPanel._clear();
+        });
+
+        // initialize board
+        container.append('<div id="board" class="jxgbox"></div>');
+
+        $('#board').mousedown(function (event) {
+            paintPanel._handleMouseEvent(event);
+        });
+    },
+
+    _setPointMode: function () {
+        this.controller.setDrawingMode(Drawings.DrawingMode.POINT);
+    },
+
+    _setLineMode: function () {
+        this.controller.setDrawingMode(Drawings.DrawingMode.LINE);
+    },
+
+    _setSegmentMode: function () {
+        this.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
+    },
+
+    _clear: function () {
+        this._clearBoard();
+        this.controller.clearModel();
+    },
+
+    _clearBoard: function() {
         var zoomX = this.board.applyZoom().zoomX;
         var zoomY = this.board.applyZoom().zoomY;
-        this.board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: this.showGrid,
-            zoomX: zoomX, zoomY: zoomY, axis: []});
-        Drawings.app.model = this._cloneModel(Drawings.app.paintPanel.model);
-        Drawings.app.clearHistory();
-        Drawings.app.paintPanel.model.clear();
+
+        JXG.JSXGraph.freeBoard(this.board);
+
+        this.board = this._createBoard();
+        this.board.setZoom(zoomX, zoomY);
     },
 
-    Initialize: function () {
-        Drawings.app.paintPanel.model.Initialize(Drawings.app.model);
+    _handleMouseEvent: function (event) {
+        this.controller.handleMouseEvent(event);
     },
 
-    _cloneModel: function (model) {
-        var model2 = {};
-        for (var key in model) model2[key] = model[key];
-        return model2;
+    _createBoard: function () {
+        return JXG.JSXGraph.initBoard(
+            'board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: this.showGrid, axis: []});
+    },
+
+    _configureModel: function () {
+        var paintPanel = this;
+
+        paintPanel._drawModel(paintPanel.model);
+
+        paintPanel.model.onUpdate(function () {
+            paintPanel._clearBoard();
+            paintPanel._drawModel(paintPanel.model);
+        });
+    },
+
+    _drawModel: function (model) {
+        var points = model.getPoints();
+        for (var i = 0; i < points.length; i++) {
+            this._drawPoint(points[i]);
+        }
+
+        var shapes = model.getShapes();
+        for (i = 0; i < shapes.length; i++) {
+            var shape = shapes[i];
+
+            if (shape instanceof Drawings.Line) {
+                this._drawLine(shape);
+            }
+            else if (shape instanceof Drawings.Segment) {
+                this._drawSegment(shape);
+            }
+        }
+    },
+
+    _drawPoint: function(point) {
+        var jxgPoint;
+
+        if (point.getName()) {
+            jxgPoint = this.board.create('point', [point.getX(), point.getY()], {name: point.getName()});
+        }
+        else {
+            jxgPoint = this.board.create('point', [point.getX(), point.getY()]);
+            point.name = jxgPoint.getName();
+        }
+
+        jxgPoint.setAttribute({
+            fixed: true
+        });
+    },
+
+    _drawLine: function(line) {
+        var point1 = line.point1();
+        var point2 = line.point2();
+
+        var jxgLine = this.board.create('line', [[point1.getX(), point1.getY()], [point2.getX(), point2.getY()]]);
+
+        jxgLine.setAttribute({
+            fixed: true
+        });
+    },
+
+    _drawSegment: function(segment) {
+        var point1 = segment.point1();
+        var point2 = segment.point2();
+
+        var jxgSegment = this.board.create('line', [[point1.getX(), point1.getY()], [point2.getX(), point2.getY()]],
+            {straightFirst: false, straightLast: false});
+
+        jxgSegment.setAttribute({
+            fixed: true
+        });
+    },
+
+    _getJxgPoints: function (event) {
+        return this.board.getAllObjectsUnderMouse(event).filter(function (element) {
+            return element instanceof JXG.Point;
+        });
     }
 };

@@ -32,22 +32,5 @@ Drawings.Point.prototype = {
             result = true;
         }
         return result;
-    },
-
-    draw: function () {
-        var jsxPoint;
-
-        if (this.name) {
-            jsxPoint = Drawings.app.paintPanel.board.create('point', [this.x, this.y], {name: this.name});
-        }
-        else {
-            jsxPoint = Drawings.app.paintPanel.board.create('point', [this.x, this.y]);
-        }
-
-        this.name = jsxPoint.getName();
-
-        jsxPoint.setAttribute({
-            fixed: true
-        });
     }
 };

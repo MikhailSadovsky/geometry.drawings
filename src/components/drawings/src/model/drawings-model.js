@@ -9,29 +9,20 @@ Drawings.Model = function Model() {
 
 Drawings.Model.prototype = {
 
-    getPoint: function (pointName) {
-        var point = null;
-        for (var i = 0; i < this.points.length; i++) {
-            if (pointName == this.points[i].getName()) {
-                point = this.points[i];
-            }
-        }
-        for (i = 0; i < this.shapes.length; i++) {
-            point = this.shapes[i].getPoint(pointName);
-            if (point != null) {
-                break;
-            }
-        }
-        if (point == null) {
-            throw TypeError();
-        }
-        return point;
+    onUpdateCallback: null,
+
+    getPoints: function() {
+        return this.points;
     },
 
-    getInfo: function () {
-        for (var i = 0; i < this.shapes.length; i++) {
-            alert("line - " + i + " " + this.shapes[i].points[0].getName() + "-" + this.shapes[i].points[1].getName())
-        }
+    getShapes: function() {
+        return this.shapes;
+    },
+
+    getPoint: function (pointName) {
+        return this.points.filter(function (point) {
+            return point.getName() == pointName;
+        });
     },
 
     clear: function () {
@@ -40,29 +31,20 @@ Drawings.Model.prototype = {
     },
 
     addShape: function (shape) {
-        this.shapes.push(shape)
-
+        this.shapes.push(shape);
+        this._updated();
     },
 
     addPoint: function (point) {
-        for (var i = 0; i < this.points.length; i++) {
-            if (this.points[i].name == point.name) {
-                return;
-            }
-        }
         this.points.push(point);
+        this._updated();
     },
 
-    Initialize: function (parmodel) {
-        this.clear();
-        for (var i = 0; i < parmodel.points.length; i++) {
-            this.points.push(parmodel.points[i]);
-            this.points[this.points.length - 1].draw();
-        }
-        for (var i = 0; i < parmodel.shapes.length; i++) {
-            this.shapes.push(parmodel.shapes[i]);
-            this.shapes[this.shapes.length - 1].draw();
-        }
-        //TODO: When insert other types of figure we must add other cycles
+    onUpdate: function(callback) {
+        this.onUpdateCallback = callback;
+    },
+
+    _updated: function() {
+        this.onUpdateCallback.call();
     }
 };

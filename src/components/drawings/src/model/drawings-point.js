@@ -24,13 +24,5 @@ Drawings.Point.prototype = {
 
     getName: function () {
         return this.name;
-    },
-
-    equals: function (point) {
-        var result = false;
-        if (this.x == point.x && this.y == point.y) {
-            result = true;
-        }
-        return result;
     }
 };

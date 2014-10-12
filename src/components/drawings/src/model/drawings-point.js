@@ -5,7 +5,7 @@
 Drawings.Point = function (x, y) {
     this.x = x;
     this.y = y;
-    this.name = "";
+    this.name = '';
 };
 
 Drawings.Point.prototype = {
@@ -35,14 +35,18 @@ Drawings.Point.prototype = {
     },
 
     draw: function () {
-        if (this.name) {
-            var point = Drawings.app.paintPanel.board.create('point', [this.x, this.y], {name: this.name});
-        } else {
-            var point = Drawings.app.paintPanel.board.create('point', [this.x, this.y]);
+        var jsxPoint;
 
+        if (this.name) {
+            jsxPoint = Drawings.app.paintPanel.board.create('point', [this.x, this.y], {name: this.name});
         }
-        this.name = point.getName();
-        point.setAttribute({
+        else {
+            jsxPoint = Drawings.app.paintPanel.board.create('point', [this.x, this.y]);
+        }
+
+        this.name = jsxPoint.getName();
+
+        jsxPoint.setAttribute({
             fixed: true
         });
     }

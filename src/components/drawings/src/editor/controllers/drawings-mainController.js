@@ -40,15 +40,6 @@ Drawings.app = {
         }
     },
 
-    executeCommand: function (command) {
-        command.execute();
-        if (this.index < this.history.length) {
-            this.history.length = this.index;
-        }
-        this.history.push(command);
-        this.index++;
-    },
-
     clearHistory: function () {
         if (this.history.length != 0) {
             this.history.length = 0;

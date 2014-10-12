@@ -7,20 +7,7 @@ Drawings.Shape = function (points) {
 };
 
 Drawings.Shape.prototype.getPoint = function (pointName) {
-    var point = null;
-    for (var i = 0; i < this.points.length; i++) {
-        if (this.points[i].name == pointName) {
-            point = this.points[i];
-            break;
-        }
-    }
-    return point;
-};
-
-Drawings.Shape.prototype.addPoint = function (point) {
-    for (var i = 0; i < this.points.length; i++) {
-        if (this.points[i].name == point.name) {
-            return;
-        }
-    }
+    return this.points.filter(function (point) {
+        return point.getName() == pointName
+    })[0];
 };

@@ -25,8 +25,7 @@ Drawings.LineCtrl = {
         Drawings.app.paintPanel.model.points.push(point);
         this.points.push(point);
         if (this.points.length == 2) {
-            var linePoints = [this.points[0], this.points[1]];
-            var line = new Drawings.Line(linePoints);
+            var line = new Drawings.Line(this.points[0], this.points[1]);
             line.draw();
             Drawings.app.paintPanel.model.addShape(line);
             this.points.length = 0;

@@ -26,9 +26,7 @@ Drawings.SegmentCtrl = {
         Drawings.app.paintPanel.model.points.push(point);
 
         if (this.points.length == 2) {
-            var segmentPoints = [this.points[0], this.points[1]];
-
-            var segment = new Drawings.Segment(segmentPoints);
+            var segment = new Drawings.Segment(this.points[0], this.points[1]);
             segment.draw();
 
             Drawings.app.paintPanel.model.addShape(segment);

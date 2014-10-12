@@ -11,40 +11,18 @@ Drawings.app = {
     history: [],
     index: 0,
     model: new Drawings.Model(),
-    paintPanel: new Drawings.PaintPanel("paintpanel", new Drawings.Model()),
+    paintPanel: new Drawings.PaintPanel("paintPanel", new Drawings.Model()),
 
     setLineMode: function () {
-        this.clearCtrlPoints();
-        this.controller = Drawings.LineCtrl;
-        this.controller.setTooltipText();
-        $("#modeInfo").text("Рисование линий");
+        this.controller = new Drawings.LineController(this.paintPanel, this.model);
     },
 
     setSegmentMode: function () {
-        this.clearCtrlPoints();
-        this.controller = Drawings.SegmentCtrl;
-        this.controller.setTooltipText();
-        $("#modeInfo").text("Рисование отрезков");
+        this.controller = new Drawings.SegmentController(this.paintPanel, this.model);
     },
 
     setPointMode: function () {
-        this.clearCtrlPoints();
-        this.controller = Drawings.PointCtrl;
-        this.controller.setTooltipText();
-        $("#modeInfo").text("Рисование точек");
-    },
-
-    clearCtrlPoints: function () {
-        if (this.controller != null) {
-            this.controller.clearPoints();
-        }
-    },
-
-    clearHistory: function () {
-        if (this.history.length != 0) {
-            this.history.length = 0;
-            this.index = 0;
-        }
+        this.controller = new Drawings.PointController(this.paintPanel, this.model);
     }
 };
 

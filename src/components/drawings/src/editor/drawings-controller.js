@@ -21,28 +21,29 @@ Drawings.Controller.prototype = {
         this.model.clear();
     },
 
-    handleMouseEvent: function(event) {
+    handleMouseDownEvent: function(event) {
         var LEFT_MOUSE_BUTTON = 1;
         if (event.which == LEFT_MOUSE_BUTTON) {
-            this._handleLeftMouseEvent(event);
+            this._handleLeftMouseDownEvent(event);
         }
     },
 
-    _handleLeftMouseEvent: function(event) {
-        var point = this._createOrFindPoint(event);
+    _handleLeftMouseDownEvent: function(event) {
+        var point = this._getPoint(event);
         this._addPoint(point);
     },
 
-    _createOrFindPoint: function(event) {
+    _getPoint: function(event) {
         var point;
 
-        if (!this.paintPanel.isPointExists(event)) {
-            var coordinates = this.paintPanel.getMouseCoordinates(event);
-            point = this._createPoint(coordinates);
+        var jxgPoint = this.paintPanel.getJxgPoint(event);
+
+        if (jxgPoint) {
+            point = this.model.getPoint(jxgPoint.getName());
         }
         else {
-            var pointName = this.paintPanel.getFirstPointName(event);
-            point = this.model.getPoint(pointName);
+            var coordinates = this.paintPanel.getMouseCoordinates(event);
+            point = this._createPoint(coordinates);
         }
 
         return point;

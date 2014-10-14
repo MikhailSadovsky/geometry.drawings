@@ -22,7 +22,7 @@ Drawings.Model.prototype = {
     getPoint: function (pointName) {
         return this.points.filter(function (point) {
             return point.getName() == pointName;
-        });
+        })[0];
     },
 
     clear: function () {

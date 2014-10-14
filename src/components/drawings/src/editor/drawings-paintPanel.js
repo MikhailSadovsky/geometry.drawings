@@ -19,18 +19,14 @@ Drawings.PaintPanel.prototype = {
         this.controller = new Drawings.Controller(this, this.model);
     },
 
+    getJxgPoint: function (event) {
+        var jxgPoints = this._getJxgPoints(event);
+        return jxgPoints.length > 0 ? jxgPoints[0] : null;
+    },
+
     getMouseCoordinates: function (event) {
         var coordinates = this.board.getUsrCoordsOfMouse(event);
         return [coordinates[0], coordinates[1]];
-    },
-
-    isPointExists: function (event) {
-        return this._getJxgPoints(event).length > 1;
-    },
-
-    getFirstPointName: function (event) {
-        var jxgPoints = this._getJxgPoints(event);
-        return jxgPoints.length > 0 ? jxgPoints[0] : null;
     },
 
     _initMarkup: function (containerId) {
@@ -66,7 +62,7 @@ Drawings.PaintPanel.prototype = {
         container.append('<div id="board" class="jxgbox"></div>');
 
         $('#board').mousedown(function (event) {
-            paintPanel._handleMouseEvent(event);
+            paintPanel._handleMouseDownEvent(event);
         });
     },
 
@@ -87,7 +83,7 @@ Drawings.PaintPanel.prototype = {
         this.controller.clearModel();
     },
 
-    _clearBoard: function() {
+    _clearBoard: function () {
         var zoomX = this.board.applyZoom().zoomX;
         var zoomY = this.board.applyZoom().zoomY;
 
@@ -97,13 +93,13 @@ Drawings.PaintPanel.prototype = {
         this.board.setZoom(zoomX, zoomY);
     },
 
-    _handleMouseEvent: function (event) {
-        this.controller.handleMouseEvent(event);
+    _handleMouseDownEvent: function (event) {
+        this.controller.handleMouseDownEvent(event);
     },
 
     _createBoard: function () {
         return JXG.JSXGraph.initBoard(
-            'board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: this.showGrid, axis: []});
+            'board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true, axis: []});
     },
 
     _configureModel: function () {
@@ -136,7 +132,7 @@ Drawings.PaintPanel.prototype = {
         }
     },
 
-    _drawPoint: function(point) {
+    _drawPoint: function (point) {
         var jxgPoint;
 
         if (point.getName()) {
@@ -152,7 +148,7 @@ Drawings.PaintPanel.prototype = {
         });
     },
 
-    _drawLine: function(line) {
+    _drawLine: function (line) {
         var point1 = line.point1();
         var point2 = line.point2();
 
@@ -163,7 +159,7 @@ Drawings.PaintPanel.prototype = {
         });
     },
 
-    _drawSegment: function(segment) {
+    _drawSegment: function (segment) {
         var point1 = segment.point1();
         var point2 = segment.point2();
 

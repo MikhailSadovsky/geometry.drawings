@@ -4,3 +4,8 @@
 *.iml
 *.iws
 *.ids
+
+src/components/drawings/static/*/js/*
+src/client/static/components/css/drawings.css
+src/client/static/*/images/*
+src/client/static/components/js/drawings/drawings.js

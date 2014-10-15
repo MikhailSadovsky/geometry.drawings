@@ -5,6 +5,8 @@
 *.iws
 *.ids
 
+*.swp
+
 src/components/drawings/static/*/js/*
 src/client/static/components/css/drawings.css
 src/client/static/*/images/*

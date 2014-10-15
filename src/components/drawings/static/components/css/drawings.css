@@ -11,22 +11,22 @@
 }
 
 .toolbar .button.point {
-    background: url("../images/point.gif") no-repeat;
+    background: url("../images/drawings/point.gif") no-repeat;
     background-size: cover;
 }
 
 .toolbar .button.line {
-    background: url("../images/line.gif") no-repeat;
+    background: url("../images/drawings/line.gif") no-repeat;
     background-size: cover;
 }
 
 .toolbar .button.segment {
-    background: url("../images/segment.jpg") no-repeat;
+    background: url("../images/drawings/segment.jpg") no-repeat;
     background-size: cover;
 }
 
 .toolbar .button.clear {
-    background: url("../images/clear.gif") no-repeat;
+    background: url("../images/drawings/clear.gif") no-repeat;
     background-size: cover;
 }
 

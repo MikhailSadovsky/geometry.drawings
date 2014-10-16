@@ -26,8 +26,8 @@ Drawings.Model.prototype = {
     },
 
     clear: function () {
-        this.shapes = [];
-        this.points = [];
+        this.shapes.length = 0;
+        this.points.length = 0;
     },
 
     addShape: function (shape) {

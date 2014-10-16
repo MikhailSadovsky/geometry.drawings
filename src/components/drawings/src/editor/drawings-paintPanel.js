@@ -182,7 +182,6 @@ Drawings.PaintPanel.prototype = {
         });
     },
 
-
     _saveToFile: function() {
         var jsonModel = this._translateModelToJson();
         var a = document.createElement('a');
@@ -190,9 +189,9 @@ Drawings.PaintPanel.prototype = {
         uriContent = contentType + encodeURIComponent(jsonModel);
         a.setAttribute('href', uriContent);
         a.setAttribute('download', "json.txt");
-        $('body').append(a);
+        document.body.appendChild(a);
         a.click();
-        $('body').remove(a);
+        document.body.removeChild(a);
     },
 
     _translateModelToJson: function() {

@@ -11,11 +11,11 @@ Drawings.Model.prototype = {
 
     onUpdateCallback: null,
 
-    getPoints: function() {
+    getPoints: function () {
         return this.points;
     },
 
-    getShapes: function() {
+    getShapes: function () {
         return this.shapes;
     },
 
@@ -40,11 +40,11 @@ Drawings.Model.prototype = {
         this._updated();
     },
 
-    onUpdate: function(callback) {
+    onUpdate: function (callback) {
         this.onUpdateCallback = callback;
     },
 
-    _updated: function() {
+    _updated: function () {
         this.onUpdateCallback.call();
     }
 };

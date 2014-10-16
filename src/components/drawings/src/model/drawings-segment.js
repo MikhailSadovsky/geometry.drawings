@@ -2,7 +2,7 @@
  * Segment model.
  */
 
-Drawings.Segment = function (point1, point2) {
+Drawings.Segment = function Segment(point1, point2) {
     Drawings.Segment.superclass.constructor.apply(this, [[point1, point2]]);
 };
 

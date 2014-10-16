@@ -2,8 +2,12 @@
  * Shape model.
  */
 
-Drawings.Shape = function (points) {
+Drawings.Shape = function Shape(points) {
     this.points = points;
+};
+
+Drawings.Shape.prototype.getPoints = function () {
+    return this.points;
 };
 
 Drawings.Shape.prototype.getPoint = function (pointName) {

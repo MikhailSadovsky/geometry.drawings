@@ -98,6 +98,18 @@ Drawings.PaintPanel.prototype = {
         this.board.setZoom(zoomX, zoomY);
     },
 
+    _saveToFile: function() {
+        var json = Drawings.Translator.toJson(this.model);
+        this._download("model.js", json);
+    },
+
+    _download: function(filename, content) {
+        var downloadLink = document.createElement('a');
+        downloadLink.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(content));
+        downloadLink.setAttribute('download', filename);
+        downloadLink.click();
+    },
+
     _handleMouseDownEvent: function (event) {
         this.controller.handleMouseDownEvent(event);
     },
@@ -180,39 +192,5 @@ Drawings.PaintPanel.prototype = {
         return this.board.getAllObjectsUnderMouse(event).filter(function (element) {
             return element instanceof JXG.Point;
         });
-    },
-
-    _saveToFile: function() {
-        var jsonModel = this._translateModelToJson();
-        var a = document.createElement('a');
-        contentType =  'data:application/octet-stream,';
-        uriContent = contentType + encodeURIComponent(jsonModel);
-        a.setAttribute('href', uriContent);
-        a.setAttribute('download', "json.txt");
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    },
-
-    _translateModelToJson: function() {
-        var points = this.model.getPoints();
-        var shapes = this._convertShapes();
-        var model = {Drawings : {points : points, shapes : shapes}};
-        var jsonModel = JSON.stringify(model);
-        return jsonModel;
-    },
-
-    _convertShapes: function() {
-        var shapes = this.model.getShapes();
-        var shapeWithType = [];
-        for(var i = 0; i < shapes.length; i++) {
-            var shape = shapes[i];
-            if (shape instanceof Drawings.Line) {
-                shapeWithType.push({points: shape.points, type: 'line'});
-            } else if(shape instanceof Drawings.Segment) {
-                shapeWithType.push({points: shape.points, type: 'segment'});
-            }
-        }
-        return shapeWithType;
     }
 };

@@ -2,7 +2,7 @@
  * Point model.
  */
 
-Drawings.Point = function (x, y) {
+Drawings.Point = function Point(x, y) {
     this.x = x;
     this.y = y;
     this.name = '';

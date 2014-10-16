@@ -8,6 +8,8 @@
         "src/model/drawings-segment.js",
         "src/model/drawings-model.js",
 
+        "src/translator/drawings-translator.js",
+
         "src/editor/drawings-controller.js",
         "src/editor/drawings-paintPanel.js"
     ],

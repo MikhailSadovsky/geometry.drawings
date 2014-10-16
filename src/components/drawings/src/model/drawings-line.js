@@ -2,7 +2,7 @@
  * Line model.
  */
 
-Drawings.Line = function (point1, point2) {
+Drawings.Line = function Line(point1, point2) {
     Drawings.Line.superclass.constructor.apply(this, [[point1, point2]]);
 };
 

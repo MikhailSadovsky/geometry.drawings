@@ -17,6 +17,8 @@ Drawings.PaintPanel.prototype = {
         this._configureModel();
 
         this.controller = new Drawings.Controller(this, this.model);
+
+        this.mouseMoved = false;
     },
 
     getJxgPoint: function (event) {
@@ -69,6 +71,14 @@ Drawings.PaintPanel.prototype = {
         $('#board').mousedown(function (event) {
             paintPanel._handleMouseDownEvent(event);
         });
+
+        $('#board').mouseup(function (event) {
+            paintPanel._handleMouseUpEvent(event);
+        });
+
+        $('#board').mousemove(function (event) {
+            paintPanel._handleMouseMoveEvent(event);
+        });
     },
 
     _setPointMode: function () {
@@ -112,6 +122,14 @@ Drawings.PaintPanel.prototype = {
 
     _handleMouseDownEvent: function (event) {
         this.controller.handleMouseDownEvent(event);
+    },
+
+    _handleMouseUpEvent: function (event) {
+        this.controller.handleMouseUpEvent(event);
+    },
+
+    _handleMouseMoveEvent: function (event) {
+        this.controller.handleMouseMoveEvent(event);
     },
 
     _createBoard: function () {

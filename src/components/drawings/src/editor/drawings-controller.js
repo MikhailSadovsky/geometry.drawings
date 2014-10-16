@@ -25,10 +25,36 @@ Drawings.Controller.prototype = {
         var LEFT_MOUSE_BUTTON = 1;
         if (event.which == LEFT_MOUSE_BUTTON) {
             this._handleLeftMouseDownEvent(event);
+            this.paintPanel.mouseMoved = false;
         }
     },
 
+    handleMouseUpEvent: function(event) {
+        var LEFT_MOUSE_BUTTON = 1;
+        if (event.which == LEFT_MOUSE_BUTTON) {
+            this._handleLeftMouseUpEvent(event);
+            this.paintPanel.mouseMoved = false;
+        }
+    },
+
+    handleMouseMoveEvent: function(event) {
+//        console.log('mousemove, paintPanelMouseMoved = ' + this.paintPanel.mouseMoved);
+        this.paintPanel.mouseMoved = true;
+    },
+
     _handleLeftMouseDownEvent: function(event) {
+//        console.log("controller_mouseDownEvent, paintPanel.mouseMoved=" + paintPanel.mouseMoved);
+    },
+
+    _handleLeftMouseUpEvent: function(event) {
+//        console.log("controller_mouseUpEvent, paintPanel.mouseMoved=" + paintPanel.mouseMoved);
+        if (this.paintPanel.mouseMoved == false) {
+            this._handleLeftMouseClickEvent(event);
+        }
+    },
+
+    _handleLeftMouseClickEvent: function(event) {
+//        console.log("controller_mouseClickEvent, paintPanel.mouseMoved=" + paintPanel.mouseMoved);
         var point = this._getPoint(event);
         this._addPoint(point);
     },

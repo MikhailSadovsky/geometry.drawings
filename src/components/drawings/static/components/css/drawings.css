@@ -29,6 +29,10 @@
     background: url("../images/drawings/clear.gif") no-repeat;
     background-size: cover;
 }
+.toolbar .button.save {
+    background: url("../images/drawings/save.jpg") no-repeat;
+    background-size: cover;
+}
 
 .jxgbox {
     width: 100%;

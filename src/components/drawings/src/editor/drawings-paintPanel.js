@@ -41,6 +41,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="lineButton" class="button line"></div>');
         toolbar.append('<div id="segmentButton" class="button segment"></div>');
         toolbar.append('<div id="clearButton" class="button clear"></div>');
+        toolbar.append('<div id="saveToFile" class="button save"></div>');
 
         $('#pointButton').click(function () {
             paintPanel._setPointMode();
@@ -56,6 +57,10 @@ Drawings.PaintPanel.prototype = {
 
         $('#clearButton').click(function () {
             paintPanel._clear();
+        });
+
+        $('#saveToFile').click(function () {
+            paintPanel._saveToFile();
         });
 
         // initialize board
@@ -175,5 +180,40 @@ Drawings.PaintPanel.prototype = {
         return this.board.getAllObjectsUnderMouse(event).filter(function (element) {
             return element instanceof JXG.Point;
         });
+    },
+
+
+    _saveToFile: function() {
+        var jsonModel = this._translateModelToJson();
+        var a = document.createElement('a');
+        contentType =  'data:application/octet-stream,';
+        uriContent = contentType + encodeURIComponent(jsonModel);
+        a.setAttribute('href', uriContent);
+        a.setAttribute('download', "json.txt");
+        $('body').append(a);
+        a.click();
+        $('body').remove(a);
+    },
+
+    _translateModelToJson: function() {
+        var points = this.model.getPoints();
+        var shapes = this._convertShapes();
+        var model = {Drawings : {points : points, shapes : shapes}};
+        var jsonModel = JSON.stringify(model);
+        return jsonModel;
+    },
+
+    _convertShapes: function() {
+        var shapes = this.model.getShapes();
+        var shapeWithType = [];
+        for(var i = 0; i < shapes.length; i++) {
+            var shape = shapes[i];
+            if (shape instanceof Drawings.Line) {
+                shapeWithType.push({points: shape.points, type: 'line'});
+            } else if(shape instanceof Drawings.Segment) {
+                shapeWithType.push({points: shape.points, type: 'segment'});
+            }
+        }
+        return shapeWithType;
     }
 };

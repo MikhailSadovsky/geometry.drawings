@@ -149,27 +149,39 @@ Drawings.PaintPanel.prototype = {
 
         paintPanel._drawModel(paintPanel.model);
 
-        paintPanel.model.onUpdate(function () {
-            paintPanel._clearBoard();
-            paintPanel._drawModel(paintPanel.model);
+        paintPanel.model.onUpdate(function (updatedObjects) {
+            paintPanel._erase(updatedObjects);
+            paintPanel._draw(updatedObjects);
         });
     },
 
     _drawModel: function (model) {
-        var points = model.getPoints();
-        for (var i = 0; i < points.length; i++) {
-            this._drawPoint(points[i]);
+        var objectsToDraw = [];
+        objectsToDraw.push(model.getPoints());
+        objectsToDraw.push(model.getShapes());
+        this._draw(objectsToDraw);
+    },
+
+    _erase: function (objects) {
+        for (var i = 0; i < objects.length; i++) {
+            var object = objects[i];
+            var jxgObject = this.board.select(object.getName());
+            this.board.removeObject(jxgObject);
         }
+    },
 
-        var shapes = model.getShapes();
-        for (i = 0; i < shapes.length; i++) {
-            var shape = shapes[i];
+    _draw: function (objects) {
+        for (var i = 0; i < objects.length; i++) {
+            var object = objects[i];
 
-            if (shape instanceof Drawings.Line) {
-                this._drawLine(shape);
+            if (object instanceof Drawings.Point) {
+                this._drawPoint(object);
             }
-            else if (shape instanceof Drawings.Segment) {
-                this._drawSegment(shape);
+            else if (object instanceof Drawings.Line) {
+                this._drawLine(object);
+            }
+            else if (object instanceof Drawings.Segment) {
+                this._drawSegment(object);
             }
         }
     },

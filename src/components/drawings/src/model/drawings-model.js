@@ -20,15 +20,15 @@ Drawings.Model.prototype = {
     },
 
     getPoint: function (pointName) {
-        return this.points.find(function (point) {
+        return this.points.filter(function (point) {
             return point.getName() == pointName;
-        });
+        })[0];
     },
 
     getShape: function (shapeName) {
-        return this.points.find(function (point) {
+        return this.points.filter(function (point) {
             return point.getName() == shapeName;
-        });
+        })[0];
     },
 
     clear: function () {
@@ -38,19 +38,19 @@ Drawings.Model.prototype = {
 
     addShape: function (shape) {
         this.shapes.push(shape);
-        this._updated();
+        this._updated([shape]);
     },
 
     addPoint: function (point) {
         this.points.push(point);
-        this._updated();
+        this._updated([point]);
     },
 
     onUpdate: function (callback) {
         this.onUpdateCallback = callback;
     },
 
-    _updated: function () {
-        this.onUpdateCallback.call();
+    _updated: function (updatedObjects) {
+        this.onUpdateCallback.call(this, updatedObjects);
     }
 };

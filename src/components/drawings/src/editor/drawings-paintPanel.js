@@ -46,11 +46,11 @@ Drawings.PaintPanel.prototype = {
         editor.append('<div id="toolbar" class="toolbar"></div>');
 
         var toolbar = $('#toolbar');
-        toolbar.append('<div id="pointButton" class="button point"></div>');
-        toolbar.append('<div id="lineButton" class="button line"></div>');
-        toolbar.append('<div id="segmentButton" class="button segment"></div>');
-        toolbar.append('<div id="clearButton" class="button clear"></div>');
-        toolbar.append('<div id="saveToFile" class="button save"></div>');
+        toolbar.append('<div id="pointButton" class="button point" title="Точка"></div>');
+        toolbar.append('<div id="lineButton" class="button line" title="Прямая"></div>');
+        toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
+        toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
+        toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
 
         $('#pointButton').click(function () {
             paintPanel._setPointMode();
@@ -190,10 +190,11 @@ Drawings.PaintPanel.prototype = {
         var jxgPoint;
 
         if (point.getName()) {
-            jxgPoint = this.board.create('point', [point.getX(), point.getY()], {name: point.getName()});
+            jxgPoint = this.board.create(
+                'point', [point.getX(), point.getY()], {name: point.getName(), showInfobox: false});
         }
         else {
-            jxgPoint = this.board.create('point', [point.getX(), point.getY()]);
+            jxgPoint = this.board.create('point', [point.getX(), point.getY()], {showInfobox: false});
             point.name = jxgPoint.getName();
         }
 

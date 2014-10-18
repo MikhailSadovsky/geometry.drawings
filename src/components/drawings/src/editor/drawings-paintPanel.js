@@ -35,8 +35,12 @@ Drawings.PaintPanel.prototype = {
         var container = $('#' + containerId);
         var paintPanel = this;
 
+        // root element
+        container.append('<div id="geometryEditor" class="geometryEditor"></div>');
+        var editor = $('#geometryEditor');
+
         // initialize toolbar markup
-        container.append('<div id="toolbar" class="toolbar"></div>');
+        editor.append('<div id="toolbar" class="toolbar"></div>');
 
         var toolbar = $('#toolbar');
         toolbar.append('<div id="pointButton" class="button point"></div>');
@@ -66,17 +70,18 @@ Drawings.PaintPanel.prototype = {
         });
 
         // initialize board
-        container.append('<div id="board" class="jxgbox"></div>');
+        editor.append('<div id="board" class="board jxgbox"></div>');
+        var board = $('#board');
 
-        $('#board').mousedown(function (event) {
+        board.mousedown(function (event) {
             paintPanel._handleMouseDownEvent(event);
         });
 
-        $('#board').mouseup(function (event) {
+        board.mouseup(function (event) {
             paintPanel._handleMouseUpEvent(event);
         });
 
-        $('#board').mousemove(function (event) {
+        board.mousemove(function (event) {
             paintPanel._handleMouseMoveEvent(event);
         });
     },
@@ -133,8 +138,7 @@ Drawings.PaintPanel.prototype = {
     },
 
     _createBoard: function () {
-        return JXG.JSXGraph.initBoard(
-            'board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true, axis: []});
+        return JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true});
     },
 
     _configureModel: function () {

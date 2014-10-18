@@ -19,6 +19,8 @@ Drawings.PaintPanel.prototype = {
         this.controller = new Drawings.Controller(this, this.model);
 
         this.mouseMoved = false;
+
+        this.mouseDownEvent = null;
     },
 
     getJxgPoint: function (event) {

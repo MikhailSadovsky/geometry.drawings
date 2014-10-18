@@ -12,9 +12,9 @@ Drawings.Shape.prototype.getPoints = function () {
 };
 
 Drawings.Shape.prototype.getPoint = function (pointName) {
-    return this.points.filter(function (point) {
+    return this.points.find(function (point) {
         return point.getName() == pointName
-    })[0];
+    });
 };
 
 Drawings.Shape.prototype.getName = function () {

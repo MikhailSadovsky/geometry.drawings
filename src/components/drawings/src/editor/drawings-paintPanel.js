@@ -194,7 +194,7 @@ Drawings.PaintPanel.prototype = {
         var point1 = line.point1();
         var point2 = line.point2();
 
-        var jxgLine = this.board.create('line', [[point1.getX(), point1.getY()], [point2.getX(), point2.getY()]]);
+        var jxgLine = this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
 
         jxgLine.setAttribute({
             fixed: true
@@ -205,8 +205,8 @@ Drawings.PaintPanel.prototype = {
         var point1 = segment.point1();
         var point2 = segment.point2();
 
-        var jxgSegment = this.board.create('line', [[point1.getX(), point1.getY()], [point2.getX(), point2.getY()]],
-            {straightFirst: false, straightLast: false});
+        var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
+            {name: segment.getName(), straightFirst: false, straightLast: false});
 
         jxgSegment.setAttribute({
             fixed: true

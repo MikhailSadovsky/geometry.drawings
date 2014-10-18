@@ -13,7 +13,7 @@ Drawings.Translator = {
         var shapes = [];
 
         model.getShapes().forEach(function (shape) {
-            shapes.push({className: shape.constructor.name, points: shape.getPoints()})
+            shapes.push({className: shape.constructor.name, name: shape.getName(), points: shape.getPoints()})
         });
 
         return {model: {points: points, shapes: shapes}};

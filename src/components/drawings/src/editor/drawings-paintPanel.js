@@ -1,5 +1,6 @@
 Drawings.PaintPanel = function (containerId, model) {
     this.containerId = containerId;
+
     this.model = model;
 
     this.controller = null;

@@ -11,23 +11,35 @@
 }
 
 .geometryEditor .toolbar .button {
-    width: 40px;
-    height: 40px;
-    margin: 0 auto 20px;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 15px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+.geometryEditor .toolbar .button:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,.3);
+}
+
+.geometryEditor .toolbar .button:active {
+    position: relative;
+    top: 1px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
 }
 
 .geometryEditor .toolbar .button.point {
-    background: url("../images/drawings/point.gif") no-repeat;
+    background: url("../images/drawings/point.png") no-repeat;
     background-size: cover;
 }
 
 .geometryEditor .toolbar .button.line {
-    background: url("../images/drawings/line.gif") no-repeat;
+    background: url("../images/drawings/line.png") no-repeat;
     background-size: cover;
 }
 
 .geometryEditor .toolbar .button.segment {
-    background: url("../images/drawings/segment.jpg") no-repeat;
+    background: url("../images/drawings/segment.png") no-repeat;
     background-size: cover;
 }
 

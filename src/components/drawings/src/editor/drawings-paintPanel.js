@@ -51,6 +51,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
+        toolbar.append('<input type="file" id="fileInput">');
 
         $('#pointButton').click(function () {
             paintPanel._setPointMode();
@@ -70,6 +71,10 @@ Drawings.PaintPanel.prototype = {
 
         $('#saveToFile').click(function () {
             paintPanel._saveToFile();
+        });
+
+        $('#fileInput').change(function () {
+            paintPanel._loadFromFile();
         });
 
         // initialize board
@@ -116,6 +121,24 @@ Drawings.PaintPanel.prototype = {
         this.board.setZoom(zoomX, zoomY);
     },
 
+    setModel: function(model) {
+        this._clear();
+        this.model = model;
+        this.controller.model = model;
+        this._configureModel();
+    },
+
+    _loadFromFile: function() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var model = Drawings.Translator.toModel(reader.result);
+            paintPanel.setModel(model);
+        }
+        reader.readAsText(file);
+    },
+
     _saveToFile: function() {
         var json = Drawings.Translator.toJson(this.model);
         this._download("model.js", json);
@@ -159,8 +182,12 @@ Drawings.PaintPanel.prototype = {
 
     _drawModel: function (model) {
         var objectsToDraw = [];
-        objectsToDraw.push(model.getPoints());
-        objectsToDraw.push(model.getShapes());
+        model.getPoints().forEach(function(point) {
+            objectsToDraw.push(point);
+        });
+        model.getShapes().forEach(function(shape) {
+            objectsToDraw.push(shape);
+        });
         this._draw(objectsToDraw);
     },
 

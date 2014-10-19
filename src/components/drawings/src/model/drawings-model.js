@@ -46,6 +46,14 @@ Drawings.Model.prototype = {
         this._updated([point]);
     },
 
+    setPoints: function(points) {
+        this.points = points;
+    },
+
+    setShapes: function(shapes) {
+        this.shapes = shapes;
+    },
+
     onUpdate: function (callback) {
         this.onUpdateCallback = callback;
     },

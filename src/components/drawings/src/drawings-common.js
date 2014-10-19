@@ -10,7 +10,8 @@ function extend(child, parent) {
 }
 
 Drawings.DrawingMode = {
-    POINT: 1,
-    LINE: 2,
-    SEGMENT: 3
+    POINT: 0,
+    LINE: 1,
+    SEGMENT: 2,
+    TRIANGLE: 3
 };

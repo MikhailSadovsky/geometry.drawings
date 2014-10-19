@@ -90,11 +90,14 @@ Drawings.Controller.prototype = {
         if (this.drawingMode == Drawings.DrawingMode.POINT) {
             this.points.length = 0;
         }
-        if (this.drawingMode == Drawings.DrawingMode.LINE) {
+        else if (this.drawingMode == Drawings.DrawingMode.LINE) {
             this._createLineIfPossible();
         }
         else if (this.drawingMode == Drawings.DrawingMode.SEGMENT) {
-            this._createSegmentIfPossible()
+            this._createSegmentIfPossible();
+        }
+        else if (this.drawingMode == Drawings.DrawingMode.TRIANGLE) {
+            this._createTriangleIfPossible();
         }
     },
 
@@ -110,6 +113,14 @@ Drawings.Controller.prototype = {
         if (this.points.length == 2) {
             var segment = new Drawings.Segment(this.points[0], this.points[1]);
             this.model.addShape(segment);
+            this.points.length = 0;
+        }
+    },
+
+    _createTriangleIfPossible: function() {
+        if (this.points.length == 3) {
+            var triangle = new Drawings.Triangle(this.points[0], this.points[1], this.points[2]);
+            this.model.addShape(triangle);
             this.points.length = 0;
         }
     }

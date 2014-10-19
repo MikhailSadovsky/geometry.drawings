@@ -3,7 +3,7 @@
  */
 
 Drawings.Segment = function Segment(point1, point2) {
-    var name = 'Отр(' + point1.getName() + ';' + point2 + ')';
+    var name = 'Отр(' + point1.getName() + ';' + point2.getName() + ')';
     Drawings.Segment.superclass.constructor.apply(this, [[point1, point2], name]);
 };
 

@@ -44,6 +44,11 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.triangle {
+    background: url("../images/drawings/triangle.png") no-repeat;
+    background-size: cover;
+}
+
 .geometryEditor .toolbar .button.clear {
     background: url("../images/drawings/clear.gif") no-repeat;
     background-size: cover;

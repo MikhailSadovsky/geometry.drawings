@@ -6,6 +6,7 @@
         "src/model/drawings-point.js",
         "src/model/drawings-line.js",
         "src/model/drawings-segment.js",
+        "src/model/drawings-triangle.js",
         "src/model/drawings-model.js",
 
         "src/translator/drawings-translator.js",

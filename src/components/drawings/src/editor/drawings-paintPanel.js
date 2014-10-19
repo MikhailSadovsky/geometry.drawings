@@ -49,19 +49,24 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="pointButton" class="button point" title="Точка"></div>');
         toolbar.append('<div id="lineButton" class="button line" title="Прямая"></div>');
         toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
+        toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
 
         $('#pointButton').click(function () {
-            paintPanel._setPointMode();
+            paintPanel._setMode(Drawings.DrawingMode.POINT);
         });
 
         $('#lineButton').click(function () {
-            paintPanel._setLineMode();
+            paintPanel._setMode(Drawings.DrawingMode.LINE);
         });
 
         $('#segmentButton').click(function () {
-            paintPanel._setSegmentMode();
+            paintPanel._setMode(Drawings.DrawingMode.SEGMENT);
+        });
+
+        $('#triangleButton').click(function () {
+            paintPanel._setMode(Drawings.DrawingMode.TRIANGLE);
         });
 
         $('#clearButton').click(function () {
@@ -89,16 +94,8 @@ Drawings.PaintPanel.prototype = {
         });
     },
 
-    _setPointMode: function () {
-        this.controller.setDrawingMode(Drawings.DrawingMode.POINT);
-    },
-
-    _setLineMode: function () {
-        this.controller.setDrawingMode(Drawings.DrawingMode.LINE);
-    },
-
-    _setSegmentMode: function () {
-        this.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
+    _setMode: function (mode) {
+        this.controller.setDrawingMode(mode);
     },
 
     _clear: function () {
@@ -185,6 +182,9 @@ Drawings.PaintPanel.prototype = {
             else if (object instanceof Drawings.Segment) {
                 this._drawSegment(object);
             }
+            else if (object instanceof Drawings.Triangle) {
+                this._drawTriangle(object);
+            }
         }
     },
 
@@ -224,6 +224,19 @@ Drawings.PaintPanel.prototype = {
             {name: segment.getName(), straightFirst: false, straightLast: false});
 
         jxgSegment.setAttribute({
+            fixed: true
+        });
+    },
+
+    _drawTriangle: function (triangle) {
+        var point1 = triangle.point1();
+        var point2 = triangle.point2();
+        var point3 = triangle.point3();
+
+        var jxgTriangle = this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
+            {name: triangle.getName(), straightFirst: false, straightLast: false});
+
+        jxgTriangle.setAttribute({
             fixed: true
         });
     },

@@ -125,7 +125,9 @@ Drawings.PaintPanel.prototype = {
         var downloadLink = document.createElement('a');
         downloadLink.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(content));
         downloadLink.setAttribute('download', filename);
+        document.body.appendChild(downloadLink);
         downloadLink.click();
+        document.body.removeChild(downloadLink);
     },
 
     _handleMouseDownEvent: function (event) {

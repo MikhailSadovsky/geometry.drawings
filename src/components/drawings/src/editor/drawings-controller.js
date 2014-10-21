@@ -46,7 +46,7 @@ Drawings.Controller.prototype = {
     },
 
     _handleLeftMouseUpEvent: function(event) {
-        this._validateClick(this.paintPanel.mouseDownEvent, event);
+        this._doEvent(this.paintPanel.mouseDownEvent, event);
     },
 
     _handleLeftMouseClickEvent: function(event) {
@@ -54,11 +54,39 @@ Drawings.Controller.prototype = {
         this._addPoint(point);
     },
 
-    _validateClick: function(mouseDownEvent, mouseUpEvent) {
+    _doEvent: function(mouseDownEvent, mouseUpEvent) {
         var mouseDownCoordinates = this.paintPanel.getMouseCoordinates(mouseDownEvent);
         var mouseUpCoordinates = this.paintPanel.getMouseCoordinates(mouseUpEvent);
         if (Math.sqrt(Math.pow(mouseDownCoordinates[0] - mouseUpCoordinates[0], 2) + Math.pow(mouseDownCoordinates[1] - mouseUpCoordinates[1], 2)) < 0.25) {
             this._handleLeftMouseClickEvent(mouseUpEvent);
+        } else {
+            this._handleLeftMouseMoveEvent(mouseUpEvent);
+        }
+    },
+
+    _handleLeftMouseMoveEvent: function(event) {
+        var element = this.paintPanel._getJxgElement(event);
+        if (element != undefined) {
+            if (element instanceof JXG.Point){
+                var point = this.model.getPoint(element.name);
+                var coordinates = this.paintPanel.getMouseCoordinates(event);
+                point.x = coordinates[0];
+                point.y = coordinates[1];
+            } else if (element instanceof JXG.Line) {
+                var line = this.model.getShape(element.name);
+                line.points[0].x = element.point1.X();
+                line.points[0].y = element.point1.Y();
+                line.points[1].x = element.point2.X();
+                line.points[1].y = element.point2.Y();
+            } else if (element instanceof JXG.Segment) {
+                var segment = paintPanel.model.getShape(element.name);
+                segment.points[0].x = element.point1.X();
+                segment.points[0].y = element.point1.Y();
+                segment.points[1].x = element.point2.X();
+                segment.points[1].y = element.point2.Y();
+            }
+        } else {
+            alert("Слишком резкие движения");
         }
     },
 

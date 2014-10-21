@@ -80,18 +80,6 @@ Drawings.PaintPanel.prototype = {
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
         var board = $('#board');
-
-        board.mousedown(function (event) {
-            paintPanel._handleMouseDownEvent(event);
-        });
-
-        board.mouseup(function (event) {
-            paintPanel._handleMouseUpEvent(event);
-        });
-
-        board.mousemove(function (event) {
-            paintPanel._handleMouseMoveEvent(event);
-        });
     },
 
     _setMode: function (mode) {
@@ -128,19 +116,23 @@ Drawings.PaintPanel.prototype = {
     },
 
     _handleMouseDownEvent: function (event) {
-        this.controller.handleMouseDownEvent(event);
+        paintPanel.controller.handleMouseDownEvent(event);
     },
 
     _handleMouseUpEvent: function (event) {
-        this.controller.handleMouseUpEvent(event);
+        paintPanel.controller.handleMouseUpEvent(event);
     },
 
     _handleMouseMoveEvent: function (event) {
-        this.controller.handleMouseMoveEvent(event);
+        paintPanel.controller.handleMouseMoveEvent(event);
     },
 
     _createBoard: function () {
-        return JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true});
+        var board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true, axis: []});
+        board.on('mousedown', this._handleMouseDownEvent);
+        board.on('mouseup', this._handleMouseUpEvent);
+        board.on('mousemove', this._handleMouseMoveEvent);
+        return board;
     },
 
     _configureModel: function () {
@@ -199,10 +191,6 @@ Drawings.PaintPanel.prototype = {
             jxgPoint = this.board.create('point', [point.getX(), point.getY()], {showInfobox: false});
             point.name = jxgPoint.getName();
         }
-
-        jxgPoint.setAttribute({
-            fixed: true
-        });
     },
 
     _drawLine: function (line) {
@@ -210,10 +198,6 @@ Drawings.PaintPanel.prototype = {
         var point2 = line.point2();
 
         var jxgLine = this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
-
-        jxgLine.setAttribute({
-            fixed: true
-        });
     },
 
     _drawSegment: function (segment) {
@@ -245,5 +229,15 @@ Drawings.PaintPanel.prototype = {
         return this.board.getAllObjectsUnderMouse(event).filter(function (element) {
             return element instanceof JXG.Point;
         });
+    },
+
+    _getJxgElement: function (event) {
+        var elements = this.board.getAllObjectsUnderMouse(event);
+        for (var i=0; i<elements.length; ++i) {
+            if (elements[i].mouseover) {
+                return elements[i];
+            }
+        }
+        return undefined;
     }
 };

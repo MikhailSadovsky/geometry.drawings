@@ -26,8 +26,8 @@ Drawings.Model.prototype = {
     },
 
     getShape: function (shapeName) {
-        return this.points.filter(function (point) {
-            return point.getName() == shapeName;
+        return this.shapes.filter(function (shape) {
+            return shape.getName() == shapeName;
         })[0];
     },
 

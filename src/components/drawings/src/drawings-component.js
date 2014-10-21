@@ -5,7 +5,7 @@
 Drawings.GeomDrawComponent = {
     ext_lang: 'geometry_code',
     formats: ['format_geometry_json'],
-
+    struct_support: true,
     factory: function(sandbox) {
         return new Drawings.GeomDrawWindow(sandbox);
     }

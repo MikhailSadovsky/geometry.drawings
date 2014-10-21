@@ -206,10 +206,6 @@ Drawings.PaintPanel.prototype = {
 
         var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
             {name: segment.getName(), straightFirst: false, straightLast: false});
-
-        jxgSegment.setAttribute({
-            fixed: true
-        });
     },
 
     _drawTriangle: function (triangle) {

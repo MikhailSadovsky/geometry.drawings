@@ -78,12 +78,6 @@ Drawings.Controller.prototype = {
                 line.points[0].y = element.point1.Y();
                 line.points[1].x = element.point2.X();
                 line.points[1].y = element.point2.Y();
-            } else if (element instanceof JXG.Segment) {
-                var segment = paintPanel.model.getShape(element.name);
-                segment.points[0].x = element.point1.X();
-                segment.points[0].y = element.point1.Y();
-                segment.points[1].x = element.point2.X();
-                segment.points[1].y = element.point2.Y();
             }
         } else {
             alert("Слишком резкие движения");

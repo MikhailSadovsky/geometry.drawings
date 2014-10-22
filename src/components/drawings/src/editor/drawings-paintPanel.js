@@ -238,6 +238,7 @@ Drawings.PaintPanel.prototype = {
 
         var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
             {name: segment.getName(), straightFirst: false, straightLast: false});
+        this._displaySegmentLength(jxgSegment.point1, jxgSegment.point2);
     },
 
     _drawTriangle: function (triangle) {
@@ -247,10 +248,21 @@ Drawings.PaintPanel.prototype = {
 
         var jxgTriangle = this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
             {name: triangle.getName(), straightFirst: false, straightLast: false});
-
+        var points = jxgTriangle.vertices;
+        this._displaySegmentLength(points[0], points[1]);
+        this._displaySegmentLength(points[1], points[2]);
+        this._displaySegmentLength(points[2], points[0]);
         jxgTriangle.setAttribute({
             fixed: true
         });
+    },
+
+    _displaySegmentLength: function(jxgPoint1, jxgPoint2) {
+        this.board.create('text',[
+            function(){return (jxgPoint1.X() + jxgPoint2.X()) / 1.85;},
+            function(){return (jxgPoint1.Y() + jxgPoint2.Y()) / 1.85;},
+            Math.sqrt(Math.pow(jxgPoint1.X() - jxgPoint2.X(),2) +
+                Math.pow(jxgPoint1.Y() - jxgPoint2.Y(), 2))],{});
     },
 
     _getJxgPoints: function (event) {

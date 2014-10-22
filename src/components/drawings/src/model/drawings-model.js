@@ -31,6 +31,14 @@ Drawings.Model.prototype = {
         })[0];
     },
 
+    setPoints: function(points) {
+        this.points = points;
+    },
+
+    setShapes: function(shapes) {
+        this.shapes = shapes;
+    },
+
     clear: function () {
         this.shapes.length = 0;
         this.points.length = 0;

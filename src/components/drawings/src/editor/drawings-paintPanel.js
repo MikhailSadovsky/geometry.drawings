@@ -52,6 +52,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
+        toolbar.append('<input type="file" id="fileInput">');
 
         $('#pointButton').click(function () {
             paintPanel._setMode(Drawings.DrawingMode.POINT);
@@ -77,6 +78,10 @@ Drawings.PaintPanel.prototype = {
             paintPanel._saveToFile();
         });
 
+        $('#fileInput').change(function () {
+            paintPanel._loadFromFile();
+        });
+
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
         var board = $('#board');
@@ -99,6 +104,24 @@ Drawings.PaintPanel.prototype = {
 
         this.board = this._createBoard();
         this.board.setZoom(zoomX, zoomY);
+    },
+
+    setModel: function(model) {
+        this._clear();
+        this.model = model;
+        this.controller.model = model;
+        this._configureModel();
+    },
+
+    _loadFromFile: function() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var model = Drawings.Translator.fromJson(reader.result);
+            paintPanel.setModel(model);
+        }
+        reader.readAsText(file);
     },
 
     _saveToFile: function() {
@@ -148,8 +171,12 @@ Drawings.PaintPanel.prototype = {
 
     _drawModel: function (model) {
         var objectsToDraw = [];
-        objectsToDraw.push(model.getPoints());
-        objectsToDraw.push(model.getShapes());
+        model.getPoints().forEach(function(point) {
+            objectsToDraw.push(point);
+        });
+        model.getShapes().forEach(function(shape) {
+            objectsToDraw.push(shape);
+        });
         this._draw(objectsToDraw);
     },
 

@@ -45,7 +45,7 @@ Drawings.Translator = {
     },
 
     _fromJsonShapes: function(jsonShapes, points) {
-        var shapes = [], point1, point2;
+        var shapes = [], point1, point2, point3;
         var translator = this;
         jsonShapes.forEach(function(shape) {
             if(shape.className == "Segment") {
@@ -56,6 +56,11 @@ Drawings.Translator = {
                 point1 = translator._findPoint(points, shape.points[0].name);
                 point2 = translator._findPoint(points, shape.points[1].name);
                 shapes.push(new Drawings.Line(point1, point2));
+            } else if(shape.className == "Triangle") {
+                point1 = translator._findPoint(points, shape.points[0].name);
+                point2 = translator._findPoint(points, shape.points[1].name);
+                point3 = translator._findPoint(points, shape.points[2].name);
+                shapes.push(new Drawings.Triangle(point1, point2, point3));
             }
         });
         return shapes;

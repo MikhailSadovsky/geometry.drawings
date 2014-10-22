@@ -52,6 +52,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
+        toolbar.append('<div id="loadFromFile" class="button load" title="Загрузить"></div>');
         toolbar.append('<input type="file" id="fileInput">');
 
         $('#pointButton').click(function () {
@@ -80,6 +81,10 @@ Drawings.PaintPanel.prototype = {
 
         $('#fileInput').change(function () {
             paintPanel._loadFromFile();
+        });
+
+        $('#loadFromFile').click(function () {
+            $("#fileInput").click();
         });
 
         // initialize board

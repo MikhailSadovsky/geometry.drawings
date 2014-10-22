@@ -59,7 +59,15 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.load {
+    background: url("../images/drawings/load.jpg") no-repeat;
+    background-size: cover;
+}
+
 .geometryEditor .board {
     width: 90%;
     height: 100%;
+}
+#fileInput {
+    display: none;
 }

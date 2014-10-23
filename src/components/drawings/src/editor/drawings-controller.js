@@ -65,23 +65,7 @@ Drawings.Controller.prototype = {
     },
 
     _handleLeftMouseMoveEvent: function(event) {
-        var element = this.paintPanel._getJxgElement(event);
-        if (element != undefined) {
-            if (element instanceof JXG.Point){
-                var point = this.model.getPoint(element.name);
-                var coordinates = this.paintPanel.getMouseCoordinates(event);
-                point.x = coordinates[0];
-                point.y = coordinates[1];
-            } else if (element instanceof JXG.Line) {
-                var line = this.model.getShape(element.name);
-                line.points[0].x = element.point1.X();
-                line.points[0].y = element.point1.Y();
-                line.points[1].x = element.point2.X();
-                line.points[1].y = element.point2.Y();
-            }
-        } else {
-            alert("Слишком резкие движения");
-        }
+        //TODO
     },
 
     _getPoint: function(event) {

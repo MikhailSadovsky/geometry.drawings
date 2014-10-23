@@ -20,3 +20,8 @@ Drawings.Triangle.prototype.point2 = function () {
 Drawings.Triangle.prototype.point3 = function () {
     return this.points[2];
 };
+
+Drawings.Triangle.prototype.setPointCoordinates = function (index, x, y) {
+    this.point[index].x = x;
+    this.point[index].y = y;
+};

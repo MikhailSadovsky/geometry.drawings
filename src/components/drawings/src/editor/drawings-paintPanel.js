@@ -223,6 +223,12 @@ Drawings.PaintPanel.prototype = {
             jxgPoint = this.board.create('point', [point.getX(), point.getY()], {showInfobox: false});
             point.name = jxgPoint.getName();
         }
+
+        jxgPoint.on('drag', function() {
+            var point = paintPanel.model.getPoint(this.name);
+            point.x = this.X();
+            point.y = this.Y();
+        });
     },
 
     _drawLine: function (line) {
@@ -230,6 +236,12 @@ Drawings.PaintPanel.prototype = {
         var point2 = line.point2();
 
         var jxgLine = this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
+
+        jxgLine.on('drag', function(){
+            var line = paintPanel.model.getShape(this.name);
+            line.setPoint1Coordinates(this.point1.X(), this.point1.Y());
+            line.setPoint2Coordinates(this.point2.X(), this.point2.Y());
+        });
     },
 
     _drawSegment: function (segment) {
@@ -238,6 +250,11 @@ Drawings.PaintPanel.prototype = {
 
         var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
             {name: segment.getName(), straightFirst: false, straightLast: false});
+        jxgSegment.on('drag', function(){
+            var segment = paintPanel.model.getShape(this.name);
+            segment.setPoint1Coordinates(this.point1.X(), this.point1.Y());
+            segment.setPoint2Coordinates(this.point2.X(), this.point2.Y());
+        });
         this._displaySegmentLength(jxgSegment.point1, jxgSegment.point2);
     },
 
@@ -249,12 +266,28 @@ Drawings.PaintPanel.prototype = {
         var jxgTriangle = this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
             {name: triangle.getName(), straightFirst: false, straightLast: false});
         var points = jxgTriangle.vertices;
+        points.forEach(function(jxgPoint){
+            jxgPoint.on('drag', function() {
+                var point = paintPanel.model.getPoint(this.name);
+                point.x = this.X();
+                point.y = this.Y();
+                console.log("x=" + point.x + ", y=" + point.y);
+            });
+        });
+        var lines = jxgTriangle.borders;
+        lines.forEach(function(jxgLine){
+            jxgLine.on('drag', function(){
+                var point1 = paintPanel.model.getPoint(this.point1.name);
+                var point2 = paintPanel.model.getPoint(this.point2.name);
+                point1.x = this.point1.X();
+                point1.y = this.point1.Y();
+                point2.x = this.point2.X();
+                point2.y = this.point2.Y();
+            });
+        });
         this._displaySegmentLength(points[0], points[1]);
         this._displaySegmentLength(points[1], points[2]);
         this._displaySegmentLength(points[2], points[0]);
-        jxgTriangle.setAttribute({
-            fixed: true
-        });
     },
 
     _displaySegmentLength: function(jxgPoint1, jxgPoint2) {

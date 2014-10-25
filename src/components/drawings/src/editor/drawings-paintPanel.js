@@ -220,7 +220,7 @@ Drawings.PaintPanel.prototype = {
         var paintPanel = this;
 
         jxgPoint.coords.on('update', function () {
-            var point = paintPanel.model.getPoint(this.name);
+            var point = paintPanel.model.getPoint(this.getName());
             point.setXY(this.X(), this.Y());
         }, jxgPoint);
     },

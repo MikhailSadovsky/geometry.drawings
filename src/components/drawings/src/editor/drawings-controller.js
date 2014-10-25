@@ -17,10 +17,7 @@ Drawings.Controller.prototype = {
 
     setDrawingMode: function(drawingMode) {
         this.drawingMode = drawingMode;
-    },
-
-    clearModel: function() {
-        this.model.clear();
+        this.points.length = 0;
     },
 
     handleEvent: function(event) {
@@ -64,7 +61,7 @@ Drawings.Controller.prototype = {
         var jxgPoint = this.paintPanel.getJxgPoint(event);
 
         if (jxgPoint) {
-            point = this.model.getPoint(jxgPoint.getName());
+            point = this.model.getPoint(jxgPoint.id);
         }
         else {
             var coordinates = this.paintPanel.getMouseCoordinates(event);
@@ -100,24 +97,53 @@ Drawings.Controller.prototype = {
     _createLineIfPossible: function() {
         if (this.points.length == 2) {
             var line = new Drawings.Line(this.points[0], this.points[1]);
+            line.setName(this._generateLineName(line));
+
             this.model.addShape(line);
+
             this.points.length = 0;
         }
+    },
+
+    _generateLineName: function(line) {
+        var point1Name = line.point1().getName();
+        var point2Name = line.point2().getName();
+        return point1Name && point2Name ? 'Прямая(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     _createSegmentIfPossible: function() {
         if (this.points.length == 2) {
             var segment = new Drawings.Segment(this.points[0], this.points[1]);
+            segment.setName(this._generateSegmentName(segment));
+
             this.model.addShape(segment);
+
             this.points.length = 0;
         }
+    },
+
+    _generateSegmentName: function(segment) {
+        var point1Name = segment.point1().getName();
+        var point2Name = segment.point2().getName();
+        return point1Name && point2Name ? 'Отр(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     _createTriangleIfPossible: function() {
         if (this.points.length == 3) {
             var triangle = new Drawings.Triangle(this.points[0], this.points[1], this.points[2]);
+            triangle.setName(this._generateTriangleName(triangle));
+
             this.model.addShape(triangle);
+
             this.points.length = 0;
         }
+    },
+
+    _generateTriangleName: function(triangle) {
+        var point1Name = triangle.point1().getName();
+        var point2Name = triangle.point2().getName();
+        var point3Name = triangle.point3().getName();
+        return point1Name && point2Name && point3Name ?
+            'Треугк(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     }
 };

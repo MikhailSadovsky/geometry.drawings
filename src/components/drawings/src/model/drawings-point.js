@@ -3,12 +3,21 @@
  */
 
 Drawings.Point = function Point(x, y) {
+    this.id = Drawings.Utils.randomUUID();
     this.x = x;
     this.y = y;
     this.name = '';
 };
 
 Drawings.Point.prototype = {
+
+    getId: function () {
+        return this.id;
+    },
+
+    setId: function(id) {
+        this.id = id;
+    },
 
     getX: function () {
         return this.x;

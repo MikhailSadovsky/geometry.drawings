@@ -3,8 +3,7 @@
  */
 
 Drawings.Line = function Line(point1, point2) {
-    var name = 'Прямая(' + point1.getName() + ';' + point2.getName() + ')';
-    Drawings.Line.superclass.constructor.apply(this, [[point1, point2], name]);
+    Drawings.Line.superclass.constructor.apply(this, [[point1, point2]]);
 };
 
 extend(Drawings.Line, Drawings.Shape);

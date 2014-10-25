@@ -93,18 +93,7 @@ Drawings.PaintPanel.prototype = {
     },
 
     _clear: function () {
-        this._clearBoard();
-        this.controller.clearModel();
-    },
-
-    _clearBoard: function () {
-        var zoomX = this.board.applyZoom().zoomX;
-        var zoomY = this.board.applyZoom().zoomY;
-
-        JXG.JSXGraph.freeBoard(this.board);
-
-        this.board = this._createBoard();
-        this.board.setZoom(zoomX, zoomY);
+        this.model.clear();
     },
 
     _saveToFile: function () {
@@ -178,80 +167,77 @@ Drawings.PaintPanel.prototype = {
         this._draw(objectsToDraw);
     },
 
-    _erase: function (objects) {
-        for (var i = 0; i < objects.length; i++) {
-            var object = objects[i];
-            var jxgObject = this.board.select(object.getName());
-            this.board.removeObject(jxgObject);
+    _erase: function (modelObjects) {
+        for (var i = 0; i < modelObjects.length; i++) {
+            this.board.removeObject(this._getJxgObjectById(modelObjects[i].getId()));
         }
     },
 
-    _draw: function (objects) {
-        for (var i = 0; i < objects.length; i++) {
-            var object = objects[i];
+    _draw: function (modelObjects) {
+        for (var i = 0; i < modelObjects.length; i++) {
+            var modelObject = modelObjects[i];
 
-            if (object instanceof Drawings.Point) {
-                this._drawPoint(object);
+            if (modelObject instanceof Drawings.Point) {
+                this._drawPoint(modelObject);
             }
-            else if (object instanceof Drawings.Line) {
-                this._drawLine(object);
+            else if (modelObject instanceof Drawings.Line) {
+                this._drawLine(modelObject);
             }
-            else if (object instanceof Drawings.Segment) {
-                this._drawSegment(object);
+            else if (modelObject instanceof Drawings.Segment) {
+                this._drawSegment(modelObject);
             }
-            else if (object instanceof Drawings.Triangle) {
-                this._drawTriangle(object);
+            else if (modelObject instanceof Drawings.Triangle) {
+                this._drawTriangle(modelObject);
             }
         }
     },
 
     _drawPoint: function (point) {
-        var jxgPoint;
-
-        if (point.getName()) {
-            jxgPoint = this.board.create(
-                'point', [point.getX(), point.getY()], {name: point.getName(), showInfobox: false});
-        }
-        else {
-            jxgPoint = this.board.create('point', [point.getX(), point.getY()], {showInfobox: false});
-            point.name = jxgPoint.getName();
-        }
+        var jxgPoint = this.board.create('point', [point.getX(), point.getY()],
+            {id: point.getId(), name: point.getName(), showInfobox: false});
 
         var paintPanel = this;
 
         jxgPoint.coords.on('update', function () {
-            var point = paintPanel.model.getPoint(this.getName());
+            var point = paintPanel.model.getPoint(this.id);
             point.setXY(this.X(), this.Y());
         }, jxgPoint);
     },
 
     _drawLine: function (line) {
-        var point1 = line.point1();
-        var point2 = line.point2();
+        var jxgPoint1 = this._getJxgObjectById(line.point1().getId());
+        var jxgPoint2 = this._getJxgObjectById(line.point2().getId());
 
-        this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
+        this.board.create('line', [jxgPoint1, jxgPoint2],
+            {id: line.getId(), name: line.getName()});
     },
 
     _drawSegment: function (segment) {
-        var point1 = segment.point1();
-        var point2 = segment.point2();
+        var jxgPoint1 = this._getJxgObjectById(segment.point1().getId());
+        var jxgPoint2 = this._getJxgObjectById(segment.point2().getId());
 
-        this.board.create('line', [point1.getName(), point2.getName()],
-            {name: segment.getName(), straightFirst: false, straightLast: false});
+        this.board.create('line', [jxgPoint1, jxgPoint2],
+            {id: segment.getId(), name: segment.getName(), straightFirst: false, straightLast: false});
     },
 
     _drawTriangle: function (triangle) {
-        var point1 = triangle.point1();
-        var point2 = triangle.point2();
-        var point3 = triangle.point3();
+        var jxgPoint1 = this._getJxgObjectById(triangle.point1().getId());
+        var jxgPoint2 = this._getJxgObjectById(triangle.point2().getId());
+        var jxgPoint3 = this._getJxgObjectById(triangle.point3().getId());
 
-        this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
-            {name: triangle.getName(), straightFirst: false, straightLast: false});
+        this.board.create('polygon', [jxgPoint1, jxgPoint2, jxgPoint3],
+            {id: triangle.getId(), name: triangle.getName(), straightFirst: false, straightLast: false});
     },
 
     _getJxgPoints: function (event) {
         return this.board.getAllObjectsUnderMouse(event).filter(function (element) {
             return element instanceof JXG.Point;
         });
+    },
+
+    _getJxgObjectById: function (id) {
+        return this.board.select(function(jxgObject) {
+            return jxgObject.id == id;
+        }).objectsList[0];
     }
 };

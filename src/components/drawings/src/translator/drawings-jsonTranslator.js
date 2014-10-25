@@ -21,6 +21,7 @@ Drawings.JsonTranslator = {
         jsonPoints.forEach(function (jsonPoint) {
             var point = new Drawings.Point(jsonPoint.x, jsonPoint.y);
             point.setName(jsonPoint.name);
+            point.setId(jsonPoint.id);
             points.push(point);
         });
 
@@ -44,21 +45,36 @@ Drawings.JsonTranslator = {
     },
 
     _parseJsonLine: function(jsonLine, points) {
-        var point1 = Drawings.Utils.getPointByName(points, jsonLine.points[0].name);
-        var point2 = Drawings.Utils.getPointByName(points, jsonLine.points[1].name);
-        return new Drawings.Line(point1, point2);
+        var point1 = Drawings.Utils.getObjectById(points, jsonLine.points[0].id);
+        var point2 = Drawings.Utils.getObjectById(points, jsonLine.points[1].id);
+
+        var line = new Drawings.Line(point1, point2);
+        line.setId(jsonLine.id);
+        line.setName(jsonLine.id);
+
+        return line;
     },
 
     _parseJsonSegment: function(jsonSegment, points) {
-        var point1 = Drawings.Utils.getPointByName(points, jsonSegment.points[0].name);
-        var point2 = Drawings.Utils.getPointByName(points, jsonSegment.points[1].name);
-        return new Drawings.Segment(point1, point2);
+        var point1 = Drawings.Utils.getObjectById(points, jsonSegment.points[0].id);
+        var point2 = Drawings.Utils.getObjectById(points, jsonSegment.points[1].id);
+
+        var segment = new Drawings.Segment(point1, point2);
+        segment.setId(jsonSegment.id);
+        segment.setName(jsonSegment.name);
+
+        return segment;
     },
 
     _parseJsonTriangle: function(jsonTriangle, points) {
-        var point1 = Drawings.Utils.getPointByName(points, jsonTriangle.points[0].name);
-        var point2 = Drawings.Utils.getPointByName(points, jsonTriangle.points[1].name);
-        var point3 = Drawings.Utils.getPointByName(points, jsonTriangle.points[2].name);
-        return new Drawings.Triangle(point1, point2, point3);
+        var point1 = Drawings.Utils.getObjectById(points, jsonTriangle.points[0].id);
+        var point2 = Drawings.Utils.getObjectById(points, jsonTriangle.points[1].id);
+        var point3 = Drawings.Utils.getObjectById(points, jsonTriangle.points[2].id);
+
+        var triangle = new Drawings.Triangle(point1, point2, point3);
+        triangle.setId(jsonTriangle.id);
+        triangle.setName(jsonTriangle.name);
+
+        return triangle;
     }
 };

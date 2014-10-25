@@ -19,16 +19,12 @@ Drawings.Model.prototype = {
         return this.shapes;
     },
 
-    getPoint: function (pointName) {
-        return this.points.filter(function (point) {
-            return point.getName() == pointName;
-        })[0];
+    getPoint: function (pointId) {
+        return Drawings.Utils.getObjectById(this.points, pointId);
     },
 
-    getShape: function (shapeName) {
-        return this.shapes.filter(function (shape) {
-            return shape.getName() == shapeName;
-        })[0];
+    getShape: function (shapeId) {
+        return Drawings.Utils.getObjectById(this.shapes, shapeId);
     },
 
     addPoint: function (point) {

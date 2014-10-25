@@ -3,8 +3,7 @@
  */
 
 Drawings.Triangle = function Triangle(point1, point2, point3) {
-    var name = 'Треугк(' + point1.getName() + ';' + point2.getName() + ';' + point3.getName() + ')';
-    Drawings.Triangle.superclass.constructor.apply(this, [[point1, point2, point3], name]);
+    Drawings.Triangle.superclass.constructor.apply(this, [[point1, point2, point3]]);
 };
 
 extend(Drawings.Triangle, Drawings.Shape);

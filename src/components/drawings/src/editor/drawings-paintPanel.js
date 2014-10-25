@@ -219,7 +219,7 @@ Drawings.PaintPanel.prototype = {
 
         var paintPanel = this;
 
-        jxgPoint.on('over', function () {
+        jxgPoint.on('update', function () {
             var point = paintPanel.model.getPoint(this.name);
             point.setX(this.X());
             point.setY(this.Y());

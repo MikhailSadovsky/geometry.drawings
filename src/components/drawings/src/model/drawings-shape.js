@@ -5,6 +5,7 @@
 Drawings.Shape = function Shape(points, name) {
     this.points = points;
     this.name = name;
+    this.className = this.constructor.name;
 };
 
 Drawings.Shape.prototype.getPoints = function () {

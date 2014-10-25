@@ -5,24 +5,13 @@
 Drawings.JsonTranslator = {
 
     toJson: function (model) {
-        return JSON.stringify(this._prepareModelForSerialization(model));
+        return JSON.stringify(model);
     },
 
     fromJson: function (json) {
         var jsonModel = JSON.parse(json);
         var points = this._fromJsonPoints(jsonModel.points);
         var shapes = this._fromJsonShapes(jsonModel.shapes, points);
-        return {points: points, shapes: shapes};
-    },
-
-    _prepareModelForSerialization: function (model) {
-        var points = model.getPoints();
-        var shapes = [];
-
-        model.getShapes().forEach(function (shape) {
-            shapes.push({className: shape.constructor.name, name: shape.getName(), points: shape.getPoints()})
-        });
-
         return {points: points, shapes: shapes};
     },
 

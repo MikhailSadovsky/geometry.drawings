@@ -26,6 +26,11 @@ Drawings.Point.prototype = {
         return this.y = y;
     },
 
+    setXY: function (x, y) {
+        this.x = x;
+        this.y = y;
+    },
+
     getName: function () {
         return this.name;
     },

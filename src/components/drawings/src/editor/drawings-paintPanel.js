@@ -18,10 +18,6 @@ Drawings.PaintPanel.prototype = {
         this._configureModel();
 
         this.controller = new Drawings.Controller(this, this.model);
-
-        this.mouseMoved = false;
-
-        this.mouseDownEvent = null;
     },
 
     getJxgPoint: function (event) {
@@ -90,7 +86,6 @@ Drawings.PaintPanel.prototype = {
 
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
-        var board = $('#board');
     },
 
     _setMode: function (mode) {
@@ -145,23 +140,19 @@ Drawings.PaintPanel.prototype = {
         }
     },
 
-    _handleMouseDownEvent: function (event) {
-        paintPanel.controller.handleMouseDownEvent(event);
-    },
-
-    _handleMouseUpEvent: function (event) {
-        paintPanel.controller.handleMouseUpEvent(event);
-    },
-
-    _handleMouseMoveEvent: function (event) {
-        paintPanel.controller.handleMouseMoveEvent(event);
-    },
-
     _createBoard: function () {
-        var board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true, axis: []});
-        board.on('mousedown', this._handleMouseDownEvent);
-        board.on('mouseup', this._handleMouseUpEvent);
-        board.on('mousemove', this._handleMouseMoveEvent);
+        var board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true});
+
+        var paintPanel = this;
+
+        board.on('mousedown', function(event) {
+            paintPanel.controller.handleEvent(event);
+        });
+
+        board.on('mouseup', function(event) {
+            paintPanel.controller.handleEvent(event);
+        });
+
         return board;
     },
 
@@ -226,10 +217,12 @@ Drawings.PaintPanel.prototype = {
             point.name = jxgPoint.getName();
         }
 
-        jxgPoint.on('drag', function () {
+        var paintPanel = this;
+
+        jxgPoint.on('over', function () {
             var point = paintPanel.model.getPoint(this.name);
-            point.x = this.X();
-            point.y = this.Y();
+            point.setX(this.X());
+            point.setY(this.Y());
         });
     },
 
@@ -237,27 +230,15 @@ Drawings.PaintPanel.prototype = {
         var point1 = line.point1();
         var point2 = line.point2();
 
-        var jxgLine = this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
-
-        jxgLine.on('drag', function () {
-            var line = paintPanel.model.getShape(this.name);
-            line.setPoint1Coordinates(this.point1.X(), this.point1.Y());
-            line.setPoint2Coordinates(this.point2.X(), this.point2.Y());
-        });
+        this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
     },
 
     _drawSegment: function (segment) {
         var point1 = segment.point1();
         var point2 = segment.point2();
 
-        var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
+        this.board.create('line', [point1.getName(), point2.getName()],
             {name: segment.getName(), straightFirst: false, straightLast: false});
-        jxgSegment.on('drag', function () {
-            var segment = paintPanel.model.getShape(this.name);
-            segment.setPoint1Coordinates(this.point1.X(), this.point1.Y());
-            segment.setPoint2Coordinates(this.point2.X(), this.point2.Y());
-        });
-        this._displaySegmentLength(jxgSegment.point1, jxgSegment.point2);
     },
 
     _drawTriangle: function (triangle) {
@@ -265,58 +246,13 @@ Drawings.PaintPanel.prototype = {
         var point2 = triangle.point2();
         var point3 = triangle.point3();
 
-        var jxgTriangle = this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
+        this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
             {name: triangle.getName(), straightFirst: false, straightLast: false});
-        var points = jxgTriangle.vertices;
-        points.forEach(function (jxgPoint) {
-            jxgPoint.on('drag', function () {
-                var point = paintPanel.model.getPoint(this.name);
-                point.x = this.X();
-                point.y = this.Y();
-                console.log("x=" + point.x + ", y=" + point.y);
-            });
-        });
-        var lines = jxgTriangle.borders;
-        lines.forEach(function (jxgLine) {
-            jxgLine.on('drag', function () {
-                var point1 = paintPanel.model.getPoint(this.point1.name);
-                var point2 = paintPanel.model.getPoint(this.point2.name);
-                point1.x = this.point1.X();
-                point1.y = this.point1.Y();
-                point2.x = this.point2.X();
-                point2.y = this.point2.Y();
-            });
-        });
-        this._displaySegmentLength(points[0], points[1]);
-        this._displaySegmentLength(points[1], points[2]);
-        this._displaySegmentLength(points[2], points[0]);
-    },
-
-    _displaySegmentLength: function (jxgPoint1, jxgPoint2) {
-        this.board.create('text', [
-            function () {
-                return (jxgPoint1.X() + jxgPoint2.X()) / 1.85;
-            },
-            function () {
-                return (jxgPoint1.Y() + jxgPoint2.Y()) / 1.85;
-            },
-            Math.sqrt(Math.pow(jxgPoint1.X() - jxgPoint2.X(), 2) +
-                Math.pow(jxgPoint1.Y() - jxgPoint2.Y(), 2))], {});
     },
 
     _getJxgPoints: function (event) {
         return this.board.getAllObjectsUnderMouse(event).filter(function (element) {
             return element instanceof JXG.Point;
         });
-    },
-
-    _getJxgElement: function (event) {
-        var elements = this.board.getAllObjectsUnderMouse(event);
-        for (var i = 0; i < elements.length; ++i) {
-            if (elements[i].mouseover) {
-                return elements[i];
-            }
-        }
-        return undefined;
     }
 };

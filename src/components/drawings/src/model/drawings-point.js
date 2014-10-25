@@ -14,15 +14,23 @@ Drawings.Point.prototype = {
         return this.x;
     },
 
+    setX: function (x) {
+        this.x = x;
+    },
+
     getY: function () {
         return this.y;
     },
 
-    setName: function (name) {
-        this.name = name;
+    setY: function (y) {
+        return this.y = y;
     },
 
     getName: function () {
         return this.name;
+    },
+
+    setName: function (name) {
+        this.name = name;
     }
 };

@@ -13,6 +13,8 @@ Drawings.Controller.prototype = {
 
     points: [],
 
+    mouseDownEvent: {},
+
     setDrawingMode: function(drawingMode) {
         this.drawingMode = drawingMode;
     },
@@ -21,54 +23,42 @@ Drawings.Controller.prototype = {
         this.model.clear();
     },
 
-    handleMouseDownEvent: function(event) {
+    handleEvent: function(event) {
         var LEFT_MOUSE_BUTTON = 1;
-        if (event.which == LEFT_MOUSE_BUTTON) {
+        if (event.type == 'mousedown' && event.which == LEFT_MOUSE_BUTTON) {
             this._handleLeftMouseDownEvent(event);
-            this.paintPanel.mouseMoved = false;
         }
-    },
-
-    handleMouseUpEvent: function(event) {
-        var LEFT_MOUSE_BUTTON = 1;
-        if (event.which == LEFT_MOUSE_BUTTON) {
+        else if (event.type == 'mouseup' && event.which == LEFT_MOUSE_BUTTON) {
             this._handleLeftMouseUpEvent(event);
-            this.paintPanel.mouseMoved = false;
         }
-    },
-
-    handleMouseMoveEvent: function(event) {
-        this.paintPanel.mouseMoved = true;
     },
 
     _handleLeftMouseDownEvent: function(event) {
-        this.paintPanel.mouseDownEvent = event;
+        this.mouseDownEvent = event;
     },
 
     _handleLeftMouseUpEvent: function(event) {
-        this._doEvent(this.paintPanel.mouseDownEvent, event);
-    },
+        var mouseDownCoordinates = this.paintPanel.getMouseCoordinates(this.mouseDownEvent);
+        var mouseUpCoordinates = this.paintPanel.getMouseCoordinates(event);
 
-    _handleLeftMouseClickEvent: function(event) {
-        var point = this._getPoint(event);
-        this._addPoint(point);
-    },
+        var x1 = mouseDownCoordinates[0];
+        var y1 = mouseDownCoordinates[1];
+        var x2 = mouseUpCoordinates[0];
+        var y2 = mouseUpCoordinates[1];
 
-    _doEvent: function(mouseDownEvent, mouseUpEvent) {
-        var mouseDownCoordinates = this.paintPanel.getMouseCoordinates(mouseDownEvent);
-        var mouseUpCoordinates = this.paintPanel.getMouseCoordinates(mouseUpEvent);
-        if (Math.sqrt(Math.pow(mouseDownCoordinates[0] - mouseUpCoordinates[0], 2) + Math.pow(mouseDownCoordinates[1] - mouseUpCoordinates[1], 2)) < 0.25) {
-            this._handleLeftMouseClickEvent(mouseUpEvent);
-        } else {
-            this._handleLeftMouseMoveEvent(mouseUpEvent);
+        var distance = Math.sqrt((x1 - x2)^2 + (y1 - y2)^2);
+
+        if (distance < 0.25) {
+            this._handleLeftMouseClickEvent(event);
         }
     },
 
-    _handleLeftMouseMoveEvent: function(event) {
-        //TODO
+    _handleLeftMouseClickEvent: function(event) {
+        var point = this._getOrCreatePoint(event);
+        this._addPoint(point);
     },
 
-    _getPoint: function(event) {
+    _getOrCreatePoint: function(event) {
         var point;
 
         var jxgPoint = this.paintPanel.getJxgPoint(event);

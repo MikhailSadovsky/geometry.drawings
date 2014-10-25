@@ -50,7 +50,7 @@ Drawings.JsonTranslator = {
 
         var line = new Drawings.Line(point1, point2);
         line.setId(jsonLine.id);
-        line.setName(jsonLine.id);
+        line.setName(jsonLine.name);
 
         return line;
     },

@@ -16,13 +16,3 @@ Drawings.Line.prototype.point1 = function () {
 Drawings.Line.prototype.point2 = function () {
     return this.points[1];
 };
-
-Drawings.Line.prototype.setPoint1Coordinates = function(x, y) {
-    this.points[0].x = x;
-    this.points[0].y = y;
-};
-
-Drawings.Line.prototype.setPoint2Coordinates = function(x, y) {
-    this.points[1].x = x;
-    this.points[1].y = y;
-};

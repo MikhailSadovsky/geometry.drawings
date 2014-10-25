@@ -53,8 +53,8 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
 
-        toolbar.append('<div id="loadFromFile" class="button load" title="Загрузить"></div>');
-        toolbar.append('<input type="file" id="fileInput">');
+        toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
+        toolbar.append('<input id="fileInput" type="file">');
 
         $('#pointButton').click(function () {
             paintPanel._setMode(Drawings.DrawingMode.POINT);
@@ -80,6 +80,10 @@ Drawings.PaintPanel.prototype = {
             paintPanel._saveToFile();
         });
 
+        $('#load').click(function () {
+            $("#fileInput").click();
+        });
+
         $('#fileInput').change(function () {
             paintPanel._loadFromFile();
         });
@@ -87,18 +91,6 @@ Drawings.PaintPanel.prototype = {
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
         var board = $('#board');
-
-        board.mousedown(function (event) {
-            paintPanel._handleMouseDownEvent(event);
-        });
-
-        board.mouseup(function (event) {
-            paintPanel._handleMouseUpEvent(event);
-        });
-
-        $('#loadFromFile').click(function () {
-            $("#fileInput").click();
-        });
     },
 
     _setMode: function (mode) {
@@ -120,26 +112,8 @@ Drawings.PaintPanel.prototype = {
         this.board.setZoom(zoomX, zoomY);
     },
 
-    setModel: function (model) {
-        this._clear();
-        this.model = model;
-        this.controller.model = model;
-        this._configureModel();
-    },
-
-    _loadFromFile: function () {
-        var fileInput = document.getElementById('fileInput');
-        var file = fileInput.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var model = Drawings.Translator.toModel(reader.result);
-            paintPanel.setModel(model);
-        };
-        reader.readAsText(file);
-    },
-
     _saveToFile: function () {
-        var json = Drawings.Translator.toJson(this.model);
+        var json = Drawings.JsonTranslator.toJson(this.model);
         this._download("model.js", json);
     },
 
@@ -150,6 +124,25 @@ Drawings.PaintPanel.prototype = {
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
+    },
+
+    _loadFromFile: function () {
+        var file = $('#fileInput')[0].files[0];
+        var reader = new FileReader();
+
+        var paintPanel = this;
+        reader.onload = function () {
+            var result = Drawings.JsonTranslator.fromJson(reader.result);
+
+            paintPanel.model.clear();
+
+            paintPanel.model.addPoints(result.points);
+            paintPanel.model.addShapes(result.shapes);
+        };
+
+        if (file) {
+            reader.readAsText(file);
+        }
     },
 
     _handleMouseDownEvent: function (event) {
@@ -177,20 +170,20 @@ Drawings.PaintPanel.prototype = {
 
         paintPanel._drawModel(paintPanel.model);
 
-        paintPanel.model.onUpdate(function (updatedObjects) {
-            paintPanel._erase(updatedObjects);
-            paintPanel._draw(updatedObjects);
+        paintPanel.model.onUpdate(function (objectsToRemove, objectsToAdd, objectsToUpdate) {
+            paintPanel._erase(objectsToRemove);
+
+            paintPanel._draw(objectsToAdd);
+
+            paintPanel._erase(objectsToUpdate);
+            paintPanel._draw(objectsToUpdate);
         });
     },
 
     _drawModel: function (model) {
         var objectsToDraw = [];
-        model.getPoints().forEach(function (point) {
-            objectsToDraw.push(point);
-        });
-        model.getShapes().forEach(function (shape) {
-            objectsToDraw.push(shape);
-        });
+        objectsToDraw = objectsToDraw.concat(model.getPoints());
+        objectsToDraw = objectsToDraw.concat(model.getShapes());
         this._draw(objectsToDraw);
     },
 

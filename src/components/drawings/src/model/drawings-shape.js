@@ -20,8 +20,3 @@ Drawings.Shape.prototype.getPoint = function (pointName) {
 Drawings.Shape.prototype.getName = function () {
     return this.name;
 };
-
-Drawings.Shape.prototype.setPointCoordinates = function (index, x, y) {
-    this.points[index].x = x;
-    this.points[index].y = y;
-};

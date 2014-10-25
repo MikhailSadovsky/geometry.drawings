@@ -31,42 +31,47 @@ Drawings.Model.prototype = {
         })[0];
     },
 
-    setPoints: function(points) {
-        this.points = points;
+    addPoint: function (point) {
+        this.points.push(point);
+        this._added([point]);
     },
 
-    setShapes: function(shapes) {
-        this.shapes = shapes;
-    },
-
-    clear: function () {
-        this.shapes.length = 0;
-        this.points.length = 0;
+    addPoints: function (points) {
+        this.points = this.points.concat(points);
+        this._added(points);
     },
 
     addShape: function (shape) {
         this.shapes.push(shape);
-        this._updated([shape]);
+        this._added([shape]);
     },
 
-    addPoint: function (point) {
-        this.points.push(point);
-        this._updated([point]);
+    addShapes: function (shapes) {
+        this.shapes = this.shapes.concat(shapes);
+        this._added(shapes);
     },
 
-    setPoints: function(points) {
-        this.points = points;
-    },
+    clear: function () {
+        this._removed(this.shapes);
+        this._removed(this.points);
 
-    setShapes: function(shapes) {
-        this.shapes = shapes;
+        this.shapes.length = 0;
+        this.points.length = 0;
     },
 
     onUpdate: function (callback) {
         this.onUpdateCallback = callback;
     },
 
-    _updated: function (updatedObjects) {
-        this.onUpdateCallback.call(this, updatedObjects);
+    _added: function (objectsToAdd) {
+        this.onUpdateCallback([], objectsToAdd, [])
+    },
+
+    _updated: function (objectsToUpdate) {
+        this.onUpdateCallback([], [], objectsToUpdate);
+    },
+
+    _removed: function(objectsToRemove) {
+        this.onUpdateCallback(objectsToRemove, [], []);
     }
 };

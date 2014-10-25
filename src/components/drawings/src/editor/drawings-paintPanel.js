@@ -52,6 +52,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
+
         toolbar.append('<div id="loadFromFile" class="button load" title="Загрузить"></div>');
         toolbar.append('<input type="file" id="fileInput">');
 
@@ -83,13 +84,21 @@ Drawings.PaintPanel.prototype = {
             paintPanel._loadFromFile();
         });
 
-        $('#loadFromFile').click(function () {
-            $("#fileInput").click();
-        });
-
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
         var board = $('#board');
+
+        board.mousedown(function (event) {
+            paintPanel._handleMouseDownEvent(event);
+        });
+
+        board.mouseup(function (event) {
+            paintPanel._handleMouseUpEvent(event);
+        });
+
+        $('#loadFromFile').click(function () {
+            $("#fileInput").click();
+        });
     },
 
     _setMode: function (mode) {
@@ -111,30 +120,30 @@ Drawings.PaintPanel.prototype = {
         this.board.setZoom(zoomX, zoomY);
     },
 
-    setModel: function(model) {
+    setModel: function (model) {
         this._clear();
         this.model = model;
         this.controller.model = model;
         this._configureModel();
     },
 
-    _loadFromFile: function() {
+    _loadFromFile: function () {
         var fileInput = document.getElementById('fileInput');
         var file = fileInput.files[0];
         var reader = new FileReader();
-        reader.onload = function(e) {
-            var model = Drawings.Translator.fromJson(reader.result);
+        reader.onload = function (e) {
+            var model = Drawings.Translator.toModel(reader.result);
             paintPanel.setModel(model);
-        }
+        };
         reader.readAsText(file);
     },
 
-    _saveToFile: function() {
+    _saveToFile: function () {
         var json = Drawings.Translator.toJson(this.model);
         this._download("model.js", json);
     },
 
-    _download: function(filename, content) {
+    _download: function (filename, content) {
         var downloadLink = document.createElement('a');
         downloadLink.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(content));
         downloadLink.setAttribute('download', filename);
@@ -176,10 +185,10 @@ Drawings.PaintPanel.prototype = {
 
     _drawModel: function (model) {
         var objectsToDraw = [];
-        model.getPoints().forEach(function(point) {
+        model.getPoints().forEach(function (point) {
             objectsToDraw.push(point);
         });
-        model.getShapes().forEach(function(shape) {
+        model.getShapes().forEach(function (shape) {
             objectsToDraw.push(shape);
         });
         this._draw(objectsToDraw);
@@ -224,7 +233,7 @@ Drawings.PaintPanel.prototype = {
             point.name = jxgPoint.getName();
         }
 
-        jxgPoint.on('drag', function() {
+        jxgPoint.on('drag', function () {
             var point = paintPanel.model.getPoint(this.name);
             point.x = this.X();
             point.y = this.Y();
@@ -237,7 +246,7 @@ Drawings.PaintPanel.prototype = {
 
         var jxgLine = this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
 
-        jxgLine.on('drag', function(){
+        jxgLine.on('drag', function () {
             var line = paintPanel.model.getShape(this.name);
             line.setPoint1Coordinates(this.point1.X(), this.point1.Y());
             line.setPoint2Coordinates(this.point2.X(), this.point2.Y());
@@ -250,7 +259,7 @@ Drawings.PaintPanel.prototype = {
 
         var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
             {name: segment.getName(), straightFirst: false, straightLast: false});
-        jxgSegment.on('drag', function(){
+        jxgSegment.on('drag', function () {
             var segment = paintPanel.model.getShape(this.name);
             segment.setPoint1Coordinates(this.point1.X(), this.point1.Y());
             segment.setPoint2Coordinates(this.point2.X(), this.point2.Y());
@@ -266,8 +275,8 @@ Drawings.PaintPanel.prototype = {
         var jxgTriangle = this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
             {name: triangle.getName(), straightFirst: false, straightLast: false});
         var points = jxgTriangle.vertices;
-        points.forEach(function(jxgPoint){
-            jxgPoint.on('drag', function() {
+        points.forEach(function (jxgPoint) {
+            jxgPoint.on('drag', function () {
                 var point = paintPanel.model.getPoint(this.name);
                 point.x = this.X();
                 point.y = this.Y();
@@ -275,8 +284,8 @@ Drawings.PaintPanel.prototype = {
             });
         });
         var lines = jxgTriangle.borders;
-        lines.forEach(function(jxgLine){
-            jxgLine.on('drag', function(){
+        lines.forEach(function (jxgLine) {
+            jxgLine.on('drag', function () {
                 var point1 = paintPanel.model.getPoint(this.point1.name);
                 var point2 = paintPanel.model.getPoint(this.point2.name);
                 point1.x = this.point1.X();
@@ -290,12 +299,16 @@ Drawings.PaintPanel.prototype = {
         this._displaySegmentLength(points[2], points[0]);
     },
 
-    _displaySegmentLength: function(jxgPoint1, jxgPoint2) {
-        this.board.create('text',[
-            function(){return (jxgPoint1.X() + jxgPoint2.X()) / 1.85;},
-            function(){return (jxgPoint1.Y() + jxgPoint2.Y()) / 1.85;},
-            Math.sqrt(Math.pow(jxgPoint1.X() - jxgPoint2.X(),2) +
-                Math.pow(jxgPoint1.Y() - jxgPoint2.Y(), 2))],{});
+    _displaySegmentLength: function (jxgPoint1, jxgPoint2) {
+        this.board.create('text', [
+            function () {
+                return (jxgPoint1.X() + jxgPoint2.X()) / 1.85;
+            },
+            function () {
+                return (jxgPoint1.Y() + jxgPoint2.Y()) / 1.85;
+            },
+            Math.sqrt(Math.pow(jxgPoint1.X() - jxgPoint2.X(), 2) +
+                Math.pow(jxgPoint1.Y() - jxgPoint2.Y(), 2))], {});
     },
 
     _getJxgPoints: function (event) {
@@ -306,7 +319,7 @@ Drawings.PaintPanel.prototype = {
 
     _getJxgElement: function (event) {
         var elements = this.board.getAllObjectsUnderMouse(event);
-        for (var i=0; i<elements.length; ++i) {
+        for (var i = 0; i < elements.length; ++i) {
             if (elements[i].mouseover) {
                 return elements[i];
             }

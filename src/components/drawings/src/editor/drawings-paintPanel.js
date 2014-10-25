@@ -219,37 +219,25 @@ Drawings.PaintPanel.prototype = {
 
         var paintPanel = this;
 
-        jxgPoint.on('mousedrag', function () {
+        jxgPoint.coords.on('update', function () {
             var point = paintPanel.model.getPoint(this.name);
             point.setXY(this.X(), this.Y());
-        });
+        }, jxgPoint);
     },
 
     _drawLine: function (line) {
         var point1 = line.point1();
         var point2 = line.point2();
 
-        var jxgLine = this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
-
-        jxgLine.on('mousedrag', function () {
-            var line = paintPanel.model.getShape(this.name);
-            line.point1().setXY(this.point1.X(), this.point1.Y());
-            line.point2().setXY(this.point2.X(), this.point2.Y());
-        });
+        this.board.create('line', [point1.getName(), point2.getName()], {name: line.getName()});
     },
 
     _drawSegment: function (segment) {
         var point1 = segment.point1();
         var point2 = segment.point2();
 
-        var jxgSegment = this.board.create('line', [point1.getName(), point2.getName()],
+        this.board.create('line', [point1.getName(), point2.getName()],
             {name: segment.getName(), straightFirst: false, straightLast: false});
-
-        jxgSegment.on('mousedrag', function () {
-            var line = paintPanel.model.getShape(this.name);
-            line.point1().setXY(this.point1.X(), this.point1.Y());
-            line.point2().setXY(this.point2.X(), this.point2.Y());
-        });
     },
 
     _drawTriangle: function (triangle) {
@@ -257,17 +245,8 @@ Drawings.PaintPanel.prototype = {
         var point2 = triangle.point2();
         var point3 = triangle.point3();
 
-        var jxgTriangle = this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
+        this.board.create('polygon', [point1.getName(), point2.getName(), point3.getName()],
             {name: triangle.getName(), straightFirst: false, straightLast: false});
-
-        jxgTriangle.borders.forEach(function (jxgSegment) {
-            jxgSegment.on('mousedrag', function () {
-                var point1 = paintPanel.model.getPoint(this.point1.name);
-                var point2 = paintPanel.model.getPoint(this.point2.name);
-                point1.setXY(this.point1.X(), this.point1.Y());
-                point2.setXY(this.point2.X(), this.point2.Y());
-            });
-        });
     },
 
     _getJxgPoints: function (event) {

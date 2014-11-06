@@ -5,6 +5,7 @@
 Drawings.Controller = function (paintPanel, model) {
     this.paintPanel = paintPanel;
     this.model = model;
+    this.modify = false;
 };
 
 Drawings.Controller.prototype = {
@@ -51,8 +52,28 @@ Drawings.Controller.prototype = {
     },
 
     _handleLeftMouseClickEvent: function(event) {
-        var point = this._getOrCreatePoint(event);
-        this._addPoint(point);
+        if(this.modify == false) {
+            var point = this._getOrCreatePoint(event);
+            this._addPoint(point);
+        } else {
+            var jxgElement = this.paintPanel.getJxgElement(event);
+            this._showDialog(jxgElement);
+        }
+    },
+
+    _showDialog: function(jxgElement) {
+        if(jxgElement instanceof JXG.Point) {
+            var name = prompt("Введите имя точки");
+            if(name) {
+                this._setPointName(jxgElement, name);
+            }
+        }
+    },
+
+    _setPointName: function(jxgPoint, name) {
+        jxgPoint.name = name;
+        var point = this.model.getPoint(jxgPoint.id)
+        point.setName(name);
     },
 
     _getOrCreatePoint: function(event) {

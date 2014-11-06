@@ -20,6 +20,11 @@ Drawings.PaintPanel.prototype = {
         this.controller = new Drawings.Controller(this, this.model);
     },
 
+    getJxgElement: function(event) {
+        var element = this.board.getAllObjectsUnderMouse(event)[0];
+        return element;
+    },
+
     getJxgPoint: function (event) {
         var jxgPoints = this._getJxgPoints(event);
         return jxgPoints.length > 0 ? jxgPoints[0] : null;
@@ -51,37 +56,50 @@ Drawings.PaintPanel.prototype = {
 
         toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
+        toolbar.append('<div id="editButton" class="button edit" title="Редактировать"></div>');
 
         $('#pointButton').click(function () {
+            paintPanel.controller.modify = false;
             paintPanel._setMode(Drawings.DrawingMode.POINT);
         });
 
         $('#lineButton').click(function () {
+            paintPanel.controller.modify = false;
             paintPanel._setMode(Drawings.DrawingMode.LINE);
         });
 
         $('#segmentButton').click(function () {
+            paintPanel.controller.modify = false;
             paintPanel._setMode(Drawings.DrawingMode.SEGMENT);
         });
 
         $('#triangleButton').click(function () {
+            paintPanel.controller.modify = false;
             paintPanel._setMode(Drawings.DrawingMode.TRIANGLE);
         });
 
         $('#clearButton').click(function () {
+            paintPanel.controller.modify = false;
             paintPanel._clear();
         });
 
         $('#saveToFile').click(function () {
+            paintPanel.controller.modify = false;
             paintPanel._saveToFile();
         });
 
         $('#load').click(function () {
+            paintPanel.controller.modify = false;
             $("#fileInput").click();
         });
 
         $('#fileInput').change(function () {
+            paintPanel.controller.modify = false;
             paintPanel._loadFromFile();
+        });
+
+        $('#editButton').click(function () {
+            paintPanel.controller.modify = true;
         });
 
         // initialize board

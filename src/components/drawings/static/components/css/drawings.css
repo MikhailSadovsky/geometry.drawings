@@ -64,6 +64,11 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.edit {
+    background: url("../images/drawings/edit.jpg") no-repeat;
+    background-size: cover;
+}
+
 .geometryEditor .board {
     width: 90%;
     height: 100%;

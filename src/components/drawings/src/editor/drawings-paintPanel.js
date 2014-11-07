@@ -169,7 +169,7 @@ Drawings.PaintPanel.prototype = {
         var segmentLabel = this.board.create('text',[
             function(){return (point1.X() + point2.X()) / 1.95 + 0.5;},
             function(){return (point1.Y() + point2.Y()) / 1.95 + 0.6;},
-        length],{  fontSize: 16});
+        length],{fontSize: 16});
         if(segment.segmentLabel) {
             segment.segmentLabel.setText("");
         }
@@ -248,7 +248,7 @@ Drawings.PaintPanel.prototype = {
         var jxgPoint2 = this._getJxgObjectById(segment.point2().getId());
 
         this.board.create('line', [jxgPoint1, jxgPoint2],
-            {id: segment.getId(), name: segment.getName(), straightFirst: false, straightLast: false, withLabel: true});
+            {id: segment.getId(), name: segment.getName(), straightFirst: false, straightLast: false, strokeOpacity: 0.4});
     },
 
     _drawTriangle: function (triangle) {

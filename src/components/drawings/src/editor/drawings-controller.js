@@ -63,17 +63,31 @@ Drawings.Controller.prototype = {
 
     _showDialog: function(jxgElement) {
         if(jxgElement instanceof JXG.Point) {
-            var name = prompt("Введите имя точки");
-            if(name) {
-                this._setPointName(jxgElement, name);
-            }
+            this._setPointName(jxgElement);
+        }
+        else if(jxgElement instanceof JXG.Line) {
+            this._setLineLength(jxgElement);
         }
     },
 
-    _setPointName: function(jxgPoint, name) {
-        jxgPoint.name = name;
-        var point = this.model.getPoint(jxgPoint.id)
-        point.setName(name);
+    _setPointName: function(jxgPoint) {
+        var name = prompt("Введите имя точки")
+        if(name) {
+            jxgPoint.name = name;
+            var point = this.model.getPoint(jxgPoint.id)
+            point.setName(name);
+        }
+    },
+
+    _setLineLength: function(jxgLine) {
+        var line = this.model.getShape(jxgLine.id);
+        if(line instanceof Drawings.Segment) {
+            var length = prompt("Введите длину отрезка");
+            if(length) {
+                line.setLength(length);
+                this.paintPanel.createSegmentLabel(jxgLine, length);
+            }
+        }
     },
 
     _getOrCreatePoint: function(event) {

@@ -68,6 +68,8 @@ Drawings.Controller.prototype = {
         else if(jxgElement instanceof JXG.Line) {
             this._setLineLength(jxgElement);
         }
+        else if(jxgElement instanceof JXG.Polygon) {
+        }
     },
 
     _setPointName: function(jxgPoint) {
@@ -83,7 +85,9 @@ Drawings.Controller.prototype = {
         var line = this.model.getShape(jxgLine.id);
         if(line instanceof Drawings.Segment) {
             var length = prompt("Введите длину отрезка");
-            if(length) {
+            if(isNaN(parseInt(length)) || !isFinite(length)) {
+                alert("Введите число!!")
+            } else if(length) {
                 line.setLength(length);
                 this.paintPanel.createSegmentLabel(jxgLine, length);
             }

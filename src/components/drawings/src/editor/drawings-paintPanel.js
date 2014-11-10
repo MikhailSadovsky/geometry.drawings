@@ -199,8 +199,13 @@ Drawings.PaintPanel.prototype = {
     },
 
     _erase: function (modelObjects) {
+        var jxgElement;
         for (var i = 0; i < modelObjects.length; i++) {
-            this.board.removeObject(this._getJxgObjectById(modelObjects[i].getId()));
+            jxgElement = this._getJxgObjectById(modelObjects[i].getId());
+            if(jxgElement.segmentLabel) {
+                this.board.removeObject(jxgElement.segmentLabel);
+            }
+            this.board.removeObject(jxgElement);
         }
     },
 
@@ -247,8 +252,11 @@ Drawings.PaintPanel.prototype = {
         var jxgPoint1 = this._getJxgObjectById(segment.point1().getId());
         var jxgPoint2 = this._getJxgObjectById(segment.point2().getId());
 
-        this.board.create('line', [jxgPoint1, jxgPoint2],
+        var jxgSegment = this.board.create('line', [jxgPoint1, jxgPoint2],
             {id: segment.getId(), name: segment.getName(), straightFirst: false, straightLast: false, strokeOpacity: 0.4});
+        if(segment.length != "") {
+            this.createSegmentLabel(jxgSegment, segment.length);
+        }
     },
 
     _drawTriangle: function (triangle) {

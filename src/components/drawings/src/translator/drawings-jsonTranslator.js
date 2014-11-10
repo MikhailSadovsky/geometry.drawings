@@ -51,7 +51,6 @@ Drawings.JsonTranslator = {
         var line = new Drawings.Line(point1, point2);
         line.setId(jsonLine.id);
         line.setName(jsonLine.name);
-
         return line;
     },
 
@@ -62,7 +61,7 @@ Drawings.JsonTranslator = {
         var segment = new Drawings.Segment(point1, point2);
         segment.setId(jsonSegment.id);
         segment.setName(jsonSegment.name);
-
+        segment.setLength(jsonSegment.length);
         return segment;
     },
 

@@ -87,7 +87,7 @@ Drawings.Controller.prototype = {
             var length = prompt("Введите длину отрезка");
             if(isNaN(parseInt(length)) || !isFinite(length)) {
                 alert("Введите число!!")
-            } else if(length) {
+            } else {
                 line.setLength(length);
                 this.paintPanel.createSegmentLabel(jxgLine, length);
             }

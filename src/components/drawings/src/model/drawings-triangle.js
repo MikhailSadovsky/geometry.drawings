@@ -4,6 +4,7 @@
 
 Drawings.Triangle = function Triangle(point1, point2, point3) {
     Drawings.Triangle.superclass.constructor.apply(this, [[point1, point2, point3]]);
+    this.square = null;
 };
 
 extend(Drawings.Triangle, Drawings.Shape);
@@ -18,4 +19,8 @@ Drawings.Triangle.prototype.point2 = function () {
 
 Drawings.Triangle.prototype.point3 = function () {
     return this.points[2];
+};
+
+Drawings.Triangle.prototype.setSquare = function (square) {
+    this.square = square;
 };

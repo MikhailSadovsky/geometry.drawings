@@ -73,7 +73,7 @@ Drawings.JsonTranslator = {
         var triangle = new Drawings.Triangle(point1, point2, point3);
         triangle.setId(jsonTriangle.id);
         triangle.setName(jsonTriangle.name);
-
+        triangle.setSquare(jsonTriangle.square);
         return triangle;
     }
 };

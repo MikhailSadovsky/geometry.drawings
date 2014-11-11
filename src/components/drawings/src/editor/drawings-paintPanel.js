@@ -163,17 +163,39 @@ Drawings.PaintPanel.prototype = {
         return board;
     },
 
-    createSegmentLabel: function(segment, length){
+    _createSegmentLabel: function(segment, length){
         var point1 = segment.point1;
         var point2 = segment.point2;
         var segmentLabel = this.board.create('text',[
             function(){return (point1.X() + point2.X()) / 1.95 + 0.5;},
             function(){return (point1.Y() + point2.Y()) / 1.95 + 0.6;},
         length],{fontSize: 16});
-        if(segment.segmentLabel) {
-            segment.segmentLabel.setText("");
+        if(segment.textLabel) {
+            segment.textLabel.setText("");
         }
-        segment.segmentLabel = segmentLabel;
+        segment.textLabel = segmentLabel;
+    },
+
+    createTextLabel: function(jxgObject, text) {
+        if(jxgObject instanceof  JXG.Line) {
+            this._createSegmentLabel(jxgObject, text);
+        } else if(jxgObject instanceof JXG.Polygon) {
+            this._createPolygonLabel(jxgObject, text);
+        }
+    },
+
+    _createPolygonLabel: function(triangle, square){
+        var point1 = triangle.vertices[0];
+        var point2 = triangle.vertices[1];
+        var point3 = triangle.vertices[2];
+        var textLabel = this.board.create('text',[
+            function(){return (point1.X() + point2.X() + point3.X()) / 3;},
+            function(){return (point1.Y() + point2.Y() + point3.Y()) / 3;},
+            square],{fontSize: 16});
+        if(triangle.textLabel) {
+            triangle.textLabel.setText("");
+        }
+        triangle.textLabel = textLabel;
     },
 
     _configureModel: function () {
@@ -202,8 +224,8 @@ Drawings.PaintPanel.prototype = {
         var jxgElement;
         for (var i = 0; i < modelObjects.length; i++) {
             jxgElement = this._getJxgObjectById(modelObjects[i].getId());
-            if(jxgElement.segmentLabel) {
-                this.board.removeObject(jxgElement.segmentLabel);
+            if(jxgElement.textLabel) {
+                this.board.removeObject(jxgElement.textLabel);
             }
             this.board.removeObject(jxgElement);
         }
@@ -255,7 +277,7 @@ Drawings.PaintPanel.prototype = {
         var jxgSegment = this.board.create('line', [jxgPoint1, jxgPoint2],
             {id: segment.getId(), name: segment.getName(), straightFirst: false, straightLast: false, strokeOpacity: 0.4});
         if(segment.length != "") {
-            this.createSegmentLabel(jxgSegment, segment.length);
+            this._createSegmentLabel(jxgSegment, segment.length);
         }
     },
 
@@ -264,8 +286,11 @@ Drawings.PaintPanel.prototype = {
         var jxgPoint2 = this._getJxgObjectById(triangle.point2().getId());
         var jxgPoint3 = this._getJxgObjectById(triangle.point3().getId());
 
-        this.board.create('polygon', [jxgPoint1, jxgPoint2, jxgPoint3],
-            {id: triangle.getId(), name: triangle.getName(), straightFirst: false, straightLast: false});
+        var polygon = this.board.create('polygon', [jxgPoint1, jxgPoint2, jxgPoint3],
+            {id: triangle.getId(), name: triangle.getName(), straightFirst: false, straightLast: false, hasInnerPoints: true});
+        if(triangle.square != "") {
+            this._createPolygonLabel(polygon, triangle.square);
+        }
     },
 
     _getJxgPoints: function (event) {
@@ -278,5 +303,14 @@ Drawings.PaintPanel.prototype = {
         return this.board.select(function(jxgObject) {
             return jxgObject.id == id;
         }).objectsList[0];
+    },
+
+    _getPolygons: function(event){
+        var elements =  this.board.select(function(jxgObject) {
+            if(jxgObject instanceof  JXG.Polygon && jxgObject.hasPoint(event.layerX, event.layerY)) {
+                return jxgObject;
+            }
+        }).objectsList;
+        return elements;
     }
 };

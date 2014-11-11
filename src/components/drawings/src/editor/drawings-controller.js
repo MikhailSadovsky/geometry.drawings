@@ -57,19 +57,55 @@ Drawings.Controller.prototype = {
             this._addPoint(point);
         } else {
             var jxgElement = this.paintPanel.getJxgElement(event);
-            this._showDialog(jxgElement);
+            this._showDialog(jxgElement, event);
         }
     },
 
-    _showDialog: function(jxgElement) {
+    _showDialog: function(jxgElement, event) {
         if(jxgElement instanceof JXG.Point) {
             this._setPointName(jxgElement);
         }
         else if(jxgElement instanceof JXG.Line) {
             this._setLineLength(jxgElement);
+        } else {
+            this._checkPolygons(event);
         }
-        else if(jxgElement instanceof JXG.Polygon) {
+    },
+
+    _checkPolygons: function(event) {
+        var polygons = this.paintPanel._getPolygons(event);
+        if(polygons.length != 0) {
+            this._setPolygonSquare(polygons);
         }
+    },
+
+    _setPolygonSquare: function(polygons) {
+        var minAreaPolygon = polygons[0];
+        if(polygons.length > 1){
+            minAreaPolygon = this._getMinAreaPolygon(polygons);
+        }
+        this._setSquare(minAreaPolygon);
+    },
+
+    _setSquare: function(polygon) {
+        var triangle = this.model.getShape(polygon.id);
+        var square = prompt("Введите площадь");
+        if(isNaN(parseInt(square)) || !isFinite(square)) {
+            alert("Введите число!!")
+        } else {
+            triangle.setSquare(square);
+            this.paintPanel.createTextLabel(polygon, square);
+        }
+    },
+
+    _getMinAreaPolygon: function(polygons) {
+        var minAreaPolygon = polygons[0];
+        polygons.forEach(function(polygon) {
+            if(polygon.Area() < minAreaPolygon.Area()) {
+                minAreaPolygon = polygon;
+            }
+        })
+        return minAreaPolygon;
     },
 
     _setPointName: function(jxgPoint) {
@@ -89,7 +125,7 @@ Drawings.Controller.prototype = {
                 alert("Введите число!!")
             } else {
                 line.setLength(length);
-                this.paintPanel.createSegmentLabel(jxgLine, length);
+                this.paintPanel.createTextLabel(jxgLine, length);
             }
         }
     },

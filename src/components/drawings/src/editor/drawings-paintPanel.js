@@ -51,6 +51,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="lineButton" class="button line" title="Прямая"></div>');
         toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
         toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
+        toolbar.append('<div id="circleButton" class="button circle" title="Окружность"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
 
@@ -76,6 +77,11 @@ Drawings.PaintPanel.prototype = {
         $('#triangleButton').click(function () {
             paintPanel.controller.modify = false;
             paintPanel._setMode(Drawings.DrawingMode.TRIANGLE);
+        });
+
+        $('#circleButton').click(function () {
+            paintPanel.controller.modify = false;
+            paintPanel._setMode(Drawings.DrawingMode.CIRCLE);
         });
 
         $('#clearButton').click(function () {
@@ -247,6 +253,9 @@ Drawings.PaintPanel.prototype = {
             else if (modelObject instanceof Drawings.Triangle) {
                 this._drawTriangle(modelObject);
             }
+            else if (modelObject instanceof Drawings.Circle) {
+                this._drawCircle(modelObject);
+            }
         }
     },
 
@@ -279,6 +288,14 @@ Drawings.PaintPanel.prototype = {
         if(segment.length != "") {
             this._createSegmentLabel(jxgSegment, segment.length);
         }
+    },
+
+    _drawCircle: function (circle) {
+        var jxgPoint1 = this._getJxgObjectById(circle.point1().getId());
+        var jxgPoint2 = this._getJxgObjectById(circle.point2().getId());
+
+        var jxgCircle = this.board.create('circle', [jxgPoint1, jxgPoint2],
+            {id: circle.getId(), name: circle.getName(), straightFirst: false, straightLast: false, strokeOpacity: 0.4});
     },
 
     _drawTriangle: function (triangle) {

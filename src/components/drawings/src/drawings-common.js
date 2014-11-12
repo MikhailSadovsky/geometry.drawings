@@ -13,5 +13,6 @@ Drawings.DrawingMode = {
     POINT: 0,
     LINE: 1,
     SEGMENT: 2,
-    TRIANGLE: 3
+    TRIANGLE: 3,
+    CIRCLE: 4
 };

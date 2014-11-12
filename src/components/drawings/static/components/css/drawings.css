@@ -49,6 +49,11 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.circle {
+    background: url("../images/drawings/circle.jpg") no-repeat;
+    background-size: cover;
+}
+
 .geometryEditor .toolbar .button.clear {
     background: url("../images/drawings/clear.gif") no-repeat;
     background-size: cover;

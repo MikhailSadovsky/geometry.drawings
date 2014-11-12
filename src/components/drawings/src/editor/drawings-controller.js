@@ -167,6 +167,9 @@ Drawings.Controller.prototype = {
         else if (this.drawingMode == Drawings.DrawingMode.TRIANGLE) {
             this._createTriangleIfPossible();
         }
+        else if (this.drawingMode == Drawings.DrawingMode.CIRCLE) {
+            this._createCircleIfPossible();
+        }
     },
 
     _createLineIfPossible: function() {
@@ -195,6 +198,21 @@ Drawings.Controller.prototype = {
 
             this.points.length = 0;
         }
+    },
+
+    _createCircleIfPossible: function() {
+        if (this.points.length == 2) {
+            var circle = new Drawings.Circle(this.points[0], this.points[1]);
+            circle.setName(this._generateCircleName(circle));
+            this.model.addShape(circle);
+            this.points.length = 0;
+        }
+    },
+
+    _generateCircleName: function(circle) {
+        var point1Name = circle.point1().getName();
+        var point2Name = circle.point2().getName();
+        return point1Name && point2Name ? 'Окр(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     _generateSegmentName: function(segment) {

@@ -8,6 +8,7 @@
         "src/model/drawings-line.js",
         "src/model/drawings-segment.js",
         "src/model/drawings-triangle.js",
+        "src/model/drawings-circle.js",
         "src/model/drawings-model.js",
 
         "src/translator/drawings-jsonTranslator.js",

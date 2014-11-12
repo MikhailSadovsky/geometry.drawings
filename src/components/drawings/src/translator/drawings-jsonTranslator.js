@@ -34,6 +34,7 @@ Drawings.JsonTranslator = {
         var parseMethodsMap = {};
         parseMethodsMap["Line"] = this._parseJsonLine;
         parseMethodsMap["Segment"] = this._parseJsonSegment;
+        parseMethodsMap["Circle"] = this._parseJsonCircle;
         parseMethodsMap["Triangle"] = this._parseJsonTriangle;
 
         jsonShapes.forEach(function (jsonShape) {
@@ -52,6 +53,17 @@ Drawings.JsonTranslator = {
         line.setId(jsonLine.id);
         line.setName(jsonLine.name);
         return line;
+    },
+
+    _parseJsonCircle: function(jsonCircle, points) {
+        var point1 = Drawings.Utils.getObjectById(points, jsonCircle.points[0].id);
+        var point2 = Drawings.Utils.getObjectById(points, jsonCircle.points[1].id);
+
+        var circle = new Drawings.Circle(point1, point2);
+        circle.setId(jsonCircle.id);
+        circle.setName(jsonCircle.name);
+        circle.setRadius(jsonCircle.radius);
+        return circle;
     },
 
     _parseJsonSegment: function(jsonSegment, points) {

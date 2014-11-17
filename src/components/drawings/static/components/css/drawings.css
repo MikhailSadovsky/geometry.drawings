@@ -70,7 +70,7 @@
 }
 
 .geometryEditor .toolbar .button.edit {
-    background: url("../images/drawings/edit.jpg") no-repeat;
+    background: url("../images/drawings/edit_properties.jpg") no-repeat;
     background-size: cover;
 }
 

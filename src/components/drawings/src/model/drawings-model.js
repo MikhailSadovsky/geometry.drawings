@@ -69,5 +69,10 @@ Drawings.Model.prototype = {
 
     _removed: function(objectsToRemove) {
         this.onUpdateCallback(objectsToRemove, [], []);
-    }
+    },
+
+    translateToBase: function () {
+        Drawings.ScTranslator.putModel(this);
+    },
+
 };

@@ -12,6 +12,7 @@
         "src/model/drawings-model.js",
 
         "src/translator/drawings-jsonTranslator.js",
+        "src/translator/drawings-scTranslator.js",
 
         "src/editor/drawings-controller.js",
         "src/editor/drawings-paintPanel.js"

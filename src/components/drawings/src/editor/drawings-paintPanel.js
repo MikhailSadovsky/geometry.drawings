@@ -154,7 +154,7 @@ Drawings.PaintPanel.prototype = {
     },
 
     _createBoard: function () {
-        var board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true});
+        var board = JXG.JSXGraph.initBoard('board', {boundingbox: [-20, 20, 20, -20], showCopyright: false, grid: true, unitX: 20, unitY: 20});
 
         var paintPanel = this;
 

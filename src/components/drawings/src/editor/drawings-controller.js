@@ -4,6 +4,7 @@
 
 Drawings.Controller = function (paintPanel, model) {
     this.paintPanel = paintPanel;
+	model.paintPanel = paintPanel;
     this.model = model;
     this.modify = false;
 };
@@ -132,7 +133,6 @@ Drawings.Controller.prototype = {
 
     _getOrCreatePoint: function(event) {
         var point;
-
         var jxgPoint = this.paintPanel.getJxgPoint(event);
 
         if (jxgPoint) {

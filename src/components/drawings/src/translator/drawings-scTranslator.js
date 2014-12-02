@@ -26,7 +26,6 @@ Drawings.ScTranslator = {
 			}).fail(function () {
 				self[node_name] = null;
 				dfd.resolve(self[node_name]);
-				//dfd.reject();
 		    });
 
 			return dfd.promise();
@@ -50,14 +49,11 @@ Drawings.ScTranslator = {
 		my_array.push(this.getKeyNode("nrel_vertex"));
 		my_array.push(this.getKeyNode("nrel_length"));
 		my_array.push(this.getKeyNode("concept_value"));
-		//my_array.push(this.getKeyNode("concept_value_2")); //TODO: add value in
-		//my_array.push(this.getKeyNode("XXXXXXXX")); //TODO: add sm
 		my_array.push(this.getKeyNode("nrel_area"));
 		my_array.push(this.getKeyNode("concept_square"));
 		my_array.push(this.getKeyNode("big_red_node")); // 14
 		
 		$.when.apply($, my_array).done(function (){
-		//alert("resolved 1: "+ self.big_red_node);//TODO: remove alert
 			dfd.resolve();
 		
 		}).fail(function () {
@@ -67,14 +63,12 @@ Drawings.ScTranslator = {
 		return dfd.promise();
 	},
 
-//~~~~~~~~~~~
     putPoint: function (point) {
 
 		var dfd = new jQuery.Deferred();
 			
 		if (point.hasOwnProperty("sc_addr") && point.sc_addr != null){
 			dfd.resolve(point.sc_addr);
-		//	alert("point resolved: " + point.sc_addr);//TODO: remove alert
 			return dfd.promise();
 		}
 			
@@ -82,7 +76,6 @@ Drawings.ScTranslator = {
 		point.sc_addr = null;
 
 		window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (r){
-			//point.setScAddr(r.result);
 			point.sc_addr = r.result;
 
 			window.sctpClient.create_arc(sc_type_arc_pos_const_perm, r.result, self.big_red_node).done(function (){
@@ -97,7 +90,6 @@ Drawings.ScTranslator = {
 			dfd.reject();
 			alert("create node for point failed");
 		});
-			//dfd.resolve(r.result);
 		
     return dfd.promise();
     },
@@ -107,13 +99,11 @@ Drawings.ScTranslator = {
 		var dfd = new jQuery.Deferred();
 		var my_array = [];
 		var self = this;
-		
 		for (t in points){
 			my_array.push(this.putPoint(points[t]));
 		};
 
 		$.when.apply($, my_array).done(function (){
-		///alert("resolved pushPoints: "+ points.length);//TODO: remove alert
 			dfd.resolve();
 		
 		}).fail(function () {
@@ -160,28 +150,26 @@ Drawings.ScTranslator = {
     },
 
     putModel: function (model) {
-	//cleanup
 	var cleanup = this.wipeOld;
-	//adding points
+
 	var pushPts = this.pushPoints;
 	var self = this;
 
 	var dfd = this.getKeyNodes().done(function () {
 		//cleanup.call(self);
-		console.log(self);//TODO: remove logging resolved system nodes
 
 		//foreach point add point-defined nodes and arcs
-		pushPts.call(self, model.points);
-	});
-
-	$.when(dfd).done(function (){
+		return pushPts.call(self, model.points);
+		
+	}).done(function (){
 		//foreach shape add shape-defined nodes and arcs
 
 		for (var i = 0; i < model.points.length; i++) 
 		{
 			var el = model.points[i];
+			document.getElementById(model.paintPanel._getJxgObjectById(el.getId()).rendNode.id).setAttribute('sc_addr', el.sc_addr);
 		}
-		alert(model.points.length + " points translated; ");
+//		alert(model.points.length + " points translated; ");
         
 	});		
 	

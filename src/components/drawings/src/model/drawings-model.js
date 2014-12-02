@@ -73,6 +73,6 @@ Drawings.Model.prototype = {
 
     translateToBase: function () {
         Drawings.ScTranslator.putModel(this);
-    },
+    }
 
 };

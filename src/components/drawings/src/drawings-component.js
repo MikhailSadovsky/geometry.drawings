@@ -82,7 +82,7 @@ Drawings.GeomDrawWindow = function(sandbox) {
 
     this.eventStructUpdate = function(added, element, arc) {
         window.sctpClient.get_arc(arc).done(function (r) {
-            var addr = r.result[1];
+            var addr = r.result;
             window.sctpClient.get_element_type(addr).done(function (t) {
                 var type = t.result;
                 

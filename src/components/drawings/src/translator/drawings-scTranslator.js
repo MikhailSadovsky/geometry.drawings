@@ -302,5 +302,5 @@ Drawings.ScTranslator = {
 
 		});
 
-	},
+	}
 };

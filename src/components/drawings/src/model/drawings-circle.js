@@ -1,7 +1,10 @@
+/**
+ * Circle model.
+ */
+
 Drawings.Circle = function Circle(point1, point2) {
     Drawings.Circle.superclass.constructor.apply(this, [[point1, point2]]);
     this.radius = null;
-    //this.className = 'circle';
 };
 
 extend(Drawings.Circle, Drawings.Shape);

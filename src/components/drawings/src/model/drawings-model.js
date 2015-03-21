@@ -11,6 +11,10 @@ Drawings.Model.prototype = {
 
     onUpdateCallback: null,
 
+    getModelObjects: function () {
+        return this.points.concat(this.shapes);
+    },
+
     getPoints: function () {
         return this.points;
     },
@@ -67,12 +71,7 @@ Drawings.Model.prototype = {
         this.onUpdateCallback([], [], objectsToUpdate);
     },
 
-    _removed: function(objectsToRemove) {
+    _removed: function (objectsToRemove) {
         this.onUpdateCallback(objectsToRemove, [], []);
-    },
-
-    translateToBase: function () {
-        Drawings.ScTranslator.putModel(this);
     }
-
 };

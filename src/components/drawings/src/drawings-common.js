@@ -16,3 +16,9 @@ Drawings.DrawingMode = {
     TRIANGLE: 3,
     CIRCLE: 4
 };
+
+Drawings.FILL_COLOR = "DodgerBlue";
+Drawings.STOKE_COLOR = "DodgerBlue";
+Drawings.TRANSLATED_FILL_COLOR = "Blue";
+Drawings.TRANSLATED_STROKE_COLOR = "Blue";
+

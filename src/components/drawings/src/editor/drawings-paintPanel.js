@@ -20,9 +20,12 @@ Drawings.PaintPanel.prototype = {
         this.controller = new Drawings.Controller(this, this.model);
     },
 
+    getJxgElements: function (event) {
+        return this.board.getAllObjectsUnderMouse(event);
+    },
+
     getJxgElement: function (event) {
-        var element = this.board.getAllObjectsUnderMouse(event)[0];
-        return element;
+        return this.board.getAllObjectsUnderMouse(event)[0];
     },
 
     getJxgPoint: function (event) {
@@ -165,13 +168,15 @@ Drawings.PaintPanel.prototype = {
     },
 
     _createBoard: function () {
-        var board = JXG.JSXGraph.initBoard('board', {
+        var properties = {
             boundingbox: [-20, 20, 20, -20],
             showCopyright: false,
             grid: true,
             unitX: 20,
             unitY: 20
-        });
+        };
+
+        var board = JXG.JSXGraph.initBoard('board', properties);
 
         var paintPanel = this;
 
@@ -184,49 +189,6 @@ Drawings.PaintPanel.prototype = {
         });
 
         return board;
-    },
-
-    _createSegmentLabel: function (segment, length) {
-        var point1 = segment.point1;
-        var point2 = segment.point2;
-        var segmentLabel = this.board.create('text', [
-            function () {
-                return (point1.X() + point2.X()) / 1.95 + 0.5;
-            },
-            function () {
-                return (point1.Y() + point2.Y()) / 1.95 + 0.6;
-            },
-            length], {fontSize: 16});
-        if (segment.textLabel) {
-            segment.textLabel.setText("");
-        }
-        segment.textLabel = segmentLabel;
-    },
-
-    createTextLabel: function (jxgObject, text) {
-        if (jxgObject instanceof  JXG.Line) {
-            this._createSegmentLabel(jxgObject, text);
-        } else if (jxgObject instanceof JXG.Polygon) {
-            this._createPolygonLabel(jxgObject, text);
-        }
-    },
-
-    _createPolygonLabel: function (triangle, square) {
-        var point1 = triangle.vertices[0];
-        var point2 = triangle.vertices[1];
-        var point3 = triangle.vertices[2];
-        var textLabel = this.board.create('text', [
-            function () {
-                return (point1.X() + point2.X() + point3.X()) / 3;
-            },
-            function () {
-                return (point1.Y() + point2.Y() + point3.Y()) / 3;
-            },
-            square], {fontSize: 16});
-        if (triangle.textLabel) {
-            triangle.textLabel.setText("");
-        }
-        triangle.textLabel = textLabel;
     },
 
     _configureModel: function () {
@@ -341,9 +303,28 @@ Drawings.PaintPanel.prototype = {
 
         var jxgSegment = this.board.create('line', [jxgPoint1, jxgPoint2], properties);
 
-        if (segment.length != "") {
-            this._createSegmentLabel(jxgSegment, segment.length);
+        if (segment.length != null) {
+            this._drawSegmentLength(jxgSegment, segment);
         }
+    },
+
+    _drawSegmentLength: function (jxgSegment, segment) {
+        var point1 = segment.point1();
+        var point2 = segment.point2();
+
+        var labelX = function () {
+            return (point1.getX() + point2.getX()) / 1.95 + 0.5;
+        };
+
+        var labelY = function () {
+            return (point1.getY() + point2.getY()) / 1.95 + 0.6;
+        };
+
+        var properties = {
+            fontSize: 16
+        };
+
+        jxgSegment.textLabel = this.board.create('text', [labelX, labelY, segment.getLength()], properties);
     },
 
     _drawCircle: function (circle) {
@@ -381,11 +362,31 @@ Drawings.PaintPanel.prototype = {
             fillColor: fillColor
         };
 
-        var polygon = this.board.create('polygon', [jxgPoint1, jxgPoint2, jxgPoint3], properties);
+        var jxgTriangle = this.board.create('polygon', [jxgPoint1, jxgPoint2, jxgPoint3], properties);
 
-        if (triangle.square != "") {
-            this._createPolygonLabel(polygon, triangle.square);
+        if (triangle.square != null) {
+            this._drawTriangleSquare(jxgTriangle, triangle);
         }
+    },
+
+    _drawTriangleSquare: function (jxgTriangle, triangle) {
+        var point1 = triangle.point1();
+        var point2 = triangle.point2();
+        var point3 = triangle.point3();
+
+        var labelX = function () {
+            return (point1.getX() + point2.getX() + point3.getX()) / 3;
+        };
+
+        var labelY = function () {
+            return (point1.getY() + point2.getY() + point3.getY()) / 3;
+        };
+
+        var properties = {
+            fontSize: 16
+        };
+
+        jxgTriangle.textLabel = this.board.create('text', [labelX, labelY, triangle.square], properties);
     },
 
     _getStrokeColor: function (shape) {
@@ -406,14 +407,5 @@ Drawings.PaintPanel.prototype = {
         return this.board.select(function (jxgObject) {
             return jxgObject.id == id;
         }).objectsList[0];
-    },
-
-    _getPolygons: function (event) {
-        var elements = this.board.select(function (jxgObject) {
-            if (jxgObject instanceof  JXG.Polygon && jxgObject.hasPoint(event.layerX, event.layerY)) {
-                return jxgObject;
-            }
-        }).objectsList;
-        return elements;
     }
 };

@@ -4,6 +4,24 @@
 
 Drawings.Utils = {
 
+    selectPoints: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Point;
+        })
+    },
+
+    selectSegments: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Segment;
+        })
+    },
+
+    selectTriangles: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Triangle;
+        })
+    },
+
     getObjectById: function (objects, objectId) {
         return objects.filter(function (object) {
             return object.getId() == objectId;

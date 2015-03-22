@@ -20,3 +20,7 @@ Drawings.Segment.prototype.point2 = function () {
 Drawings.Segment.prototype.setLength = function (length) {
     this.length = length;
 };
+
+Drawings.Segment.prototype.getLength = function () {
+    return this.length;
+};

@@ -173,7 +173,7 @@ Drawings.Controller.prototype = {
     },
 
     _setupSettings: function (event) {
-        var jxgObjects = this.paintPanel.getJxgElements(event);
+        var jxgObjects = this.paintPanel.getJxgObject(event);
 
         var objects = [];
         for (var i = 0; i < jxgObjects.length; i++) {

@@ -10,6 +10,12 @@ Drawings.Utils = {
         })
     },
 
+    selectShapes: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Shape;
+        })
+    },
+
     selectSegments: function (objects) {
         return objects.filter(function (object) {
             return object instanceof Drawings.Segment;

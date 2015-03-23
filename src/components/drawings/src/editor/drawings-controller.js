@@ -204,7 +204,7 @@ Drawings.Controller.prototype = {
 
         if (name) {
             point.setName(name);
-            this.model.updated(point);
+            this.model.updated([point]);
         }
     },
 
@@ -216,7 +216,7 @@ Drawings.Controller.prototype = {
         }
         else {
             segment.setLength(length);
-            this.model.updated(segment);
+            this.model.updated([segment]);
         }
     },
 
@@ -228,7 +228,7 @@ Drawings.Controller.prototype = {
         }
         else {
             triangle.setSquare(square);
-            this.model.updated(triangle);
+            this.model.updated([triangle]);
         }
     }
 };

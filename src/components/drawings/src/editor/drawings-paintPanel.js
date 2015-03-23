@@ -204,7 +204,7 @@ Drawings.PaintPanel.prototype = {
         paintPanel.model.onUpdate(function (objectsToRemove, objectsToAdd, objectsToUpdate) {
             paintPanel._erase(objectsToRemove);
             paintPanel._draw(objectsToAdd);
-            paintPanel._redraw(objectsToUpdate);
+            paintPanel._update(objectsToUpdate);
         });
     },
 
@@ -217,25 +217,60 @@ Drawings.PaintPanel.prototype = {
 
     _draw: function (modelObjects) {
         for (var i = 0; i < modelObjects.length; i++) {
-            var modelObject = modelObjects[i];
-
-            var renderer = this.rendererMap[modelObject.className];
-            renderer.render(modelObject);
+            var renderer = this.rendererMap[modelObjects[i].className];
+            renderer.render(modelObjects[i]);
         }
     },
 
     _erase: function (modelObjects) {
         for (var i = 0; i < modelObjects.length; i++) {
-            var modelObject = modelObjects[i];
-
-            var renderer = this.rendererMap[modelObject.className];
-            renderer.erase(modelObject);
+            var renderer = this.rendererMap[modelObjects[i].className];
+            renderer.erase(modelObjects[i]);
         }
     },
 
     _redraw: function (modelObjects) {
         this._erase(modelObjects);
         this._draw(modelObjects);
+    },
+
+    _update: function(modelObjects) {
+        var points = Drawings.Utils.selectPoints(modelObjects);
+        var shapes = Drawings.Utils.selectShapes(modelObjects);
+
+        this._updatePoints(points);
+        this._updateShapes(shapes);
+    },
+
+    _updatePoints: function(points) {
+        for (var i = 0; i < points.length; i++) {
+            var point = points[i];
+
+            var connectedShapes = this._getConnectedShapes(point);
+
+            this._erase(connectedShapes);
+            this._redraw([point]);
+            this._draw(connectedShapes);
+        }
+    },
+
+    _getConnectedShapes: function (point) {
+        var shapes = this.model.getShapes();
+        var connectedShapes = [];
+
+        for (var i = 0; i < shapes.length; i++) {
+            var pointIndex = shapes[i].getPoints().indexOf(point);
+
+            if (pointIndex >= 0) {
+                connectedShapes.push(shapes[i]);
+            }
+        }
+
+        return connectedShapes;
+    },
+
+    _updateShapes: function(shapes) {
+        this._redraw(shapes);
     },
 
     _getJxgObjectById: function (id) {

@@ -63,39 +63,12 @@ Drawings.Model.prototype = {
         this.points.length = 0;
     },
 
+    updated: function (objects) {
+        this._updated(objects)
+    },
+
     onUpdate: function (callback) {
         this.onUpdateCallback = callback;
-    },
-
-    updated: function (object) {
-        if (object instanceof Drawings.Point) {
-            this._updatePoint(object);
-        }
-        else {
-            this._updated([object]);
-        }
-    },
-
-    _updatePoint: function (point) {
-        var connectedShapes = this._getConnectedShapes(point);
-        this._removed(connectedShapes);
-        this._updated([point]);
-        this._added(connectedShapes);
-    },
-
-    _getConnectedShapes: function (point) {
-        var connectedShapes = [];
-
-        for (var i = 0; i < this.shapes.length; i++) {
-            var shape = this.shapes[i];
-            var pointIndex = shape.getPoints().indexOf(point);
-
-            if (pointIndex >= 0) {
-                connectedShapes.push(shape);
-            }
-        }
-
-        return connectedShapes;
     },
 
     _added: function (objectsToAdd) {

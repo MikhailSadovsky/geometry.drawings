@@ -24,3 +24,7 @@ Drawings.Triangle.prototype.point3 = function () {
 Drawings.Triangle.prototype.setSquare = function (square) {
     this.square = square;
 };
+
+Drawings.Triangle.prototype.getSquare = function () {
+    return this.square;
+};

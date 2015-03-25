@@ -14,6 +14,8 @@
         "src/translator/drawings-jsonTranslator.js",
         "src/translator/drawings-scTranslator.js",
 
+        "src/editor/component/drawings-contextMenu.js",
+
         "src/editor/drawings-controller.js",
         "src/editor/drawings-paintPanel.js",
 
@@ -21,7 +23,11 @@
         "src/editor/renderer/drawings-lineRenderer.js",
         "src/editor/renderer/drawings-segmentRenderer.js",
         "src/editor/renderer/drawings-triangleRenderer.js",
-        "src/editor/renderer/drawings-circleRenderer.js"
+        "src/editor/renderer/drawings-circleRenderer.js",
+
+        "src/editor/controller/drawings-pointController.js",
+        "src/editor/controller/drawings-segmentController.js",
+        "src/editor/controller/drawings-triangleController.js"
     ],
 
     "component": "src/drawings-component.js",

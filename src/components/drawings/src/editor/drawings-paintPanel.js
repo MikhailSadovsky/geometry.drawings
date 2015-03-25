@@ -32,12 +32,16 @@ Drawings.PaintPanel.prototype = {
         this.rendererMap["Circle"] = new Drawings.CircleRenderer(this.board);
     },
 
-    getJxgObject: function (event) {
+    getBoard: function () {
+        return this.board;
+    },
+
+    getJxgObjects: function (event) {
         return this.board.getAllObjectsUnderMouse(event);
     },
 
     getJxgPoint: function (event) {
-        var jxgObjects = this.getJxgObject(event);
+        var jxgObjects = this.getJxgObjects(event);
 
         var jxgPoints = jxgObjects.filter(function (jxgObject) {
             return jxgObject instanceof JXG.Point;
@@ -131,6 +135,9 @@ Drawings.PaintPanel.prototype = {
 
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
+
+        // initialize context settings menu
+        context.init();
     },
 
     _saveToFile: function () {
@@ -234,7 +241,7 @@ Drawings.PaintPanel.prototype = {
         this._draw(modelObjects);
     },
 
-    _update: function(modelObjects) {
+    _update: function (modelObjects) {
         var points = Drawings.Utils.selectPoints(modelObjects);
         var shapes = Drawings.Utils.selectShapes(modelObjects);
 
@@ -242,7 +249,7 @@ Drawings.PaintPanel.prototype = {
         this._updateShapes(shapes);
     },
 
-    _updatePoints: function(points) {
+    _updatePoints: function (points) {
         for (var i = 0; i < points.length; i++) {
             var point = points[i];
 
@@ -269,7 +276,7 @@ Drawings.PaintPanel.prototype = {
         return connectedShapes;
     },
 
-    _updateShapes: function(shapes) {
+    _updateShapes: function (shapes) {
         this._redraw(shapes);
     },
 

@@ -7,6 +7,10 @@ Drawings.Controller = function (paintPanel, model) {
     model.paintPanel = paintPanel;
     this.model = model;
     this.modify = false;
+
+    this.pointController = new Drawings.PointController(this.model);
+    this.segmentController = new Drawings.SegmentController(this.model);
+    this.triangleController = new Drawings.TriangleController(this.model);
 };
 
 Drawings.Controller.prototype = {
@@ -24,12 +28,16 @@ Drawings.Controller.prototype = {
 
     handleEvent: function (event) {
         var LEFT_MOUSE_BUTTON = 1;
+        var RIGHT_MOUSE_BUTTON = 3;
 
         if (event.type == 'mousedown' && event.which == LEFT_MOUSE_BUTTON) {
             this._handleLeftMouseDownEvent(event);
         }
         else if (event.type == 'mouseup' && event.which == LEFT_MOUSE_BUTTON) {
             this._handleLeftMouseUpEvent(event);
+        }
+        else if (event.type == 'mousedown' && event.which == RIGHT_MOUSE_BUTTON) {
+            this._handleRightMouseDownEvent(event);
         }
     },
 
@@ -38,16 +46,7 @@ Drawings.Controller.prototype = {
     },
 
     _handleLeftMouseUpEvent: function (event) {
-        var mouseDownCoordinates = this.paintPanel.getMouseCoordinates(this.mouseDownEvent);
-        var mouseUpCoordinates = this.paintPanel.getMouseCoordinates(event);
-
-        var x1 = mouseDownCoordinates[0];
-        var y1 = mouseDownCoordinates[1];
-        var x2 = mouseUpCoordinates[0];
-        var y2 = mouseUpCoordinates[1];
-
-        var distance = Math.sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2);
-
+        var distance = this._getDistanceBetweenEvents(this.mouseDownEvent, event);
         if (distance < 0.25) {
             this._handleLeftMouseClickEvent(event);
         }
@@ -172,8 +171,30 @@ Drawings.Controller.prototype = {
         'Треугк(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },
 
+    _handleRightMouseDownEvent: function () {
+        var jxgObjects = this.paintPanel.getJxgObjects(event);
+        var objects = Drawings.Utils.toModelObjects(this.model, jxgObjects);
+
+        var points = Drawings.Utils.selectPoints(objects);
+        var segments = Drawings.Utils.selectSegments(objects);
+        var triangles = Drawings.Utils.selectTriangles(objects);
+
+        if (points.length > 0) {
+            var jxgPoint = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), points[0].getId());
+            this.pointController.handleContextMenuEvent(jxgPoint);
+        }
+        else if (segments.length > 0) {
+            var jxgSegment = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), segments[0].getId());
+            this.segmentController.handleContextMenuEvent(jxgSegment);
+        }
+        else if (triangles.length > 0) {
+            var jxgTriangle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), triangles[0].getId());
+            this.triangleController.handleContextMenuEvent(jxgTriangle);
+        }
+    },
+
     _setupSettings: function (event) {
-        var jxgObjects = this.paintPanel.getJxgObject(event);
+        var jxgObjects = this.paintPanel.getJxgObjects(event);
 
         var objects = [];
         for (var i = 0; i < jxgObjects.length; i++) {
@@ -230,5 +251,17 @@ Drawings.Controller.prototype = {
             triangle.setSquare(square);
             this.model.updated([triangle]);
         }
+    },
+
+    _getDistanceBetweenEvents: function (event1, event2) {
+        var event1Coordinates = this.paintPanel.getMouseCoordinates(event1);
+        var x1 = event1Coordinates[0];
+        var y1 = event1Coordinates[1];
+
+        var event2Coordinates = this.paintPanel.getMouseCoordinates(event2);
+        var x2 = event2Coordinates[0];
+        var y2 = event2Coordinates[1];
+
+        return Math.sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2);
     }
 };

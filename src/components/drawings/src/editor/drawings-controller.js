@@ -6,7 +6,6 @@ Drawings.Controller = function (paintPanel, model) {
     this.paintPanel = paintPanel;
     model.paintPanel = paintPanel;
     this.model = model;
-    this.modify = false;
 
     this.pointController = new Drawings.PointController(this.model);
     this.segmentController = new Drawings.SegmentController(this.model);
@@ -53,13 +52,8 @@ Drawings.Controller.prototype = {
     },
 
     _handleLeftMouseClickEvent: function (event) {
-        if (this.modify == false) {
-            var point = this._getOrCreatePoint(event);
-            this._addPoint(point);
-        }
-        else {
-            this._setupSettings(event);
-        }
+        var point = this._getOrCreatePoint(event);
+        this._addPoint(point);
     },
 
     _getOrCreatePoint: function (event) {
@@ -106,7 +100,7 @@ Drawings.Controller.prototype = {
     _createLineIfPossible: function () {
         if (this.points.length == 2) {
             var line = new Drawings.Line(this.points[0], this.points[1]);
-            line.setName(this._generateLineName(line));
+            line.setName(Drawings.Utils.generateLineName(line));
 
             this.model.addShape(line);
 
@@ -114,16 +108,10 @@ Drawings.Controller.prototype = {
         }
     },
 
-    _generateLineName: function (line) {
-        var point1Name = line.point1().getName();
-        var point2Name = line.point2().getName();
-        return point1Name && point2Name ? 'Прямая(' + point1Name + ';' + point2Name + ')' : '';
-    },
-
     _createSegmentIfPossible: function () {
         if (this.points.length == 2) {
             var segment = new Drawings.Segment(this.points[0], this.points[1]);
-            segment.setName(this._generateSegmentName(segment));
+            segment.setName(Drawings.Utils.generateSegmentName(segment));
 
             this.model.addShape(segment);
 
@@ -131,44 +119,24 @@ Drawings.Controller.prototype = {
         }
     },
 
-    _generateSegmentName: function (segment) {
-        var point1Name = segment.point1().getName();
-        var point2Name = segment.point2().getName();
-        return point1Name && point2Name ? 'Отр(' + point1Name + ';' + point2Name + ')' : '';
-    },
-
     _createCircleIfPossible: function () {
         if (this.points.length == 2) {
             var circle = new Drawings.Circle(this.points[0], this.points[1]);
-            circle.setName(this._generateCircleName(circle));
+            circle.setName(Drawings.Utils.generateCircleName(circle));
             this.model.addShape(circle);
             this.points.length = 0;
         }
     },
 
-    _generateCircleName: function (circle) {
-        var point1Name = circle.point1().getName();
-        var point2Name = circle.point2().getName();
-        return point1Name && point2Name ? 'Окр(' + point1Name + ';' + point2Name + ')' : '';
-    },
-
     _createTriangleIfPossible: function () {
         if (this.points.length == 3) {
             var triangle = new Drawings.Triangle(this.points[0], this.points[1], this.points[2]);
-            triangle.setName(this._generateTriangleName(triangle));
+            triangle.setName(Drawings.Utils.generateTriangleName(triangle));
 
             this.model.addShape(triangle);
 
             this.points.length = 0;
         }
-    },
-
-    _generateTriangleName: function (triangle) {
-        var point1Name = triangle.point1().getName();
-        var point2Name = triangle.point2().getName();
-        var point3Name = triangle.point3().getName();
-        return point1Name && point2Name && point3Name ?
-        'Треугк(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },
 
     _handleRightMouseDownEvent: function (event) {

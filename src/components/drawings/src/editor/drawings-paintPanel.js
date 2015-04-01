@@ -80,47 +80,38 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
 
         $('#pointButton').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT)
         });
 
         $('#lineButton').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
         });
 
         $('#segmentButton').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
         });
 
         $('#triangleButton').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.TRIANGLE);
         });
 
         $('#circleButton').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.CIRCLE);
         });
 
         $('#clearButton').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel.model.clear();
         });
 
         $('#saveToFile').click(function () {
-            paintPanel.controller.modify = false;
             paintPanel._saveToFile();
         });
 
         $('#load').click(function () {
-            paintPanel.controller.modify = false;
             $("#fileInput").click();
         });
 
         $('#fileInput').change(function () {
-            paintPanel.controller.modify = false;
             paintPanel._loadFromFile();
         });
 

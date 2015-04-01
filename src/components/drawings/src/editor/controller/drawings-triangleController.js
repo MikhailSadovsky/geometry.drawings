@@ -8,20 +8,21 @@ Drawings.TriangleController = function (model) {
 
 Drawings.TriangleController.prototype = {
 
-    handleContextMenuEvent: function (jxgTriangle) {
+    handleContextMenuEvent: function (jxgTriangle, event) {
         var triangle = this.model.getShape(jxgTriangle.id);
 
         var controller = this;
+
+        var contextMenu = new Drawings.ContextMenu('#' + jxgTriangle.rendNode.id, event);
 
         var setSquareMenuItem = {
             text: 'Задать площадь',
             action: function () {
                 controller._setSquareAction(triangle);
-                context.destroy();
             }
         };
 
-        context.attach('#' + jxgTriangle.rendNode.id, [setSquareMenuItem]);
+        contextMenu.show([setSquareMenuItem]);
     },
 
     _setSquareAction: function (triangle) {

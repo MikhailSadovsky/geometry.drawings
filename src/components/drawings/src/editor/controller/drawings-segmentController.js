@@ -8,20 +8,21 @@ Drawings.SegmentController = function (model) {
 
 Drawings.SegmentController.prototype = {
 
-    handleContextMenuEvent: function (jxgSegment) {
+    handleContextMenuEvent: function (jxgSegment, event) {
         var segment = this.model.getShape(jxgSegment.id);
 
         var controller = this;
+
+        var contextMenu = new Drawings.ContextMenu('#' + jxgSegment.rendNode.id, event);
 
         var setLengthMenuItem = {
             text: 'Задать длину',
             action: function () {
                 controller._setLengthAction(segment);
-                context.destroy();
             }
         };
 
-        context.attach('#' + jxgSegment.rendNode.id, [setLengthMenuItem]);
+        contextMenu.show([setLengthMenuItem]);
     },
 
     _setLengthAction: function (segment) {

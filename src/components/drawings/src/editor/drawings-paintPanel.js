@@ -77,7 +77,6 @@ Drawings.PaintPanel.prototype = {
 
         toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
-        toolbar.append('<div id="editButton" class="button edit" title="Редактировать"></div>');
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
 
         $('#pointButton').click(function () {
@@ -125,19 +124,12 @@ Drawings.PaintPanel.prototype = {
             paintPanel._loadFromFile();
         });
 
-        $('#editButton').click(function () {
-            paintPanel.controller.modify = true;
-        });
-
         $('#translateButton').click(function () {
             paintPanel._translate();
         });
 
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
-
-        // initialize context settings menu
-        context.init();
     },
 
     _saveToFile: function () {

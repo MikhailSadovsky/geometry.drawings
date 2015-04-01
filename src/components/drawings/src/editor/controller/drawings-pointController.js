@@ -8,20 +8,21 @@ Drawings.PointController = function (model) {
 
 Drawings.PointController.prototype = {
 
-    handleContextMenuEvent: function (jxgPoint) {
+    handleContextMenuEvent: function (jxgPoint, event) {
         var point = this.model.getPoint(jxgPoint.id);
 
         var controller = this;
+
+        var contextMenu = new Drawings.ContextMenu('#' + jxgPoint.rendNode.id, event);
 
         var setNameMenuItem = {
             text: 'Задать имя точки',
             action: function () {
                 controller._setNameAction(point);
-                context.destroy();
             }
         };
 
-        context.attach('#' + jxgPoint.rendNode.id, [setNameMenuItem]);
+        contextMenu.show([setNameMenuItem]);
     },
 
     _setNameAction: function (point) {

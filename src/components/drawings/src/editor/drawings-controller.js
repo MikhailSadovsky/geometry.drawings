@@ -131,6 +131,12 @@ Drawings.Controller.prototype = {
         }
     },
 
+    _generateSegmentName: function (segment) {
+        var point1Name = segment.point1().getName();
+        var point2Name = segment.point2().getName();
+        return point1Name && point2Name ? 'Отр(' + point1Name + ';' + point2Name + ')' : '';
+    },
+
     _createCircleIfPossible: function () {
         if (this.points.length == 2) {
             var circle = new Drawings.Circle(this.points[0], this.points[1]);
@@ -144,12 +150,6 @@ Drawings.Controller.prototype = {
         var point1Name = circle.point1().getName();
         var point2Name = circle.point2().getName();
         return point1Name && point2Name ? 'Окр(' + point1Name + ';' + point2Name + ')' : '';
-    },
-
-    _generateSegmentName: function (segment) {
-        var point1Name = segment.point1().getName();
-        var point2Name = segment.point2().getName();
-        return point1Name && point2Name ? 'Отр(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     _createTriangleIfPossible: function () {
@@ -171,7 +171,7 @@ Drawings.Controller.prototype = {
         'Треугк(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },
 
-    _handleRightMouseDownEvent: function () {
+    _handleRightMouseDownEvent: function (event) {
         var jxgObjects = this.paintPanel.getJxgObjects(event);
         var objects = Drawings.Utils.toModelObjects(this.model, jxgObjects);
 
@@ -181,75 +181,15 @@ Drawings.Controller.prototype = {
 
         if (points.length > 0) {
             var jxgPoint = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), points[0].getId());
-            this.pointController.handleContextMenuEvent(jxgPoint);
+            this.pointController.handleContextMenuEvent(jxgPoint, event);
         }
         else if (segments.length > 0) {
             var jxgSegment = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), segments[0].getId());
-            this.segmentController.handleContextMenuEvent(jxgSegment);
+            this.segmentController.handleContextMenuEvent(jxgSegment, event);
         }
         else if (triangles.length > 0) {
             var jxgTriangle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), triangles[0].getId());
-            this.triangleController.handleContextMenuEvent(jxgTriangle);
-        }
-    },
-
-    _setupSettings: function (event) {
-        var jxgObjects = this.paintPanel.getJxgObjects(event);
-
-        var objects = [];
-        for (var i = 0; i < jxgObjects.length; i++) {
-            objects[i] = this.model.getModelObject(jxgObjects[i].id)
-        }
-
-        this._showDialog(objects);
-    },
-
-    _showDialog: function (objects) {
-        var points = Drawings.Utils.selectPoints(objects);
-        var segments = Drawings.Utils.selectSegments(objects);
-        var triangles = Drawings.Utils.selectTriangles(objects);
-
-        if (points.length > 0) {
-            this._setPointName(points[0]);
-        }
-        else if (segments.length > 0) {
-            this._setSegmentLength(segments[0]);
-        }
-        else if (triangles.length > 0) {
-            this._setTriangleSquare(triangles[0]);
-        }
-    },
-
-    _setPointName: function (point) {
-        var name = prompt("Введите имя точки");
-
-        if (name) {
-            point.setName(name);
-            this.model.updated([point]);
-        }
-    },
-
-    _setSegmentLength: function (segment) {
-        var length = prompt("Введите длину отрезка");
-
-        if (isNaN(parseInt(length)) || !isFinite(length)) {
-            alert("Введите число!!")
-        }
-        else {
-            segment.setLength(length);
-            this.model.updated([segment]);
-        }
-    },
-
-    _setTriangleSquare: function (triangle) {
-        var square = prompt("Введите площадь");
-
-        if (isNaN(parseInt(square)) || !isFinite(square)) {
-            alert("Введите число!!")
-        }
-        else {
-            triangle.setSquare(square);
-            this.model.updated([triangle]);
+            this.triangleController.handleContextMenuEvent(jxgTriangle, event);
         }
     },
 

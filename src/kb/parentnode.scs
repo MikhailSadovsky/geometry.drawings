@@ -1,5 +1,5 @@
 big_red_node
-<- sc_node_struct;
+<- sc_node_not_relation;
 => nrel_main_idtf: 
 	[контур узла с аргументами задачи] 
 	(* 

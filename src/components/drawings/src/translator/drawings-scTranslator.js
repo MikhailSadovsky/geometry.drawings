@@ -22,7 +22,7 @@ Drawings.ScTranslator = {
                 });
             return dfd.promise();
         }
-        ;
+
     },
     getKeyNodes: function () {
         var dfd = new jQuery.Deferred();
@@ -49,6 +49,7 @@ Drawings.ScTranslator = {
         });
         return dfd.promise();
     },
+
     putPoint: function (point) {
         var dfd = new jQuery.Deferred();
         if (point.hasOwnProperty("sc_addr") && point.sc_addr != null) {
@@ -62,21 +63,17 @@ Drawings.ScTranslator = {
                 point.sc_addr = r;
                 var arc1 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
-                arc1.done(function (rr) {
-                }).fail(function () {
-// point.sc_addr = null;
-                    alert("2) create arc for point failed");
-                });
                 var arc2 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.concept_geometric_point, r);
-                arc2.done(function (rr) {
-                }).fail(function () {
-// point.sc_addr = null;
-                    alert("3) create arc for point failed");
-                });
-                $.when(arc1, arc2).done(function () {
-//console.log('sc_addr = ', r);
-//alert('Both arcs are constructed');
+
+                arc2.done(function (res) {
+                    window.sctpClient.create_arc(
+                        sc_type_arc_pos_const_perm, self.big_red_node, res);
+                })
+
+                var arc3 = window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, self.big_red_node, self.concept_geometric_point);
+                $.when(arc1, arc2, arc3).done(function () {
                     dfd.resolve(r);
                 });
             }).fail(function () {
@@ -100,14 +97,28 @@ Drawings.ScTranslator = {
                 shape.sc_addr = r;
                 var arc1 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
-                arc1.done(function (rr) {
-                }).fail(function () {
-// point.sc_addr = null;
-                    alert("2) create arc for shape failed");
-                });
+
                 var shapeType = self.concept_geometric_point;
                 if (shape.className == 'Segment') {
                     shapeType = self.concept_segment;
+                    var points = shape.points;
+                    for (var i = 0; i < points.length; i++) {
+                        window.sctpClient.create_arc(
+                            sc_type_arc_pos_const_perm, self.concept_geometric_point, points[i].sc_addr);
+                        window.sctpClient.create_arc(
+                            sc_type_arc_common | sc_type_const
+                            , r, points[i].sc_addr).done(function (res3) {
+                                window.sctpClient.create_arc(
+                                    sc_type_arc_pos_const_perm, self.nrel_boundary_point, res3).done(function(res4){
+                                        window.sctpClient.create_arc(
+                                            sc_type_arc_pos_const_perm, self.big_red_node, res4);
+                                    });
+                                window.sctpClient.create_arc(
+                                    sc_type_arc_pos_const_perm, self.big_red_node, res3);
+                                window.sctpClient.create_arc(
+                                    sc_type_arc_pos_const_perm, self.big_red_node, self.nrel_boundary_point);
+                            });
+                    }
                 }
                 if (shape.className == 'Line') {
                     shapeType = self.concept_line;
@@ -120,14 +131,14 @@ Drawings.ScTranslator = {
                 }
                 var arc2 = window.sctpClient
                     .create_arc(sc_type_arc_pos_const_perm, shapeType, r);
-                arc2.done(function (rr) {
-                }).fail(function () {
-// point.sc_addr = null;
-                    alert("3) create arc for shape failed");
-                });
+
+                arc2.done(function (result) {
+                    window.sctpClient.create_arc(
+                        sc_type_arc_pos_const_perm, self.big_red_node, result);
+                })
+
                 $.when(arc1, arc2).done(function () {
                     console.log('sc_addr shape= ', r);
-                    alert('Both arcs for shape are constructed');
                     dfd.resolve(r);
                 });
             }).fail(function () {
@@ -145,7 +156,7 @@ Drawings.ScTranslator = {
         for (t in points) {
             my_array.push(this.putPoint(points[t]));
         }
-        ;
+
         $.when.apply($, my_array).done(function () {
             dfd.resolve();
         }).fail(function () {
@@ -160,7 +171,7 @@ Drawings.ScTranslator = {
         for (t in shapes) {
             my_array.push(this.putShape(shapes[t]));
         }
-        ;
+
         $.when.apply($, my_array).done(function () {
             dfd.resolve();
         }).fail(function () {

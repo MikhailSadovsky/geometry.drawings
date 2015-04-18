@@ -53,27 +53,19 @@ Drawings.Controller.prototype = {
 
     _handleLeftMouseClickEvent: function (event) {
         var point = this._getOrCreatePoint(event);
-        if (point) {
-            this._addPoint(point);
-        }
+        this._addPoint(point);
     },
 
     _getOrCreatePoint: function (event) {
         var point;
-        var jxgObject = this.paintPanel.getJxgObjects(event);
         var jxgPoint = this.paintPanel.getJxgPoint(event);
 
         if (jxgPoint) {
             point = this.model.getPoint(jxgPoint.id);
         }
         else {
-            if(jxgObject.length >=1) {
-                point = null
-            }
-            else {
-                var coordinates = this.paintPanel.getMouseCoordinates(event);
-                point = this._createPoint(coordinates);
-            }
+            var coordinates = this.paintPanel.getMouseCoordinates(event);
+            point = this._createPoint(coordinates);
         }
 
         return point;

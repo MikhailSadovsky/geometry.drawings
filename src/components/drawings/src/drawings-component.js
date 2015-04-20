@@ -56,7 +56,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addShape(point2);
                         self.model.addShape(segment);
                         obj.translated = true;
-                    }else if (end && (begin == self.keynodes.line)) {
+                    } else if (end && (begin == self.keynodes.line)) {
                         console.log("update draw line");
                         var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
                         var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
@@ -65,18 +65,18 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addShape(point2);
                         self.model.addShape(line);
                         obj.translated = true;
-                    }else if (end && (begin == self.keynodes.triangle)) {
+                    } else if (end && (begin == self.keynodes.triangle)) {
                         console.log("update draw triangle");
                         var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
                         var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
                         var point3 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var triangle = new Drawings.Triangle(point1,point2,point3);
+                        var triangle = new Drawings.Triangle(point1, point2, point3);
                         self.model.addShape(point1);
                         self.model.addShape(point2);
                         self.model.addShape(point3);
                         self.model.addShape(triangle);
                         obj.translated = true;
-                    }else if (end && (begin == self.keynodes.circle)) {
+                    } else if (end && (begin == self.keynodes.circle)) {
                         console.log("update draw circle");
                         var point1 = new Drawings.Point((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0);
                         var point2 = new Drawings.Point((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0);

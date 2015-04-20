@@ -31,8 +31,9 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("concept_segment"));
         my_array.push(this.getKeyNode("nrel_side"));
         my_array.push(this.getKeyNode("concept_triangle"));
+        my_array.push(this.getKeyNode("concept_circle"));
         my_array.push(this.getKeyNode("concept_geometric_point"));// ?
-        my_array.push(this.getKeyNode("concept_line"));
+        my_array.push(this.getKeyNode("concept_straight_line"));
         my_array.push(this.getKeyNode("nrel_boundary_point"));
         my_array.push(this.getKeyNode("nrel_inclusion"));
         my_array.push(this.getKeyNode("nrel_vertex"));
@@ -48,6 +49,37 @@ Drawings.ScTranslator = {
             dfd.reject();
         });
         return dfd.promise();
+    },
+
+    /*
+     Add relation or attribute construction.
+     All parameters must be sc_addr
+     */
+    addFiveConstruction: function (start_el, end_el, relOrAttr, arc_type) {
+        window.sctpClient.create_arc(
+            arc_type, start_el, end_el).done(function (res) {
+                window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, relOrAttr, res);
+            });
+    },
+
+    /*
+     Add relation or attribute construction and put all arcs into base_el.
+     All parameters must be sc_addr.
+     */
+    addFiveConstructionIntoBase: function (start_el, end_el, relOrAttr, base_el, arc_type) {
+        window.sctpClient.create_arc(
+            arc_type, start_el, end_el).done(function (res) {
+                window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, relOrAttr, res).done(function (res1) {
+                        window.sctpClient.create_arc(
+                            sc_type_arc_pos_const_perm, base_el, res1);
+                    });
+                window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, base_el, res);
+                window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, base_el, relOrAttr);
+            });
     },
 
     putPoint: function (point) {
@@ -94,50 +126,48 @@ Drawings.ScTranslator = {
         shape.sc_addr = null;
         window.sctpClient.create_node(sc_type_node | sc_type_const).done(
             function (r) {
+                var points = shape.points;
                 shape.sc_addr = r;
-                var arc1 = window.sctpClient.create_arc(
-                    sc_type_arc_pos_const_perm, self.big_red_node, r);
 
                 var shapeType = self.concept_geometric_point;
                 if (shape.className == 'Segment') {
                     shapeType = self.concept_segment;
-                    var points = shape.points;
                     for (var i = 0; i < points.length; i++) {
-                        window.sctpClient.create_arc(
-                            sc_type_arc_pos_const_perm, self.concept_geometric_point, points[i].sc_addr);
-                        window.sctpClient.create_arc(
-                            sc_type_arc_common | sc_type_const
-                            , r, points[i].sc_addr).done(function (res3) {
-                                window.sctpClient.create_arc(
-                                    sc_type_arc_pos_const_perm, self.nrel_boundary_point, res3).done(function(res4){
-                                        window.sctpClient.create_arc(
-                                            sc_type_arc_pos_const_perm, self.big_red_node, res4);
-                                    });
-                                window.sctpClient.create_arc(
-                                    sc_type_arc_pos_const_perm, self.big_red_node, res3);
-                                window.sctpClient.create_arc(
-                                    sc_type_arc_pos_const_perm, self.big_red_node, self.nrel_boundary_point);
-                            });
+                        self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_boundary_point,
+                            self.big_red_node, sc_type_arc_common | sc_type_const);
                     }
                 }
                 if (shape.className == 'Line') {
-                    shapeType = self.concept_line;
+                    shapeType = self.concept_straight_line;
+                    for (var i = 0; i < points.length; i++) {
+                        self.addFiveConstruction(r, points[i].sc_addr, self.big_red_node, sc_type_arc_pos_const_perm);
+                    }
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
                 }
                 if (shape.className == 'Triangle') {
                     shapeType = self.concept_triangle;
+                    for (var i = 0; i < points.length; i++) {
+                        self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
+                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                    }
                 }
+                var arc1 = window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, self.big_red_node, r);
+
                 var arc2 = window.sctpClient
                     .create_arc(sc_type_arc_pos_const_perm, shapeType, r);
 
                 arc2.done(function (result) {
                     window.sctpClient.create_arc(
                         sc_type_arc_pos_const_perm, self.big_red_node, result);
-                })
+                });
 
-                $.when(arc1, arc2).done(function () {
+                var arc3 = window.sctpClient.create_arc(
+                    sc_type_arc_pos_const_perm, self.big_red_node, shapeType);
+
+                $.when(arc1, arc2, arc3).done(function () {
                     console.log('sc_addr shape= ', r);
                     dfd.resolve(r);
                 });

@@ -45,6 +45,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         console.log("update draw point");
                         var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
                         self.model.addPoint(point);
+						//adding sc-addr
+						document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', end);
 
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.segment)) {
@@ -55,6 +57,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addShape(point1);
                         self.model.addShape(point2);
                         self.model.addShape(segment);
+						//adding sc-addr
+						document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.line)) {
                         console.log("update draw line");
@@ -64,6 +68,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addShape(point1);
                         self.model.addShape(point2);
                         self.model.addShape(line);
+						//adding sc-addr
+						document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.triangle)) {
                         console.log("update draw triangle");
@@ -75,6 +81,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addShape(point2);
                         self.model.addShape(point3);
                         self.model.addShape(triangle);
+						//adding sc-addr
+						document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.circle)) {
                         console.log("update draw circle");
@@ -84,6 +92,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addShape(point1);
                         self.model.addShape(point2);
                         self.model.addShape(circle);
+						//adding sc-addr
+						document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     }
                 }

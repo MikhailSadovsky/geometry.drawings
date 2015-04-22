@@ -132,7 +132,28 @@ Drawings.Controller.prototype = {
         if (this.points.length == 3) {
             var triangle = new Drawings.Triangle(this.points[0], this.points[1], this.points[2]);
             triangle.setName(Drawings.Utils.generateTriangleName(triangle));
+           
+			var segment1 = new Drawings.Segment(this.points[0], this.points[1]);
+            segment1.setName(Drawings.Utils.generateSegmentName(segment1));
 
+            this.model.addShape(segment1);
+
+            var segment2 = new Drawings.Segment(this.points[1], this.points[2]);
+            segment2.setName(Drawings.Utils.generateSegmentName(segment2));
+
+            this.model.addShape(segment2);
+
+            var segment3 = new Drawings.Segment(this.points[2], this.points[0]);
+            segment3.setName(Drawings.Utils.generateSegmentName(segment3));
+
+            this.model.addShape(segment1);
+            this.model.addShape(segment2);
+            this.model.addShape(segment3);
+			
+			triangle.segment1 = segment1;
+			triangle.segment2 = segment2;
+			triangle.segment3 = segment3;
+			
             this.model.addShape(triangle);
 
             this.points.length = 0;

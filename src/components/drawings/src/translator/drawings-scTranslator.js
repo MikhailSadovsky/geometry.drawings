@@ -152,6 +152,19 @@ Drawings.ScTranslator = {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
                     }
+					if (!shape.hasOwnProperty('shapes'))
+					{
+						shape.shapes = [];
+						shape.shapes[0] = shape.segment1;
+						shape.shapes[1] = shape.segment2;
+						shape.shapes[2] = shape.segment3;
+					}
+
+                    for (var i = 0; i < shape.shapes.length; i++) {
+						console.log('shape.shapes[i].sc_addr = ' + shape.shapes[i].sc_addr);
+                        self.addFiveConstructionIntoBase(r, shape.shapes[i].sc_addr, self.nrel_side,
+                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                    }
                 }
                 var arc1 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
@@ -176,6 +189,8 @@ Drawings.ScTranslator = {
                 dfd.reject();
                 alert("1) create node for shape failed");
             });
+	
+		dfd.resolve(shape.sc_addr);
         return dfd.promise();
     },
 // /
@@ -194,19 +209,33 @@ Drawings.ScTranslator = {
         });
         return dfd.promise();
     },
-    pushShapes: function (shapes) {
+    pushShapes: function (shapes){
         var dfd = new jQuery.Deferred();
-        var my_array = [];
+        var my_array1 = [];
         var self = this;
-        for (t in shapes) {
-            my_array.push(this.putShape(shapes[t]));
+		//put segments first
+		for (t in shapes) {
+			if (shapes[t].className == 'Segment')
+				my_array1.push(this.putShape(shapes[t]));
         }
 
-        $.when.apply($, my_array).done(function () {
-            dfd.resolve();
-        }).fail(function () {
-            dfd.reject();
-        });
+        $.when.apply($, my_array1).done(function () {
+			//then other shapes
+			var my_array2 = [];
+			
+			for (t in shapes) {
+				if (shapes[t].className != 'Segment')
+					my_array2.push(self.putShape(shapes[t]));
+			}
+			
+			$.when.apply($, my_array2).done(function () {
+				dfd.resolve();
+			}).fail(function () {
+	            dfd.reject();
+	        });
+		}).fail(function () {
+	            dfd.reject();
+	        });
         return dfd.promise();
     },
 // temporary solution for keeping KB clean

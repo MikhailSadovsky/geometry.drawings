@@ -37,7 +37,7 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("nrel_boundary_point"));
         my_array.push(this.getKeyNode("nrel_inclusion"));
         my_array.push(this.getKeyNode("nrel_vertex"));
-        my_array.push(this.getKeyNode("nrel_idtf"));
+        my_array.push(this.getKeyNode("nrel_system_identifier"));
         my_array.push(this.getKeyNode("nrel_length"));
         my_array.push(this.getKeyNode("concept_value"));
         my_array.push(this.getKeyNode("nrel_area"));
@@ -97,7 +97,7 @@ Drawings.ScTranslator = {
                 if ("" != point.name) {
                     window.sctpClient.create_link().done(function (res) {
                         window.sctpClient.set_link_content(res, point.name);
-                        self.addFiveConstructionIntoBase(r, res, self.nrel_idtf, self.big_red_node,
+                        self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.big_red_node,
                             sc_type_arc_common | sc_type_const);
                     });
                 }
@@ -178,7 +178,7 @@ Drawings.ScTranslator = {
                 if ("" != shape.name) {
                     window.sctpClient.create_link().done(function (res) {
                         window.sctpClient.set_link_content(res, shape.name);
-                        self.addFiveConstructionIntoBase(r, res, self.nrel_idtf, self.big_red_node,
+                        self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.big_red_node,
                             sc_type_arc_common | sc_type_const);
                     });
                 }

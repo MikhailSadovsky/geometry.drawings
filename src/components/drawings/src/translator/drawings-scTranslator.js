@@ -37,6 +37,7 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("nrel_boundary_point"));
         my_array.push(this.getKeyNode("nrel_inclusion"));
         my_array.push(this.getKeyNode("nrel_vertex"));
+        my_array.push(this.getKeyNode("nrel_radius"));
         my_array.push(this.getKeyNode("nrel_system_identifier"));
         my_array.push(this.getKeyNode("nrel_length"));
         my_array.push(this.getKeyNode("concept_value"));
@@ -153,6 +154,10 @@ Drawings.ScTranslator = {
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
+                    if(shape.radius) {
+                        self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
+                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                    }
                 }
                 if (shape.className == 'Triangle') {
                     shapeType = self.concept_triangle;

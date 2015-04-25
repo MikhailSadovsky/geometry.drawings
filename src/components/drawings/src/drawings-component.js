@@ -17,6 +17,28 @@ Drawings.GeomDrawWindow = function (sandbox) {
     this.recieveData = function (data) {
         console.log("in recieve data" + data);
     };
+
+    // element - point node
+    function drawPointWithIdtf(element){
+        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+            element, sc_type_arc_common | sc_type_const,
+            sc_type_link, sc_type_arc_pos_const_perm, self.keynodes.identifier]).done(function (res) {
+            window.sctpClient.get_link_content(res[0][2], 'string').done(function (idtf) {
+                console.log("update draw point");
+                var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                point.name = idtf;
+                self.model.addPoint(point);
+                //adding sc-addr
+                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', element);
+            });
+        }).fail(function () {
+            console.log("update draw point without idtf");
+            var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+            self.model.addPoint(point);
+            //adding sc-addr
+            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', element);
+        });
+    }
 // resolve keynodes
     var self = this;
     var scElements = {};
@@ -32,11 +54,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     var end = obj.data.end;
 // if it connect point set and point, then create the last one
                     if (end && (begin == self.keynodes.point)) {
-                        console.log("update draw point");
-                        var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        self.model.addPoint(point);
-                        //adding sc-addr
-                        document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', end);
+                        drawPointWithIdtf(end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.segment)) {
                         console.log("update draw segment");
@@ -46,7 +64,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addPoint(point1);
                         self.model.addPoint(point2);
                         self.model.addShape(segment);
-                        //adding sc-addr
+//adding sc-addr
                         document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.line)) {
@@ -57,7 +75,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addPoint(point1);
                         self.model.addPoint(point2);
                         self.model.addShape(line);
-                        //adding sc-addr
+//adding sc-addr
                         document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.triangle)) {
@@ -70,7 +88,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addPoint(point2);
                         self.model.addPoint(point3);
                         self.model.addShape(triangle);
-                        //adding sc-addr
+//adding sc-addr
                         document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     } else if (end && (begin == self.keynodes.circle)) {
@@ -81,7 +99,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         self.model.addPoint(point1);
                         self.model.addPoint(point2);
                         self.model.addShape(circle);
-                        //adding sc-addr
+//adding sc-addr
                         document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
                         obj.translated = true;
                     }
@@ -127,6 +145,12 @@ Drawings.GeomDrawWindow = function (sandbox) {
     SCWeb.core.Server.resolveScAddr(['concept_circle',
     ], function (keynodes) {
         self.keynodes.circle = keynodes['concept_circle'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_system_identifier',
+    ], function (keynodes) {
+        self.keynodes.identifier = keynodes['nrel_system_identifier'];
         self.needUpdate = true;
         self.requestUpdate();
     });

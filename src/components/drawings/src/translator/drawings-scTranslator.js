@@ -290,21 +290,24 @@ Drawings.ScTranslator = {
 
     viewBasedKeyNode : function(){
 
-                SCWeb.core.Server.resolveScAddr(["big_red_node"],
+                SCWeb.core.Server.resolveScAddr(["concept_geometric_point"],
 
                     function(data)
                     {
 
-                        console.log("data = " + data["big_red_node"]);
-                        var cmd = data["big_red_node"];
+                        console.log("data = " + data["concept_geometric_point"]);
+                        var cmd = data["concept_geometric_point"];
 
                         SCWeb.core.Server.doCommand(cmd,
-                            [self.big_red_node], function(result) {
-                                if (result) {
+                            [self.concept_geometric_point], function(result) {
+                                if (result.question != undefined) {
+                                    alert("addr = " + tmpaddr);
                                     SCWeb.ui.WindowManager.appendHistoryItem(result.question);
                                 }
                             });
                     });
+
+
     },
 
     putModel: function (model) {

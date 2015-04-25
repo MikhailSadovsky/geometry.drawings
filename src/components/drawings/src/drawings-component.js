@@ -18,6 +18,110 @@ Drawings.GeomDrawWindow = function (sandbox) {
         console.log("in recieve data" + data);
     };
 
+    var scElements = {};
+
+    function drawAllPoints(){
+        for (var addr in scElements) {
+            var obj = scElements[addr];
+            if (!obj || obj.translated) continue;
+// check if object is an arc
+            if (obj.data.type & sc_type_arc_pos_const_perm) {
+                var begin = obj.data.begin;
+                var end = obj.data.end;
+                // if it connect point set and point, then create the last one
+                if (end && (begin == self.keynodes.point)) {
+                    drawPointWithIdtf(end);
+                    obj.translated = true;
+                }
+            }
+        }
+    }
+
+    function drawAllSegments(){
+        for (var addr in scElements) {
+            var obj = scElements[addr];
+            if (!obj || obj.translated) continue;
+// check if object is an arc
+            if (obj.data.type & sc_type_arc_pos_const_perm) {
+                var begin = obj.data.begin;
+                var end = obj.data.end;
+                if (end && (begin == self.keynodes.segment)) {
+                    console.log("update draw segment");
+                    var point1 = new Object();
+                    var point2 = new Object();
+                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                        end, sc_type_arc_common | sc_type_const,
+                        sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, self.keynodes.boundary]).
+                        done(function (res) {
+                            var point1_addr = res[0][2];
+                            var point2 = res[1][2];
+                            alert(self.model.points);
+                            for (var index = 0; index < self.model.points.length; index++) {
+                                if (self.model.points[index].sc_addr == point1_addr) {
+                                    point1 = self.model.points[index];
+                                } else if (self.model.points[index].sc_addr == point2_addr) {
+                                    point2 = self.model.points[index];
+                                }
+                            }
+                            alert(point1);
+                            Drawings.Controller._addPoint(point1);
+                            Drawings.Controller._addPoint(point2);
+                            var segment = new Drawings.Segment(point1, point2);
+                            self.model.addShape(segment);
+                            //adding sc-addr
+                            document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
+                            obj.translated = true;
+                        });
+                }
+            }
+        }
+    }
+
+    function drawAllOtherShapes(){
+        for (var addr in scElements) {
+            var obj = scElements[addr];
+            if (!obj || obj.translated) continue;
+// check if object is an arc
+            if (obj.data.type & sc_type_arc_pos_const_perm) {
+                var begin = obj.data.begin;
+                var end = obj.data.end;
+                if (end && (begin == self.keynodes.line)) {
+                    console.log("update draw line");
+                    var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                    var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                    var line = new Drawings.Line(point1, point2);
+                    self.model.addPoint(point1);
+                    self.model.addPoint(point2);
+                    self.model.addShape(line);
+                    document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
+                    obj.translated = true;
+                } else if (end && (begin == self.keynodes.triangle)) {
+                    console.log("update draw triangle");
+                    var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                    var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                    var point3 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                    var triangle = new Drawings.Triangle(point1, point2, point3);
+                    self.model.addPoint(point1);
+                    self.model.addPoint(point2);
+                    self.model.addPoint(point3);
+                    self.model.addShape(triangle);
+                    document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
+                    obj.translated = true;
+                } else if (end && (begin == self.keynodes.circle)) {
+                    console.log("update draw circle");
+                    var point1 = new Drawings.Point((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0);
+                    var point2 = new Drawings.Point((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0);
+                    var circle = new Drawings.Circle(point1, point2);
+                    self.model.addPoint(point1);
+                    self.model.addPoint(point2);
+                    self.model.addShape(circle);
+                    document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
+                    obj.translated = true;
+                }
+            }
+        }
+    }
+
     // element - point node
     function drawPointWithIdtf(element){
         window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
@@ -41,70 +145,15 @@ Drawings.GeomDrawWindow = function (sandbox) {
     }
 // resolve keynodes
     var self = this;
-    var scElements = {};
     this.needUpdate = false;
     this.requestUpdate = function () {
         var updateVisual = function () {
-            for (var addr in scElements) {
-                var obj = scElements[addr];
-                if (!obj || obj.translated) continue;
 // check if object is an arc
-                if (obj.data.type & sc_type_arc_pos_const_perm) {
-                    var begin = obj.data.begin;
-                    var end = obj.data.end;
-// if it connect point set and point, then create the last one
-                    if (end && (begin == self.keynodes.point)) {
-                        drawPointWithIdtf(end);
-                        obj.translated = true;
-                    } else if (end && (begin == self.keynodes.segment)) {
-                        console.log("update draw segment");
-                        var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var segment = new Drawings.Segment(point1, point2);
-                        self.model.addPoint(point1);
-                        self.model.addPoint(point2);
-                        self.model.addShape(segment);
-//adding sc-addr
-                        document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
-                        obj.translated = true;
-                    } else if (end && (begin == self.keynodes.line)) {
-                        console.log("update draw line");
-                        var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var line = new Drawings.Line(point1, point2);
-                        self.model.addPoint(point1);
-                        self.model.addPoint(point2);
-                        self.model.addShape(line);
-//adding sc-addr
-                        document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
-                        obj.translated = true;
-                    } else if (end && (begin == self.keynodes.triangle)) {
-                        console.log("update draw triangle");
-                        var point1 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var point2 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var point3 = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        var triangle = new Drawings.Triangle(point1, point2, point3);
-                        self.model.addPoint(point1);
-                        self.model.addPoint(point2);
-                        self.model.addPoint(point3);
-                        self.model.addShape(triangle);
-//adding sc-addr
-                        document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                        obj.translated = true;
-                    } else if (end && (begin == self.keynodes.circle)) {
-                        console.log("update draw circle");
-                        var point1 = new Drawings.Point((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0);
-                        var point2 = new Drawings.Point((Math.random() - 0.5) * 10.0, (Math.random() - 0.5) * 10.0);
-                        var circle = new Drawings.Circle(point1, point2);
-                        self.model.addPoint(point1);
-                        self.model.addPoint(point2);
-                        self.model.addShape(circle);
-//adding sc-addr
-                        document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                        obj.translated = true;
-                    }
-                }
-            }
+                    drawAllPoints();
+                    drawAllSegments();
+                    drawAllOtherShapes();
+
+
 /// @todo: Don't update if there are no new elements
             window.clearTimeout(self.structTimeout);
             delete self.structTimeout;
@@ -151,6 +200,12 @@ Drawings.GeomDrawWindow = function (sandbox) {
     SCWeb.core.Server.resolveScAddr(['nrel_system_identifier',
     ], function (keynodes) {
         self.keynodes.identifier = keynodes['nrel_system_identifier'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_boundary_point',
+    ], function (keynodes) {
+        self.keynodes.boundary = keynodes['nrel_boundary_point'];
         self.needUpdate = true;
         self.requestUpdate();
     });

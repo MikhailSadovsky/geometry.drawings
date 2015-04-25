@@ -287,6 +287,29 @@ Drawings.ScTranslator = {
 //dfd.resolve();
         return dfd.promise();
     },
+
+    viewBasedKeyNode : function(){
+
+                SCWeb.core.Server.resolveScAddr(["concept_geometric_point"],
+
+                    function(data)
+                    {
+
+                        console.log("data = " + data["concept_geometric_point"]);
+                        var cmd = data["concept_geometric_point"];
+
+                        SCWeb.core.Server.doCommand(cmd,
+                            [self.concept_geometric_point], function(result) {
+                                if (result.question != undefined) {
+                                    alert("addr = " + tmpaddr);
+                                    SCWeb.ui.WindowManager.appendHistoryItem(result.question);
+                                }
+                            });
+                    });
+
+
+    },
+
     putModel: function (model) {
         var cleanup = this.wipeOld;
         var pushPts = this.pushPoints;

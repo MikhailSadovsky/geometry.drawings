@@ -78,6 +78,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
+        toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
 
         $('#pointButton').click(function () {
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT)
@@ -118,6 +119,10 @@ Drawings.PaintPanel.prototype = {
         $('#translateButton').click(function () {
             paintPanel._translate();
         });
+
+        $('#viewButton').click(function () {
+            paintPanel._viewBasedKeyNode();
+        })
 
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');
@@ -160,6 +165,10 @@ Drawings.PaintPanel.prototype = {
         Drawings.ScTranslator.putModel(this.model);
         // Redraw all (only translated ?) shapes after translation
         //this._redraw(this.model.getModelObjects());
+    },
+
+    _viewBasedKeyNode: function () {
+        Drawings.ScTranslator.viewBasedKeyNode();
     },
 
     _createBoard: function () {

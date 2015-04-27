@@ -21,6 +21,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
     var scElements = {};
 
     function drawAllPoints(){
+        var dfd = new jQuery.Deferred();
         for (var addr in scElements) {
             var obj = scElements[addr];
             if (!obj || obj.translated) continue;
@@ -32,12 +33,15 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 if (end && (begin == self.keynodes.point)) {
                     drawPointWithIdtf(end);
                     obj.translated = true;
+                    dfd.resolve();
                 }
             }
         }
+        return dfd.promise();
     }
 
     function drawAllSegments(){
+        var dfd = new jQuery.Deferred();
         for (var addr in scElements) {
             var obj = scElements[addr];
             if (!obj || obj.translated) continue;
@@ -71,10 +75,12 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             //adding sc-addr
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             obj.translated = true;
+                            dfd.resolve();
                         });
                 }
             }
         }
+        return dfd.promise();
     }
 
     function drawAllOtherShapes(){
@@ -124,6 +130,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
     // element - point node
     function drawPointWithIdtf(element){
+        var complete = false;
         window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
             element, sc_type_arc_common | sc_type_const,
             sc_type_link, sc_type_arc_pos_const_perm, self.keynodes.identifier]).done(function (res) {
@@ -134,6 +141,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 self.model.addPoint(point);
                 //adding sc-addr
                 document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', element);
+            complete = true;
             });
         }).fail(function () {
             console.log("update draw point without idtf");
@@ -141,7 +149,13 @@ Drawings.GeomDrawWindow = function (sandbox) {
             self.model.addPoint(point);
             //adding sc-addr
             document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', element);
+            complete = true;
         });
+
+        while (complete != true)
+        {
+            sleep(1);
+        }
     }
 // resolve keynodes
     var self = this;
@@ -149,9 +163,13 @@ Drawings.GeomDrawWindow = function (sandbox) {
     this.requestUpdate = function () {
         var updateVisual = function () {
 // check if object is an arc
-                    drawAllPoints();
-                    drawAllSegments();
-                    drawAllOtherShapes();
+            var dfd1 = drawAllPoints();
+            dfd1.done(function(r){
+                drawAllSegments();
+            }) ;
+            dfd1.done(function(r2){
+                drawAllOtherShapes();
+            });
 
 
 /// @todo: Don't update if there are no new elements
@@ -159,6 +177,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
             delete self.structTimeout;
             if (self.needUpdate)
                 self.requestUpdate();
+            return dfd1.promise();
         };
         self.needUpdate = true;
         if (!self.structTimeout) {

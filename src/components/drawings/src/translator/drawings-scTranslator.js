@@ -96,14 +96,14 @@ Drawings.ScTranslator = {
         window.sctpClient.create_node(sc_type_node | sc_type_const).done(
             function (r) {
                 point.sc_addr = r;
-               if ("" != point.name) {
+                if ("" != point.name) {
                     window.sctpClient.create_link().done(function (res) {
                         window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
                         window.sctpClient.set_link_content(res, point.name);
                         self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.big_red_node,
                             sc_type_arc_common | sc_type_const);
                     });
-               }
+                }
                 var arc1 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
                 var arc2 = window.sctpClient.create_arc(
@@ -157,7 +157,7 @@ Drawings.ScTranslator = {
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
-                    if(shape.radius) {
+                    if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
                     }
@@ -168,30 +168,29 @@ Drawings.ScTranslator = {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
                     }
-					if (!shape.hasOwnProperty('shapes'))
-					{
-						shape.shapes = [];
-						shape.shapes[0] = shape.segment1;
-						shape.shapes[1] = shape.segment2;
-						shape.shapes[2] = shape.segment3;
-					}
+                    if (!shape.hasOwnProperty('shapes')) {
+                        shape.shapes = [];
+                        shape.shapes[0] = shape.segment1;
+                        shape.shapes[1] = shape.segment2;
+                        shape.shapes[2] = shape.segment3;
+                    }
 
                     for (var i = 0; i < shape.shapes.length; i++) {
-						console.log('shape.shapes[i].sc_addr = ' + shape.shapes[i].sc_addr);
+                        console.log('shape.shapes[i].sc_addr = ' + shape.shapes[i].sc_addr);
                         self.addFiveConstructionIntoBase(r, shape.shapes[i].sc_addr, self.nrel_side,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
                     }
 
                 }
 
-               if ("" != shape.name) {
+                if ("" != shape.name) {
                     window.sctpClient.create_link().done(function (res) {
                         window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
                         window.sctpClient.set_link_content(res, shape.name);
                         self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.big_red_node,
                             sc_type_arc_common | sc_type_const);
                     });
-               }
+                }
 
                 var arc1 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
@@ -217,7 +216,7 @@ Drawings.ScTranslator = {
                 alert("1) create node for shape failed");
             });
 
-		dfd.resolve(shape.sc_addr);
+        dfd.resolve(shape.sc_addr);
         return dfd.promise();
     },
 // /
@@ -236,33 +235,33 @@ Drawings.ScTranslator = {
         });
         return dfd.promise();
     },
-    pushShapes: function (shapes){
+    pushShapes: function (shapes) {
         var dfd = new jQuery.Deferred();
         var my_array1 = [];
         var self = this;
-		//put segments first
-		for (t in shapes) {
-			if (shapes[t].className == 'Segment')
-				my_array1.push(this.putShape(shapes[t]));
+        //put segments first
+        for (t in shapes) {
+            if (shapes[t].className == 'Segment')
+                my_array1.push(this.putShape(shapes[t]));
         }
 
         $.when.apply($, my_array1).done(function () {
-			//then other shapes
-			var my_array2 = [];
+            //then other shapes
+            var my_array2 = [];
 
-			for (t in shapes) {
-				if (shapes[t].className != 'Segment')
-					my_array2.push(self.putShape(shapes[t]));
-			}
+            for (t in shapes) {
+                if (shapes[t].className != 'Segment')
+                    my_array2.push(self.putShape(shapes[t]));
+            }
 
-			$.when.apply($, my_array2).done(function () {
-				dfd.resolve();
-			}).fail(function () {
-	            dfd.reject();
-	        });
-		}).fail(function () {
-	            dfd.reject();
-	        });
+            $.when.apply($, my_array2).done(function () {
+                dfd.resolve();
+            }).fail(function () {
+                dfd.reject();
+            });
+        }).fail(function () {
+            dfd.reject();
+        });
         return dfd.promise();
     },
 // temporary solution for keeping KB clean
@@ -288,24 +287,26 @@ Drawings.ScTranslator = {
         return dfd.promise();
     },
 
-    viewBasedKeyNode : function(){
+    viewBasedKeyNode: function () {
+        var addr;
+        SCWeb.core.Server.resolveScAddr(['big_red_node',
+        ], function (keynodes) {
+            addr = keynodes['big_red_node'];
 
-                SCWeb.core.Server.resolveScAddr(["concept_geometric_point"],
+            SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
 
-                    function(data)
-                    {
+                function (data) {
+                    console.log("data = " + data["ui_menu_view_full_semantic_neighborhood"]);
+                    var cmd = data["ui_menu_view_full_semantic_neighborhood"];
 
-                        console.log("data = " + data["concept_geometric_point"]);
-                        var cmd = data["concept_geometric_point"];
-
-                        SCWeb.core.Server.doCommand(cmd,
-                            [self.concept_geometric_point], function(result) {
-                                if (result.question != undefined) {
-                                    alert("addr = " + tmpaddr);
-                                    SCWeb.ui.WindowManager.appendHistoryItem(result.question);
-                                }
-                            });
-                    });
+                    SCWeb.core.Server.doCommand(cmd,
+                        [addr], function (result) {
+                            if (result.question != undefined) {
+                                SCWeb.ui.WindowManager.appendHistoryItem(result.question);
+                            }
+                        });
+                });
+        });
 
 
     },

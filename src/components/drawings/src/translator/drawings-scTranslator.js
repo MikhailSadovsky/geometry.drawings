@@ -41,6 +41,7 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("nrel_radius"));
         my_array.push(this.getKeyNode("nrel_system_identifier"));
         my_array.push(this.getKeyNode("nrel_length"));
+        my_array.push(this.getKeyNode("nrel_center_of_circle"));
         my_array.push(this.getKeyNode("nrel_value"));
         my_array.push(this.getKeyNode("nrel_area"));
         my_array.push(this.getKeyNode("concept_square"));
@@ -157,6 +158,12 @@ Drawings.ScTranslator = {
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
+                    if (shape.center){
+                                self.addFiveConstructionIntoBase(r, points[0].sc_addr, self.nrel_center_of_circle,
+                                    self.big_red_node, sc_type_arc_common | sc_type_const);
+                                self.addFiveConstruction(r, points[1].sc_addr, self.big_red_node, sc_type_arc_pos_const_perm);
+                    }
+
                     if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
@@ -289,14 +296,13 @@ Drawings.ScTranslator = {
 
     viewBasedKeyNode: function () {
         var addr;
-        SCWeb.core.Server.resolveScAddr(['big_red_node',
-        ], function (keynodes) {
+        SCWeb.core.Server.resolveScAddr(['big_red_node'], function (keynodes) {
             addr = keynodes['big_red_node'];
 
             SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
 
                 function (data) {
-                    console.log("data = " + data["ui_menu_view_full_semantic_neighborhood"]);
+
                     var cmd = data["ui_menu_view_full_semantic_neighborhood"];
 
                     SCWeb.core.Server.doCommand(cmd,

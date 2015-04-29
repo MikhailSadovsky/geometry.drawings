@@ -131,11 +131,12 @@ Drawings.Controller.prototype = {
         if (this.points.length == 2) {
             var circle = new Drawings.Circle(this.points[0], this.points[1]);
             circle.setName(Drawings.Utils.generateCircleName(circle));
-            var radius = new Drawings.Segment(this.points[0], this.points[1]);
-            radius.setName(Drawings.Utils.generateSegmentName(radius));
-            circle.setRadius(radius);
+            //var radius = new Drawings.Segment(this.points[0], this.points[1]);
+            //radius.setName(Drawings.Utils.generateSegmentName(radius));
+            circle.setCenter(this.points[0])
+            //circle.setRadius(radius);
             this.model.addShape(circle);
-            this.model.addShape(radius);
+            //this.model.addShape(radius);
             this.points.length = 0;
         }
     },

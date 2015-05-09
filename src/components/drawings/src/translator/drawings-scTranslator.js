@@ -22,7 +22,6 @@ Drawings.ScTranslator = {
                 });
             return dfd.promise();
         }
-
     },
     getKeyNodes: function () {
         var dfd = new jQuery.Deferred();
@@ -54,7 +53,6 @@ Drawings.ScTranslator = {
         });
         return dfd.promise();
     },
-
     /*
      Add link with content into base_el.
      All parameters must be sc_addr
@@ -67,16 +65,13 @@ Drawings.ScTranslator = {
                 sc_type_arc_common | sc_type_const);
         });
     },
-
     /*
      Add relation and quantity-value-answer construction.
      See segment length example
      relation must be sc_addr, value is an answer (for example shape.length)
      */
     addConstructionWithValueAndQuantity: function (relation, value) {
-
     },
-
     /*
      Add relation or attribute construction.
      All parameters must be sc_addr
@@ -88,7 +83,6 @@ Drawings.ScTranslator = {
                     sc_type_arc_pos_const_perm, relOrAttr, res);
             });
     },
-
     /*
      Add relation or attribute construction and put all arcs into base_el.
      All parameters must be sc_addr.
@@ -107,7 +101,6 @@ Drawings.ScTranslator = {
                     sc_type_arc_pos_const_perm, base_el, relOrAttr);
             });
     },
-
     putPoint: function (point) {
         var dfd = new jQuery.Deferred();
         if (point.hasOwnProperty("sc_addr") && point.sc_addr != null) {
@@ -115,7 +108,6 @@ Drawings.ScTranslator = {
             return dfd.promise();
         }
         var self = this;
-        point.sc_addr = null;
         window.sctpClient.create_node(sc_type_node | sc_type_const).done(
             function (r) {
                 point.sc_addr = r;
@@ -131,19 +123,16 @@ Drawings.ScTranslator = {
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
                 var arc2 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.concept_geometric_point, r);
-
                 arc2.done(function (res) {
                     window.sctpClient.create_arc(
                         sc_type_arc_pos_const_perm, self.big_red_node, res);
                 })
-
                 var arc3 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, self.concept_geometric_point);
                 $.when(arc1, arc2, arc3).done(function () {
                     dfd.resolve(r);
                 });
             }).fail(function () {
-                point.sc_addr = null;
                 dfd.reject();
                 alert("1) create node for point failed");
             });
@@ -157,12 +146,10 @@ Drawings.ScTranslator = {
             return dfd.promise();
         }
         var self = this;
-        shape.sc_addr = null;
         window.sctpClient.create_node(sc_type_node | sc_type_const).done(
             function (r) {
                 var points = shape.points;
                 shape.sc_addr = r;
-
                 var shapeType = self.concept_geometric_point;
                 if (shape.className == 'Segment') {
                     shapeType = self.concept_segment;
@@ -210,12 +197,11 @@ Drawings.ScTranslator = {
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
-                    if (shape.center){
-                                self.addFiveConstructionIntoBase(r, points[0].sc_addr, self.nrel_center_of_circle,
-                                    self.big_red_node, sc_type_arc_common | sc_type_const);
-                                self.addFiveConstruction(r, points[1].sc_addr, self.big_red_node, sc_type_arc_pos_const_perm);
+                    if (shape.center) {
+                        self.addFiveConstructionIntoBase(r, points[0].sc_addr, self.nrel_center_of_circle,
+                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                        self.addFiveConstruction(r, points[1].sc_addr, self.big_red_node, sc_type_arc_pos_const_perm);
                     }
-
                     if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
@@ -233,15 +219,11 @@ Drawings.ScTranslator = {
                         shape.shapes[1] = shape.segment2;
                         shape.shapes[2] = shape.segment3;
                     }
-
                     for (var i = 0; i < shape.shapes.length; i++) {
-                        console.log('shape.shapes[i].sc_addr = ' + shape.shapes[i].sc_addr);
                         self.addFiveConstructionIntoBase(r, shape.shapes[i].sc_addr, self.nrel_side,
                             self.big_red_node, sc_type_arc_common | sc_type_const);
                     }
-
                 }
-
                 if ("" != shape.name) {
                     window.sctpClient.create_link().done(function (res) {
                         window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
@@ -250,32 +232,23 @@ Drawings.ScTranslator = {
                             sc_type_arc_common | sc_type_const);
                     });
                 }
-
                 var arc1 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, r);
-
                 var arc2 = window.sctpClient
                     .create_arc(sc_type_arc_pos_const_perm, shapeType, r);
-
                 arc2.done(function (result) {
                     window.sctpClient.create_arc(
                         sc_type_arc_pos_const_perm, self.big_red_node, result);
                 });
-
                 var arc3 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.big_red_node, shapeType);
-
                 $.when(arc1, arc2, arc3).done(function () {
-                    console.log('sc_addr shape= ', r);
                     dfd.resolve(r);
                 });
             }).fail(function () {
-                shape.sc_addr = null;
                 dfd.reject();
                 alert("1) create node for shape failed");
             });
-
-        dfd.resolve(shape.sc_addr);
         return dfd.promise();
     },
 // /
@@ -286,7 +259,6 @@ Drawings.ScTranslator = {
         for (t in points) {
             my_array.push(this.putPoint(points[t]));
         }
-
         $.when.apply($, my_array).done(function () {
             dfd.resolve();
         }).fail(function () {
@@ -298,26 +270,13 @@ Drawings.ScTranslator = {
         var dfd = new jQuery.Deferred();
         var my_array1 = [];
         var self = this;
-        //put segments first
+//put segments first
         for (t in shapes) {
-            if (shapes[t].className == 'Segment')
+            if (shapes[t].className != 'Point')
                 my_array1.push(this.putShape(shapes[t]));
         }
-
         $.when.apply($, my_array1).done(function () {
-            //then other shapes
-            var my_array2 = [];
-
-            for (t in shapes) {
-                if (shapes[t].className != 'Segment')
-                    my_array2.push(self.putShape(shapes[t]));
-            }
-
-            $.when.apply($, my_array2).done(function () {
-                dfd.resolve();
-            }).fail(function () {
-                dfd.reject();
-            });
+            dfd.resolve();
         }).fail(function () {
             dfd.reject();
         });
@@ -339,24 +298,19 @@ Drawings.ScTranslator = {
             } //TODO: add deleting when it will work
             dfd.resolve();
         }).fail(function () {
-            //alert("fail in wipeOld");
+//alert("fail in wipeOld");
             dfd.resolve();
         });
 //dfd.resolve();
         return dfd.promise();
     },
-
     viewBasedKeyNode: function () {
         var addr;
         SCWeb.core.Server.resolveScAddr(['big_red_node'], function (keynodes) {
             addr = keynodes['big_red_node'];
-
             SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
-
                 function (data) {
-
                     var cmd = data["ui_menu_view_full_semantic_neighborhood"];
-
                     SCWeb.core.Server.doCommand(cmd,
                         [addr], function (result) {
                             if (result.question != undefined) {
@@ -365,10 +319,7 @@ Drawings.ScTranslator = {
                         });
                 });
         });
-
-
     },
-
     putModel: function (model) {
         var cleanup = this.wipeOld;
         var pushPts = this.pushPoints;
@@ -384,10 +335,12 @@ Drawings.ScTranslator = {
 // foreach points add point-defined nodes and arcs
                     for (var i = 0; i < model.points.length; i++) {
                         var el = model.points[i];
-                        document.getElementById(
-                            model.paintPanel._getJxgObjectById(el
-                                .getId()).rendNode.id)
-                            .setAttribute('sc_addr', el.sc_addr);
+                        if (el.hasOwnProperty("sc_addr")) {
+                            document.getElementById(
+                                model.paintPanel._getJxgObjectById(el
+                                    .getId()).rendNode.id)
+                                .setAttribute('sc_addr', el.sc_addr);
+                        }
                     }
                 });
         });
@@ -397,10 +350,12 @@ Drawings.ScTranslator = {
 // foreach shapes add shape-defined nodes and arcs
                     for (var i = 0; i < model.shapes.length; i++) {
                         var el = model.shapes[i];
-                        document.getElementById(
-                            model.paintPanel._getJxgObjectById(el
-                                .getId()).rendNode.id)
-                            .setAttribute('sc_addr', el.sc_addr);
+                        if (el.hasOwnProperty("sc_addr")) {
+                            document.getElementById(
+                                model.paintPanel._getJxgObjectById(el
+                                    .getId()).rendNode.id)
+                                .setAttribute('sc_addr', el.sc_addr);
+                        }
                     }
                 });
         });

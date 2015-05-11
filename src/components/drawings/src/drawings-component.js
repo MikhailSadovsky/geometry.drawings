@@ -32,26 +32,22 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 var end = obj.data.end;
                 // if it connect point set and point, then create the last one
                 if (end && (begin == self.keynodes.point)) {
-                    console.log("addr= " + end);
                     points.push(end);
                     obj.translated = true;
                 }
             }
         }
-        console.log("points="+ points);
         var dfd2 = drawPointsWithIdtf(points);
         dfd2.done(function (r) {
-            console.log("dfd2.done");
-            console.clear();
-            drawAllSegments();
-            dfd.resolve();
+            var res = drawAllSegments();
+            res.done(function(r1){
+                dfd.resolve();
+            });
         });
         return dfd.promise();
     }
 
     function drawAllSegments() {
-        console.clear();
-        console.log("in draw segments");
         var dfd = new jQuery.Deferred();
         for (var addr in scElements) {
             var obj = scElements[addr];
@@ -61,16 +57,14 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 var begin = obj.data.begin;
                 var end = obj.data.end;
                 if (end && (begin == self.keynodes.segment)) {
-                    console.log("update draw segment");
-                    var point1 = new Object();
-                    var point2 = new Object();
+                    var point1;
+                    var point2;
                     window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                         end, sc_type_arc_common | sc_type_const,
                         sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, self.keynodes.boundary]).
                         done(function (res) {
                             var point1_addr = res[0][2];
                             var point2_addr = res[1][2];
-                            alert(self.model.points);
                             for (var index = 0; index < self.model.points.length; index++) {
                                 if (self.model.points[index].sc_addr == point1_addr) {
                                     point1 = self.model.points[index];
@@ -78,17 +72,16 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     point2 = self.model.points[index];
                                 }
                             }
-                            alert(point1);
                             var segment = new Drawings.Segment(point1, point2);
                             self.model.addShape(segment);
                             //adding sc-addr
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             obj.translated = true;
+                            dfd.resolve();
                         });
                 }
             }
         }
-        dfd.resolve();
         return dfd.promise();
     }
 
@@ -144,33 +137,31 @@ Drawings.GeomDrawWindow = function (sandbox) {
     function drawPointsWithIdtf(points) {
         var dfd = new jQuery.Deferred();
         for (var i = 0; i < points.length; i++) {
-            console.log("points[i]=" + points[i]);
+            ( function(index){
+            var point_addr = points[i];
             var res1 = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                 points[i], sc_type_arc_common | sc_type_const,
                 sc_type_link, sc_type_arc_pos_const_perm, self.keynodes.identifier]);
             res1.done(function (res) {
-                console.log("in done");
                 window.sctpClient.get_link_content(res[0][2], 'string').done(function (idtf) {
-                    console.log("update draw point");
-                    console.log("idtf= " + idtf);
                     var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
                     point.name = idtf;
+                    point.sc_addr = points[index];
                     self.model.addPoint(point);
                     //adding sc-addr
                     document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[i]);
+                    dfd.resolve();
                 });
             });
             res1.fail(function () {
-                console.log("in fail");
-                console.log("update draw point without idtf");
                 var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                point.sc_addr = points[index];
                 self.model.addPoint(point);
                 //adding sc-addr
                 document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[i]);
-            });
+                dfd.resolve();
+            });})(i);
         }
-        console.log("Before resolve draw with idtf");
-        dfd.resolve();
         return dfd.promise();
     }
 
@@ -182,12 +173,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
 // check if object is an arc
             var dfd1 = drawAllPoints();
             dfd1.done(function (r) {
-                console.log("draw points done");
                 //  drawAllSegments();
             });
-            //dfd1.done(function(r2){
-            //    drawAllOtherShapes();
-            //});
 
 
 /// @todo: Don't update if there are no new elements

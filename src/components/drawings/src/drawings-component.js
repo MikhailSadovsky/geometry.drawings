@@ -73,6 +73,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                 }
                             }
                             var segment = new Drawings.Segment(point1, point2);
+                            segment.sc_addr = end;
                             self.model.addShape(segment);
                             //adding sc-addr
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
@@ -138,7 +139,6 @@ Drawings.GeomDrawWindow = function (sandbox) {
         var dfd = new jQuery.Deferred();
         for (var i = 0; i < points.length; i++) {
             ( function(index){
-            var point_addr = points[i];
             var res1 = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                 points[i], sc_type_arc_common | sc_type_const,
                 sc_type_link, sc_type_arc_pos_const_perm, self.keynodes.identifier]);
@@ -149,7 +149,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     point.sc_addr = points[index];
                     self.model.addPoint(point);
                     //adding sc-addr
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[i]);
+                    document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
                     dfd.resolve();
                 });
             });
@@ -158,7 +158,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 point.sc_addr = points[index];
                 self.model.addPoint(point);
                 //adding sc-addr
-                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[i]);
+                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
                 dfd.resolve();
             });})(i);
         }

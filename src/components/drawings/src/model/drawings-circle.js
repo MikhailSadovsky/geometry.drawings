@@ -6,7 +6,6 @@ Drawings.Circle = function Circle(point1, point2) {
     Drawings.Circle.superclass.constructor.apply(this, [[point1, point2]]);
     this.radius = null;
     this.center = null;
-    
 };
 
 extend(Drawings.Circle, Drawings.Shape);
@@ -27,3 +26,5 @@ Drawings.Circle.prototype.setRadius = function (radius) {
 Drawings.Circle.prototype.setCenter = function (center) {
     this.center = center;
 };
+
+

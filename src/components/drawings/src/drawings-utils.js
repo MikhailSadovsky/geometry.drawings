@@ -28,6 +28,12 @@ Drawings.Utils = {
         })
     },
 
+    selectCircles: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Circle;
+        })
+    },
+
     getObjectById: function (objects, objectId) {
         return objects.filter(function (object) {
             return object.getId() == objectId;

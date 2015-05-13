@@ -122,7 +122,7 @@ Drawings.PaintPanel.prototype = {
 
         $('#viewButton').click(function () {
             paintPanel._viewBasedKeyNode();
-        })
+        });
 
         // initialize board
         editor.append('<div id="board" class="board jxgbox"></div>');

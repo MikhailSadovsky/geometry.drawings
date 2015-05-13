@@ -39,8 +39,10 @@ Drawings.GeomDrawWindow = function (sandbox) {
         }
         var dfd2 = drawPointsWithIdtf(points);
         dfd2.done(function (r) {
+         //   console.log("pointswithIdtf Translated");
             var res = drawAllSegments();
             res.done(function(r1){
+           //     console.log("segments Translate");
                 dfd.resolve();
             });
         });
@@ -48,6 +50,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
     }
 
     function drawAllSegments() {
+    //    console.log("at drawAllSegments");
         var dfd = new jQuery.Deferred();
         for (var addr in scElements) {
             var obj = scElements[addr];
@@ -150,7 +153,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addPoint(point);
                     //adding sc-addr
                     document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                    dfd.resolve();
+                    //dfd.resolve();
                 });
             });
             res1.fail(function () {
@@ -159,9 +162,10 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 self.model.addPoint(point);
                 //adding sc-addr
                 document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                dfd.resolve();
+                //dfd.resolve();
             });})(i);
         }
+        dfd.resolve();
         return dfd.promise();
     }
 

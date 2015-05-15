@@ -9,6 +9,8 @@ Drawings.GeomDrawComponent = {
         return new Drawings.GeomDrawWindow(sandbox);
     }
 };
+
+
 Drawings.GeomDrawWindow = function (sandbox) {
     this.sandbox = sandbox;
     this.model = new Drawings.Model();
@@ -42,14 +44,75 @@ Drawings.GeomDrawWindow = function (sandbox) {
          //   console.log("pointswithIdtf Translated");
             var res = drawAllSegments();
             res.done(function(r1){
-           //     console.log("segments Translate");
-                dfd.resolve();
+          var resOfLines = drawAllLines();
+                resOfLines.done(function (res){
+                    console.log('at resOfLines.done()');
+                    dfd.resolve();
+                });
+
             });
         });
         return dfd.promise();
     }
 
-    function drawAllSegments() {
+    function drawAllLines() {
+        console.log("at drawAllLines");
+        var dfd = new jQuery.Deferred();
+        for (var addr in scElements) {
+            var obj = scElements[addr];
+            if (!obj || obj.translated) continue;
+// check if object is an arc
+            if (obj.data.type & sc_type_arc_pos_const_perm) {
+                var begin = obj.data.begin;
+                var end = obj.data.end;
+                if (end && (begin == self.keynodes.line)) {
+                    console.log("at node = line");
+                    var point1;
+                    var point2;
+                    console.log(end);
+                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_F, [
+                        self.keynodes.line, sc_type_arc_common | sc_type_const,
+                        end]).
+                        done(function (res) {
+                            console.log("at sommewhere");
+                            for(i = 0; i <= res.length; i++ ) {
+                                console.log("at drawAllLines, at iterating points");
+                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_F, [
+                                    res[i][2], sc_type_arc_common | sc_type_const,
+                                    self.keynodes.point]).done( function (iteratingPoints){
+                                    var point1_addr = iteratingPoints[0][0];
+                                    var point2_addr = iteratingPoints[1][0];
+                                    for (var index = 0; index < self.model.points.length; index++) {
+                                        if (self.model.points[index].sc_addr == point1_addr) {
+                                            point1 = self.model.points[index];
+                                        } else if (self.model.points[index].sc_addr == point2_addr) {
+                                            point2 = self.model.points[index];
+                                        }
+                                    }
+                                    var line = new Drawings.Line(point1, point2);
+                                    line.sc_addr = end;
+                                    self.model.addShape(line);
+                                    //adding sc-addr
+                                    document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
+                                    obj.translated = true;
+                                    dfd.resolve();
+
+                                })
+                            }
+
+                        })
+                    .fail( function(){
+
+                            console.log("at fail___", end);
+                            dfd.resolve();
+                        });
+                }
+            }
+        }
+        return dfd.promise();
+    }
+
+        function drawAllSegments() {
     //    console.log("at drawAllSegments");
         var dfd = new jQuery.Deferred();
         for (var addr in scElements) {
@@ -62,7 +125,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 if (end && (begin == self.keynodes.segment)) {
                     var point1;
                     var point2;
-                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                  //  console.log("THe first end is ", end);
+                    var resvar = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                         end, sc_type_arc_common | sc_type_const,
                         sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, self.keynodes.boundary]).
                         done(function (res) {
@@ -79,13 +143,16 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             segment.sc_addr = end;
                             self.model.addShape(segment);
                             //adding sc-addr
+                           // console.log("THe resvar is ", resvar);
+                           // console.log("THe second end is ", end);
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             obj.translated = true;
-                            dfd.resolve();
+
                         });
                 }
             }
         }
+            dfd.resolve();
         return dfd.promise();
     }
 

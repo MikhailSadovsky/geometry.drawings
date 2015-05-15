@@ -232,7 +232,7 @@ Drawings.ScTranslator = {
                                                         self.chart_arguments, sc_type_arc_common | sc_type_const);
                                                     self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
                                                     window.sctpClient.create_link().done(function (res) {
-                                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.bchart_arguments, res);
+                                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
                                                         window.sctpClient.set_link_content(res, shape.radius);
                                                         self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
                                                             sc_type_arc_common | sc_type_const);

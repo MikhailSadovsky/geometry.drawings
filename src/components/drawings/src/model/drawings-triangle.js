@@ -5,6 +5,7 @@
 Drawings.Triangle = function Triangle(point1, point2, point3) {
     Drawings.Triangle.superclass.constructor.apply(this, [[point1, point2, point3]]);
     this.square = null;
+    this.perimeter = null;
 };
 
 extend(Drawings.Triangle, Drawings.Shape);
@@ -27,4 +28,12 @@ Drawings.Triangle.prototype.setSquare = function (square) {
 
 Drawings.Triangle.prototype.getSquare = function () {
     return this.square;
+};
+
+Drawings.Triangle.prototype.setPerimeter = function (perimeter) {
+    this.perimeter = perimeter;
+};
+
+Drawings.Triangle.prototype.getPerimeter = function () {
+    return this.perimeter;
 };

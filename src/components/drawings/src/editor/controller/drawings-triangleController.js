@@ -22,7 +22,23 @@ Drawings.TriangleController.prototype = {
             }
         };
 
-        contextMenu.show([setSquareMenuItem]);
+        var setPerimeterMenuItem = {
+            text: 'Задать периметр',
+            action: function () {
+                controller._setPerimeterAction(triangle);
+            }
+        };
+
+        contextMenu.show([setSquareMenuItem, setPerimeterMenuItem]);
+    },
+
+    _setPerimeterAction: function (triangle) {
+        var perimeter = prompt('Введите периметр треугольника:');
+
+        if (perimeter != null) {
+            triangle.setPerimeter(perimeter);
+            this.model.updated([triangle]);
+        }
     },
 
     _setSquareAction: function (triangle) {

@@ -44,7 +44,7 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("nrel_value"));
         my_array.push(this.getKeyNode("nrel_area"));
         my_array.push(this.getKeyNode("concept_square"));
-        my_array.push(this.getKeyNode("big_red_node"));
+        my_array.push(this.getKeyNode("chart_arguments"));
         my_array.push(this.getKeyNode("sc_garbage")); // 15
         $.when.apply($, my_array).done(function () {
             dfd.resolve();
@@ -59,7 +59,7 @@ Drawings.ScTranslator = {
      */
     addNewLinkWithContent: function (content, base_el) {
         window.sctpClient.create_link().done(function (res) {
-            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
+            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
             window.sctpClient.set_link_content(res, content);
             self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, base_el,
                 sc_type_arc_common | sc_type_const);
@@ -113,22 +113,22 @@ Drawings.ScTranslator = {
                 point.sc_addr = r;
                 if ("" != point.name) {
                     window.sctpClient.create_link().done(function (res) {
-                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
+                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
                         window.sctpClient.set_link_content(res, point.name);
-                        self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.big_red_node,
+                        self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.chart_arguments,
                             sc_type_arc_common | sc_type_const);
                     });
                 }
                 var arc1 = window.sctpClient.create_arc(
-                    sc_type_arc_pos_const_perm, self.big_red_node, r);
+                    sc_type_arc_pos_const_perm, self.chart_arguments, r);
                 var arc2 = window.sctpClient.create_arc(
                     sc_type_arc_pos_const_perm, self.concept_geometric_point, r);
                 arc2.done(function (res) {
                     window.sctpClient.create_arc(
-                        sc_type_arc_pos_const_perm, self.big_red_node, res);
+                        sc_type_arc_pos_const_perm, self.chart_arguments, res);
                 })
                 var arc3 = window.sctpClient.create_arc(
-                    sc_type_arc_pos_const_perm, self.big_red_node, self.concept_geometric_point);
+                    sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_geometric_point);
                 $.when(arc1, arc2, arc3).done(function () {
                     dfd.resolve(r);
                 });
@@ -155,31 +155,31 @@ Drawings.ScTranslator = {
                     shapeType = self.concept_segment;
                     for (var i = 0; i < points.length; i++) {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_boundary_point,
-                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
                     if (shape.length) {
                         self.addConstructionWithValueAndQuantity(self.nrel_length, shape.length);
-                        var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, self.nrel_length);
+                        var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
                         arc1.done(function (r1) {
-                            var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, self.nrel_value);
+                            var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
                             arc2.done(function (r2) {
-                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, self.concept_quantity);
+                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_quantity);
                                 window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
-                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, quality_node);
+                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
                                     window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (value_node) {
-                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, value_node);
+                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, value_node);
                                         window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (answer_node) {
-                                            self.addFiveConstruction(self.concept_quantity, quality_node, self.big_red_node, sc_type_arc_pos_const_perm);
-                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, answer_node);
+                                            self.addFiveConstruction(self.concept_quantity, quality_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, answer_node);
                                             self.addFiveConstructionIntoBase(r, quality_node, self.nrel_length,
-                                                self.big_red_node, sc_type_arc_common | sc_type_const);
+                                                self.chart_arguments, sc_type_arc_common | sc_type_const);
                                             self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
-                                                self.big_red_node, sc_type_arc_common | sc_type_const);
-                                            self.addFiveConstruction(value_node, answer_node, self.big_red_node, sc_type_arc_pos_const_perm);
+                                                self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                            self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
                                             window.sctpClient.create_link().done(function (res) {
-                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
+                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
                                                 window.sctpClient.set_link_content(res, shape.length);
-                                                self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.big_red_node,
+                                                self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
                                                     sc_type_arc_common | sc_type_const);
                                             });
                                         });
@@ -192,26 +192,26 @@ Drawings.ScTranslator = {
                 if (shape.className == 'Line') {
                     shapeType = self.concept_straight_line;
                     for (var i = 0; i < points.length; i++) {
-                        self.addFiveConstruction(r, points[i].sc_addr, self.big_red_node, sc_type_arc_pos_const_perm);
+                        self.addFiveConstruction(r, points[i].sc_addr, self.chart_arguments, sc_type_arc_pos_const_perm);
                     }
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
                     if (shape.center) {
                         self.addFiveConstructionIntoBase(r, points[0].sc_addr, self.nrel_center_of_circle,
-                            self.big_red_node, sc_type_arc_common | sc_type_const);
-                        self.addFiveConstruction(r, points[1].sc_addr, self.big_red_node, sc_type_arc_pos_const_perm);
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
+                        self.addFiveConstruction(r, points[1].sc_addr, self.chart_arguments, sc_type_arc_pos_const_perm);
                     }
                     if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
-                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
                 }
                 if (shape.className == 'Triangle') {
                     shapeType = self.concept_triangle;
                     for (var i = 0; i < points.length; i++) {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
-                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
                     if (!shape.hasOwnProperty('shapes')) {
                         shape.shapes = [];
@@ -221,27 +221,27 @@ Drawings.ScTranslator = {
                     }
                     for (var i = 0; i < shape.shapes.length; i++) {
                         self.addFiveConstructionIntoBase(r, shape.shapes[i].sc_addr, self.nrel_side,
-                            self.big_red_node, sc_type_arc_common | sc_type_const);
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
                 }
                 if ("" != shape.name) {
                     window.sctpClient.create_link().done(function (res) {
-                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.big_red_node, res);
+                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
                         window.sctpClient.set_link_content(res, shape.name);
-                        self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.big_red_node,
+                        self.addFiveConstructionIntoBase(r, res, self.nrel_system_identifier, self.chart_arguments,
                             sc_type_arc_common | sc_type_const);
                     });
                 }
                 var arc1 = window.sctpClient.create_arc(
-                    sc_type_arc_pos_const_perm, self.big_red_node, r);
+                    sc_type_arc_pos_const_perm, self.chart_arguments, r);
                 var arc2 = window.sctpClient
                     .create_arc(sc_type_arc_pos_const_perm, shapeType, r);
                 arc2.done(function (result) {
                     window.sctpClient.create_arc(
-                        sc_type_arc_pos_const_perm, self.big_red_node, result);
+                        sc_type_arc_pos_const_perm, self.chart_arguments, result);
                 });
                 var arc3 = window.sctpClient.create_arc(
-                    sc_type_arc_pos_const_perm, self.big_red_node, shapeType);
+                    sc_type_arc_pos_const_perm, self.chart_arguments, shapeType);
                 $.when(arc1, arc2, arc3).done(function () {
                     dfd.resolve(r);
                 });
@@ -284,12 +284,12 @@ Drawings.ScTranslator = {
     },
 // temporary solution for keeping KB clean
     wipeOld: function () {
-// find 'big_red_node' that contains all new data and wipe out contents
+// find 'chart_arguments' that contains all new data and wipe out contents
 // - deleting won't work yet =\
         var self = this;
         var dfd = new jQuery.Deferred();
         window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
-            self.big_red_node, sc_type_arc_pos_const_perm, sc_type_node |
+            self.chart_arguments, sc_type_arc_pos_const_perm, sc_type_node |
             sc_type_const]).done(function (res) {
             for (r in res.result) {
 //langs.push(res.result[r][2]);
@@ -306,8 +306,8 @@ Drawings.ScTranslator = {
     },
     viewBasedKeyNode: function () {
         var addr;
-        SCWeb.core.Server.resolveScAddr(['big_red_node'], function (keynodes) {
-            addr = keynodes['big_red_node'];
+        SCWeb.core.Server.resolveScAddr(['chart_arguments'], function (keynodes) {
+            addr = keynodes['chart_arguments'];
             SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
                 function (data) {
                     var cmd = data["ui_menu_view_full_semantic_neighborhood"];

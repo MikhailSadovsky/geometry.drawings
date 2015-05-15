@@ -1,4 +1,4 @@
-big_red_node
+chart_arguments
 <- sc_node_struct;
 => nrel_main_idtf: 
 	[контур узла с аргументами задачи] 

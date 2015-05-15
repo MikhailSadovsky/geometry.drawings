@@ -10,6 +10,7 @@ Drawings.Controller = function (paintPanel, model) {
     this.pointController = new Drawings.PointController(this.model);
     this.segmentController = new Drawings.SegmentController(this.model);
     this.triangleController = new Drawings.TriangleController(this.model);
+    this.circleController = new Drawings.CircleController(this.model);
 };
 
 Drawings.Controller.prototype = {
@@ -146,7 +147,7 @@ Drawings.Controller.prototype = {
             var triangle = new Drawings.Triangle(this.points[0], this.points[1], this.points[2]);
             triangle.setName(Drawings.Utils.generateTriangleName(triangle));
 
-			var segment1 = new Drawings.Segment(this.points[0], this.points[1]);
+            var segment1 = new Drawings.Segment(this.points[0], this.points[1]);
             segment1.setName(Drawings.Utils.generateSegmentName(segment1));
 
             var segment2 = new Drawings.Segment(this.points[1], this.points[2]);
@@ -158,11 +159,11 @@ Drawings.Controller.prototype = {
             this.model.addShape(segment1);
             this.model.addShape(segment2);
             this.model.addShape(segment3);
-			
-			triangle.segment1 = segment1;
-			triangle.segment2 = segment2;
-			triangle.segment3 = segment3;
-			
+
+            triangle.segment1 = segment1;
+            triangle.segment2 = segment2;
+            triangle.segment3 = segment3;
+
             this.model.addShape(triangle);
 
             this.points.length = 0;
@@ -176,6 +177,7 @@ Drawings.Controller.prototype = {
         var points = Drawings.Utils.selectPoints(objects);
         var segments = Drawings.Utils.selectSegments(objects);
         var triangles = Drawings.Utils.selectTriangles(objects);
+        var circles = Drawings.Utils.selectCircles(objects);
 
         if (points.length > 0) {
             var jxgPoint = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), points[0].getId());
@@ -188,6 +190,10 @@ Drawings.Controller.prototype = {
         else if (triangles.length > 0) {
             var jxgTriangle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), triangles[0].getId());
             this.triangleController.handleContextMenuEvent(jxgTriangle, event);
+        }
+        else if (circles.length > 0) {
+            var jxgCircle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), circles[0].getId());
+            this.circleController.handleContextMenuEvent(jxgCircle, event);
         }
     },
 

@@ -203,8 +203,80 @@ Drawings.ScTranslator = {
                         self.addFiveConstruction(r, points[1].sc_addr, self.chart_arguments, sc_type_arc_pos_const_perm);
                     }
                     if (shape.radius) {
+
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
+
+                            window.sctpClient.create_node(sc_type_node | sc_type_const).done(function(createdNode){
+                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, createdNode);
+                                self.addFiveConstructionIntoBase(r, createdNode, self.nrel_radius,
+                                    self.chart_arguments, sc_type_arc_common | sc_type_const);
+
+
+                                self.addConstructionWithValueAndQuantity(self.nrel_length, shape.radius);
+                                var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
+                                arc1.done(function (r1) {
+                                    var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
+                                    arc2.done(function (r2) {
+                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_quantity);
+                                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
+                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
+                                            window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (value_node) {
+                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, value_node);
+                                                window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (answer_node) {
+                                                    self.addFiveConstruction(self.concept_quantity, quality_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, answer_node);
+                                                    self.addFiveConstructionIntoBase(createdNode, quality_node, self.nrel_length,
+                                                        self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                                    self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
+                                                        self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                                    self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                                    window.sctpClient.create_link().done(function (res) {
+                                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.bchart_arguments, res);
+                                                        window.sctpClient.set_link_content(res, shape.radius);
+                                                        self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
+                                                            sc_type_arc_common | sc_type_const);
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+
+
+                            });
+                    }
+                    if (shape.length) {
+                        self.addConstructionWithValueAndQuantity(self.nrel_length, shape.length);
+                        var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
+                        arc1.done(function (r1) {
+                            var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
+                            arc2.done(function (r2) {
+                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_quantity);
+                                window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
+                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
+                                    window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (value_node) {
+                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, value_node);
+                                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (answer_node) {
+                                            self.addFiveConstruction(self.concept_quantity, quality_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, answer_node);
+                                            self.addFiveConstructionIntoBase(r, quality_node, self.nrel_length,
+                                                self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                            self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
+                                                self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                            self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                            window.sctpClient.create_link().done(function (res) {
+                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
+                                                window.sctpClient.set_link_content(res, shape.length);
+                                                self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
+                                                    sc_type_arc_common | sc_type_const);
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+
                     }
                 }
                 if (shape.className == 'Triangle') {

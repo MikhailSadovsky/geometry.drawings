@@ -17,16 +17,28 @@ Drawings.CircleController.prototype = {
                 controller._setRadiusAction(circle);
             }
         };
-
-        contextMenu.show([setRadiusMenuItem]);
+        var setLengthMenuItem = {
+            text: 'Задать длину окружости',
+            action: function () {
+                controller._setLengthAction(circle);
+            }
+        };
+        contextMenu.show([setRadiusMenuItem, setLengthMenuItem]);
     },
 
     _setRadiusAction: function (circle) {
         var radiusLength = prompt('Введите длину радиуса');
-        
+
         if (radiusLength != null) {
-            //todo checking points
+            circle.setRadius(radiusLength);
+            this.model.updated([circle]);
+        }
+    },
+    _setLengthAction: function (circle) {
+        var length = prompt('Введите длину окружности:');
+        if (length != null) {
+            circle.setLength(length);
             this.model.updated([circle]);
         }
     }
-};
+}

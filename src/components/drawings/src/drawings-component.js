@@ -118,6 +118,54 @@ Drawings.GeomDrawWindow = function (sandbox) {
         return dfd.promise();
     }
 
+
+
+    function translateRelation(node, relation){
+        var dfd = new jQuery.Deferred();
+        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+            node,
+            sc_type_arc_common | sc_type_const,
+            sc_type_node | sc_type_const,
+            sc_type_arc_pos_const_perm,
+            relation]).
+            done(function(relationNodes){
+                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5A_A_F_A_F, [
+                    sc_type_node | sc_type_const,
+                    sc_type_arc_common | sc_type_const,
+                    relationNodes[0][2],
+                    sc_type_arc_pos_const_perm,
+                    self.keynodes.value]).
+                    done(function(valueNodes){
+                        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+                            valueNodes[0][0],
+                            sc_type_arc_pos_const_perm,
+                            sc_type_node | sc_type_const]).
+                            done(function(sysValueNodes){
+                                console.log(sysValueNodes[0][2]);
+                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                                    sysValueNodes[0][2],
+                                    sc_type_arc_common | sc_type_const,
+                                    sc_type_link | sc_type_const,
+                                    sc_type_arc_pos_const_perm,
+                                    self.keynodes.identifier]).
+                                    done(function(linkNodes){
+                                        console.log("yes");
+                                        var content = window.sctpClient.get_link_content(linkNodes[0][2],'string');
+                                        console.log('content '+ content);
+                                    }).
+                                    fail(function(){
+                                        console.log("nooooo");
+                                    })
+                            });
+                    });
+                dfd.resolve();
+            });
+
+        return dfd.promise();
+    }
+
+
+
         function drawAllSegments() {
     //    console.log("at drawAllSegments");
         var dfd = new jQuery.Deferred();
@@ -133,7 +181,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     var point1;
                     var point2;
                    // console.log("THe first end is ", end);
-                    var resvar = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                         end, sc_type_arc_common | sc_type_const,
                         sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, self.keynodes.boundary]).
                         done(function (res) {
@@ -153,8 +201,10 @@ Drawings.GeomDrawWindow = function (sandbox) {
                            // console.log("THe resvar is ", resvar);
                            // console.log("THe second end is ", end);
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
-                            obj.translated = true;
-
+                            var translateLen = translateRelation(end, self.keynodes.length);
+                            translateLen.done(function(resDfd){
+                                obj.translated = true;
+                            });
                         });
                 }
             }
@@ -308,6 +358,18 @@ Drawings.GeomDrawWindow = function (sandbox) {
     SCWeb.core.Server.resolveScAddr(['nrel_boundary_point',
     ], function (keynodes) {
         self.keynodes.boundary = keynodes['nrel_boundary_point'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_value',
+    ], function (keynodes) {
+        self.keynodes.value = keynodes['nrel_value'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_length',
+    ], function (keynodes) {
+        self.keynodes.length = keynodes['nrel_length'];
         self.needUpdate = true;
         self.requestUpdate();
     });

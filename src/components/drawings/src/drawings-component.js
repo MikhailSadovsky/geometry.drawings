@@ -58,7 +58,6 @@ Drawings.GeomDrawWindow = function (sandbox) {
     function drawAllLines() {
         console.log("at drawAllLines");
         var dfd = new jQuery.Deferred();
-        var addr;
         jQuery.each(scElements, function(j, val){
            // console.log(val);
             var obj = scElements[j];
@@ -71,8 +70,6 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     var point1;
                     var point2;
                     var pointsAddrs = [];
-                    var res1;
-
                     window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
                         end, sc_type_arc_pos_const_perm,
                         sc_type_node | sc_type_const])
@@ -118,16 +115,16 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 }
             }
         });
-
         return dfd.promise();
     }
 
         function drawAllSegments() {
     //    console.log("at drawAllSegments");
         var dfd = new jQuery.Deferred();
-        for (var addr in scElements) {
-            var obj = scElements[addr];
-            if (!obj || obj.translated) continue;
+            jQuery.each(scElements, function(j, val){
+                // console.log(val);
+                var obj = scElements[j];
+            if (!obj || obj.translated) return;
 // check if object is an arc
             if (obj.data.type & sc_type_arc_pos_const_perm) {
                 var begin = obj.data.begin;
@@ -135,7 +132,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 if (end && (begin == self.keynodes.segment)) {
                     var point1;
                     var point2;
-                  //  console.log("THe first end is ", end);
+                   // console.log("THe first end is ", end);
                     var resvar = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                         end, sc_type_arc_common | sc_type_const,
                         sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, self.keynodes.boundary]).
@@ -161,7 +158,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         });
                 }
             }
-        }
+        });
             dfd.resolve();
         return dfd.promise();
     }

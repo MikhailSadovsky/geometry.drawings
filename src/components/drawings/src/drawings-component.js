@@ -58,34 +58,46 @@ Drawings.GeomDrawWindow = function (sandbox) {
     function drawAllLines() {
         console.log("at drawAllLines");
         var dfd = new jQuery.Deferred();
-        for (var addr in scElements) {
-            var obj = scElements[addr];
-            if (!obj || obj.translated) continue;
+        var addr;
+        jQuery.each(scElements, function(j, val){
+           // console.log(val);
+            var obj = scElements[j];
+            if (!obj || obj.translated) return;
 // check if object is an arc
             if (obj.data.type & sc_type_arc_pos_const_perm) {
                 var begin = obj.data.begin;
                 var end = obj.data.end;
                 if (end && (begin == self.keynodes.line)) {
-                    console.log("at node = line");
                     var point1;
                     var point2;
-                    console.log(end);
-                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_F, [
-                        self.keynodes.line, sc_type_arc_common | sc_type_const,
-                        end]).
-                        done(function (res) {
-                            console.log("at sommewhere");
-                            for(i = 0; i <= res.length; i++ ) {
-                                console.log("at drawAllLines, at iterating points");
-                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_F, [
-                                    res[i][2], sc_type_arc_common | sc_type_const,
-                                    self.keynodes.point]).done( function (iteratingPoints){
-                                    var point1_addr = iteratingPoints[0][0];
-                                    var point2_addr = iteratingPoints[1][0];
+                    var pointsAddrs = [];
+                    var res1;
+
+                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+                        end, sc_type_arc_pos_const_perm,
+                        sc_type_node | sc_type_const])
+                        .done(function (res) {
+
+                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+                                        self.keynodes.point,
+                                        sc_type_arc_pos_const_perm,
+                                        sc_type_node | sc_type_const])
+                                .done(function (iteratingPoints) {
+
+                                        for(i = 0; i < res.length; i++ ) {
+                                            for(indexOfPoints = 0; indexOfPoints < iteratingPoints.length; indexOfPoints++){
+                                                if(res[i][2] == iteratingPoints[indexOfPoints][2]){
+                                                    if (pointsAddrs.length < 2) {
+                                                        pointsAddrs.push(res[i][2]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        console.log("iteratingPOints " + iteratingPoints);
                                     for (var index = 0; index < self.model.points.length; index++) {
-                                        if (self.model.points[index].sc_addr == point1_addr) {
+                                        if (self.model.points[index].sc_addr == pointsAddrs[0]) {
                                             point1 = self.model.points[index];
-                                        } else if (self.model.points[index].sc_addr == point2_addr) {
+                                        } else if (self.model.points[index].sc_addr == pointsAddrs[1]) {
                                             point2 = self.model.points[index];
                                         }
                                     }
@@ -96,19 +108,17 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
                                     obj.translated = true;
                                     dfd.resolve();
-
-                                })
-                            }
-
+                                    });
                         })
-                    .fail( function(){
+                        .fail( function(){
 
                             console.log("at fail___", end);
                             dfd.resolve();
                         });
                 }
             }
-        }
+        });
+
         return dfd.promise();
     }
 

@@ -48,7 +48,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 resOfLines.done(function (res){
                     var resOfCircles = drawAllCircles();
                     resOfCircles.done(function(res2){
-                        console.log("at draw all circles1");
+
                         dfd.resolve();
                     });
 
@@ -61,7 +61,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
 
     function drawAllCircles() {
-        console.log("at d rawAllCircles");
+
         var dfd = new jQuery.Deferred();
         jQuery.each(scElements, function(j, val){
             // console.log(val);
@@ -122,9 +122,24 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                                 //console.log("our content is " + resDfd);
                                                 circle.setLength(resDfd);
                                                 self.model.updated([circle]);
-                                               // var translateRadius = translateRelation()
-                                                obj.translated = true;
+
                                             });
+                                            window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                                                end,
+                                                sc_type_arc_common | sc_type_const,
+                                                sc_type_node | sc_type_const,
+                                                sc_type_arc_pos_const_perm,
+                                                self.keynodes.radiusOfCircle]).
+                                                done(function(iteratingRadius){
+                                                    var translateRadius = translateRelation(iteratingRadius[0][2], self.keynodes.length);
+                                                    translateRadius.done(function(resOfTranslRadDfd){
+                                                        console.log("AAAAAAAAAAAAA " + resOfTranslRadDfd);
+                                                        circle.setRadius(resOfTranslRadDfd);
+                                                        self.model.updated([circle]);
+                                                        obj.translated = true;
+
+                                                    });
+                                                });
 
                                         });
                                 });
@@ -178,7 +193,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                                 }
                                             }
                                         }
-                                        console.log("iteratingPOints " + iteratingPoints);
+
                                     for (var index = 0; index < self.model.points.length; index++) {
                                         if (self.model.points[index].sc_addr == pointsAddrs[0]) {
                                             point1 = self.model.points[index];
@@ -240,7 +255,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     sc_type_arc_pos_const_perm,
                                     self.keynodes.identifier]).
                                     done(function(linkNodes){
-                                        console.log("yes");
+                                        //console.log("yes");
                                         window.sctpClient.get_link_content(linkNodes[0][2],'string').done(function(content){
                                             //console.log('content '+ content);
                                             dfd.resolve(content);
@@ -295,7 +310,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             var translateLen = translateRelation(end, self.keynodes.length);
                             translateLen.done(function(resDfd){
-                                console.log("our content is " + resDfd);
+                              //  console.log("our content is " + resDfd);
                                 segment.setLength(resDfd);
                                 self.model.updated([segment]);
                                 obj.translated = true;
@@ -472,6 +487,12 @@ Drawings.GeomDrawWindow = function (sandbox) {
     SCWeb.core.Server.resolveScAddr(['nrel_center_of_circle',
     ], function (keynodes) {
         self.keynodes.centerOfCircle = keynodes['nrel_center_of_circle'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    })
+    SCWeb.core.Server.resolveScAddr(['nrel_radius',
+    ], function (keynodes) {
+        self.keynodes.radiusOfCircle = keynodes['nrel_radius'];
         self.needUpdate = true;
         self.requestUpdate();
     })

@@ -117,19 +117,27 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                             self.model.addShape(circle);
                                             //adding sc-addr
                                             document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                            obj.translated = true;
-                                            dfd.resolve();
+                                            var translateLen = translateRelation(end, self.keynodes.length);
+                                            translateLen.done(function(resDfd) {
+                                                //console.log("our content is " + resDfd);
+                                                circle.setLength(resDfd);
+                                                self.model.updated([circle]);
+                                               // var translateRadius = translateRelation()
+                                                obj.translated = true;
+                                            });
+
                                         });
                                 });
                         })
                         .fail( function(){
 
                             console.log("at fail___", end);
-                            dfd.resolve();
+
                         });
                 }
             }
         });
+        dfd.resolve();
         return dfd.promise();
     }
 
@@ -184,7 +192,6 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     //adding sc-addr
                                     document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
                                     obj.translated = true;
-
 
                                     });
                         })

@@ -115,8 +115,20 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     self.model.addShape(triangle);
                                     //adding sc-addr
                                     document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                    obj.translated = true;
+                                    var translateSquare = translateRelation(end, self.keynodes.area);
+                                    translateSquare.done(function(resDfd) {
+                                        //console.log("our content is " + resDfd);
+                                        triangle.setSquare(resDfd);
+                                        self.model.updated([triangle]);
 
+                                    });
+                                    var translateSquare = translateRelation(end, self.keynodes.perimeter);
+                                    translateSquare.done(function(resDfd2) {
+                                        //console.log("our content is " + resDfd);
+                                        triangle.setPerimeter(resDfd2);
+                                        self.model.updated([triangle]);
+                                    });
+                                    obj.translated = true;
                                 });
                         })
                         .fail( function(){
@@ -571,7 +583,19 @@ Drawings.GeomDrawWindow = function (sandbox) {
         self.keynodes.vertex = keynodes['nrel_vertex'];
         self.needUpdate = true;
         self.requestUpdate();
-    })
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_area',
+    ], function (keynodes) {
+        self.keynodes.area = keynodes['nrel_area'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_perimeter',
+    ], function (keynodes) {
+        self.keynodes.perimeter = keynodes['nrel_perimeter'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
     this.eventStructUpdate = function (added, element, arc) {
         window.sctpClient.get_arc(arc).done(function (r) {
             var addr = r[1];

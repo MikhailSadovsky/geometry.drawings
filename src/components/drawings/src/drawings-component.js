@@ -121,6 +121,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
 
     function translateRelation(node, relation){
+
         var dfd = new jQuery.Deferred();
         window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
             node,
@@ -145,20 +146,23 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                 window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                                     sysValueNodes[0][2],
                                     sc_type_arc_common | sc_type_const,
-                                    sc_type_link | sc_type_const,
+                                    sc_type_link,
                                     sc_type_arc_pos_const_perm,
                                     self.keynodes.identifier]).
                                     done(function(linkNodes){
                                         console.log("yes");
-                                        var content = window.sctpClient.get_link_content(linkNodes[0][2],'string');
-                                        console.log('content '+ content);
+                                        window.sctpClient.get_link_content(linkNodes[0][2],'string').done(function(content){
+                                            //console.log('content '+ content);
+                                            dfd.resolve(content);
+                                        });
+
                                     }).
                                     fail(function(){
                                         console.log("nooooo");
                                     })
                             });
                     });
-                dfd.resolve();
+
             });
 
         return dfd.promise();
@@ -203,6 +207,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             var translateLen = translateRelation(end, self.keynodes.length);
                             translateLen.done(function(resDfd){
+                                console.log("our content is " + resDfd);
+                                segment.setLength(resDfd);
+                                self.model.updated([segment]);
                                 obj.translated = true;
                             });
                         });
@@ -212,6 +219,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
             dfd.resolve();
         return dfd.promise();
     }
+
 
     function drawAllOtherShapes() {
         var dfd = new jQuery.Deferred();

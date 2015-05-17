@@ -10,7 +10,6 @@ Drawings.GeomDrawComponent = {
     }
 };
 
-
 Drawings.GeomDrawWindow = function (sandbox) {
     this.sandbox = sandbox;
     this.model = new Drawings.Model();
@@ -48,16 +47,92 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 resOfLines.done(function (res){
                     var resOfCircles = drawAllCircles();
                     resOfCircles.done(function(res2){
+                        var resOfTriangles = drawAllTriangles();
+                        resOfTriangles.done(function(res3){
 
-                        dfd.resolve();
+                        });
                     });
 
                 });
 
             });
         });
+        dfd.resolve();
         return dfd.promise();
     }
+
+
+
+    function drawAllTriangles(){
+
+        var dfd = new jQuery.Deferred();
+        jQuery.each(scElements, function(j, val){
+            // console.log(val);
+            var obj = scElements[j];
+            if (!obj || obj.translated) return;
+// check if object is an arc
+            if (obj.data.type & sc_type_arc_pos_const_perm) {
+                var begin = obj.data.begin;
+                var end = obj.data.end;
+                if (end && (begin == self.keynodes.triangle)) {
+                    var point1;
+                    var point2;
+                    var point3;
+                    var pointsAddrs = [];
+                    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                        end,
+                        sc_type_arc_common | sc_type_const,
+                        sc_type_node | sc_type_const,
+                        sc_type_arc_pos_const_perm,
+                        self.keynodes.vertex])
+                        .done(function (res) {
+                            window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+                                self.keynodes.point,
+                                sc_type_arc_pos_const_perm,
+                                sc_type_node | sc_type_const])
+                                .done(function (iteratingPoints) {
+                                    for(i = 0; i < res.length; i++ ) {
+                                        for(indexOfPoints = 0; indexOfPoints < iteratingPoints.length; indexOfPoints++){
+                                            if(res[i][2] == iteratingPoints[indexOfPoints][2]){
+                                                if (pointsAddrs.length < 3) {
+                                                    pointsAddrs.push(res[i][2]);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    for (var index = 0; index < self.model.points.length; index++) {
+                                        if (self.model.points[index].sc_addr == pointsAddrs[0]) {
+                                            point1 = self.model.points[index];
+                                        } else if (self.model.points[index].sc_addr == pointsAddrs[1]) {
+                                            point2 = self.model.points[index];
+                                        }else if (self.model.points[index].sc_addr == pointsAddrs[2]) {
+                                            point3 = self.model.points[index];
+                                        }
+                                    }
+                                    var triangle = new Drawings.Triangle(point1, point2, point3);
+                                    triangle.sc_addr = end;
+                                    self.model.addShape(triangle);
+                                    //adding sc-addr
+                                    document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
+                                    obj.translated = true;
+
+                                });
+                        })
+                        .fail( function(){
+
+                            console.log("at fail___", end);
+                            dfd.resolve();
+                        });
+                }
+            }
+        });
+        dfd.resolve();
+        return dfd.promise();
+
+    }
+
+
 
 
     function drawAllCircles() {
@@ -133,11 +208,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                                 done(function(iteratingRadius){
                                                     var translateRadius = translateRelation(iteratingRadius[0][2], self.keynodes.length);
                                                     translateRadius.done(function(resOfTranslRadDfd){
-                                                        console.log("AAAAAAAAAAAAA " + resOfTranslRadDfd);
                                                         circle.setRadius(resOfTranslRadDfd);
                                                         self.model.updated([circle]);
                                                         obj.translated = true;
-
                                                     });
                                                 });
 
@@ -157,11 +230,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
     }
 
 
-
-
-
     function drawAllLines() {
-        console.log("at drawAllLines");
+       // console.log("at drawAllLines");
         var dfd = new jQuery.Deferred();
         jQuery.each(scElements, function(j, val){
            // console.log(val);
@@ -489,10 +559,16 @@ Drawings.GeomDrawWindow = function (sandbox) {
         self.keynodes.centerOfCircle = keynodes['nrel_center_of_circle'];
         self.needUpdate = true;
         self.requestUpdate();
-    })
+    });
     SCWeb.core.Server.resolveScAddr(['nrel_radius',
     ], function (keynodes) {
         self.keynodes.radiusOfCircle = keynodes['nrel_radius'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['nrel_vertex',
+    ], function (keynodes) {
+        self.keynodes.vertex = keynodes['nrel_vertex'];
         self.needUpdate = true;
         self.requestUpdate();
     })

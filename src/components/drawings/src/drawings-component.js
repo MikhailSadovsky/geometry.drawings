@@ -63,7 +63,53 @@ Drawings.GeomDrawWindow = function (sandbox) {
         return dfd.promise();
     }
 
+    function SearchDefinition(concept_node){
 
+        var dfd = new jQuery.Deferred();
+        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5A_A_F_A_F, [
+            sc_type_node | sc_type_const,
+            sc_type_arc_pos_const_perm,
+            concept_node,
+            sc_type_arc_pos_const_perm,
+            self.keynodes.key_sc_element]).
+            done(function(definitionNodes){
+                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5A_A_F_A_F, [
+                    sc_type_node | sc_type_const,
+                    sc_type_arc_common | sc_type_const,
+                    definitionNodes[0][0],
+                    sc_type_arc_pos_const_perm,
+                    self.keynodes.text_translation]).
+                    done(function(translationNodes){
+                        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                            translationNodes[0][0],
+                            sc_type_arc_pos_const_perm,
+                            sc_type_node | sc_type_const,
+                            sc_type_arc_pos_const_perm,
+                            self.keynodes.example]).
+                            done(function(sys){
+                                console.log(sys[0][2]);
+                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                                    sys[0][2],
+                                    sc_type_arc_common | sc_type_const,
+                                    sc_type_link,
+                                    sc_type_arc_pos_const_perm,
+                                    self.keynodes.identifier]).
+                                    done(function(linkNodes){
+                                        //console.log("yes");
+                                        window.sctpClient.get_link_content(linkNodes[0][2],'string').done(function(content){
+                                            //console.log('content '+ content);
+                                            dfd.resolve(content);
+                                        });
+                                    }).
+                                    fail(function(){
+                                        console.log("nooooo");
+                                    })
+                            });
+                    });
+
+            });
+        return dfd.promise();
+    }
 
     function drawAllTriangles(){
 
@@ -605,9 +651,33 @@ Drawings.GeomDrawWindow = function (sandbox) {
         self.needUpdate = true;
         self.requestUpdate();
     });
+    SCWeb.core.Server.resolveScAddr(['nrel_sc_text_translation',
+    ], function (keynodes) {
+        self.keynodes.text_translation = keynodes['nrel_sc_text_translation'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
     SCWeb.core.Server.resolveScAddr(['nrel_area',
     ], function (keynodes) {
         self.keynodes.area = keynodes['nrel_area'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['sc_definition',
+    ], function (keynodes) {
+        self.keynodes.definition = keynodes['sc_definition'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['rrel_key_sc_element',
+    ], function (keynodes) {
+        self.keynodes.key_sc_element= keynodes['rrel_key_sc_element'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['rrel_example',
+    ], function (keynodes) {
+        self.keynodes.example= keynodes['rrel_example'];
         self.needUpdate = true;
         self.requestUpdate();
     });

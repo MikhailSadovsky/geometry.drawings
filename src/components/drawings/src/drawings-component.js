@@ -51,7 +51,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     resOfCircles.done(function(res2){
                         var resOfTriangles = drawAllTriangles();
                         resOfTriangles.done(function(res3){
-                            dfd.resolve();
+
                         });
                     });
 
@@ -59,7 +59,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
             });
         });
-        //dfd.resolve();
+        dfd.resolve();
         return dfd.promise();
     }
 
@@ -117,8 +117,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     self.model.addShape(triangle);
                                     //adding sc-addr
                                     document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                   // document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
-                                      //  .setAttribute("class", 'sc-no-default-cmd');
+                                    document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
+                                        .setAttribute("class", 'sc-no-default-cmd');
                                     var translateSquare = translateRelation(end, self.keynodes.area);
                                     translateSquare.done(function(resDfd) {
                                         //console.log("our content is " + resDfd);
@@ -143,9 +143,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         });
                 }
             }
-            dfd.resolve();
-        });
 
+        });
+        dfd.resolve();
         return dfd.promise();
 
     }
@@ -210,6 +210,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                             self.model.addShape(circle);
                                             //adding sc-addr
                                             document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
+                                            document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id)
+                                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                                             var translateLen = translateRelation(end, self.keynodes.length);
                                             translateLen.done(function(resDfd) {
                                                 //console.log("our content is " + resDfd);
@@ -295,7 +297,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     self.model.addShape(line);
                                     //adding sc-addr
                                     document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                    obj.translated = true;
+                                        document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
+                                            .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+                                        obj.translated = true;
                                       //  dfd.resolve();
                                     });
                         })
@@ -357,7 +361,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     });
 
             });
-        //dfd.resolve();
+       // dfd.resolve();
         return dfd.promise();
     }
 
@@ -397,6 +401,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                            // console.log("THe resvar is ", resvar);
                            // console.log("THe second end is ", end);
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
+                            document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id)
+                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                             var translateLen = translateRelation(end, self.keynodes.length);
                             translateLen.done(function(resDfd){
                               //  console.log("our content is " + resDfd);
@@ -479,8 +485,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addPoint(point);
                     //adding sc-addr
                     document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                    //document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
-                       // .setAttribute( 'class', 'sc-no-default-cmd');
+                    document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
+                        .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                     dfd.resolve();
                 });
             });
@@ -490,12 +496,14 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 self.model.addPoint(point);
                 //adding sc-addr
                 document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
+                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
+                    .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
 
                 dfd.resolve();
             });})(i);
-           // dfd.resolve();
+
         }
-      //  dfd.resolve();
+       // dfd.resolve();
         return dfd.promise();
     }
 

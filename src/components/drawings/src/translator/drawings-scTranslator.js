@@ -531,6 +531,11 @@ wipeOld: function () {
                                 model.paintPanel._getJxgObjectById(el
                                     .getId()).rendNode.id)
                                 .setAttribute('sc_addr', el.sc_addr);
+                            document.getElementById(
+                                model.paintPanel._getJxgObjectById(el
+                                    .getId()).rendNode.id)
+                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+
                         }
                     }
                 });
@@ -546,6 +551,10 @@ wipeOld: function () {
                                 model.paintPanel._getJxgObjectById(el
                                     .getId()).rendNode.id)
                                 .setAttribute('sc_addr', el.sc_addr);
+                            document.getElementById(
+                                model.paintPanel._getJxgObjectById(el
+                                    .getId()).rendNode.id)
+                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                         }
                     }
                 });

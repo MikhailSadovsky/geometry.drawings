@@ -1,7 +1,10 @@
 /**
  * sc translator.
  */
+
 Drawings.ScTranslator = {
+
+
     getKeyNode: function (node_name) {
         if (!this.hasOwnProperty(node_name) || this[node_name] == null) {
             var dfd = new jQuery.Deferred();
@@ -48,9 +51,9 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("chart_arguments"));
         my_array.push(this.getKeyNode("sc_garbage")); // 15
         $.when.apply($, my_array).done(function () {
-            dfd.resolve();
+            dfd.resolve(my_array);
         }).fail(function () {
-            dfd.reject();
+            dfd.reject(my_array);
         });
         return dfd.promise();
     },
@@ -411,28 +414,86 @@ Drawings.ScTranslator = {
         });
         return dfd.promise();
     },
-// temporary solution for keeping KB clean
-    wipeOld: function () {
-// find 'chart_arguments' that contains all new data and wipe out contents
-// - deleting won't work yet =\
-        var self = this;
-        var dfd = new jQuery.Deferred();
-        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
-            self.chart_arguments, sc_type_arc_pos_const_perm, sc_type_node |
-            sc_type_const]).done(function (res) {
-            for (r in res.result) {
-//langs.push(res.result[r][2]);
-                window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
-                    self.sc_garbage, r[2]);
-            } //TODO: add deleting when it will work
-            dfd.resolve();
-        }).fail(function () {
+
+
+
+
+  getSystemAddrs: function(){
+      var self = this;
+      var dfd = new jQuery.Deferred();
+      var sysArray = [];
+      sysArray.push(self.concept_quantity);
+      sysArray.push(self.concept_segment);
+      sysArray.push(self.nrel_side);
+      sysArray.push(self.concept_triangle);
+      sysArray.push(self.concept_circle);
+      sysArray.push(self.concept_geometric_point);
+      sysArray.push(self.concept_straight_line);
+      sysArray.push(self.nrel_boundary_point);
+      sysArray.push(self.nrel_inclusion);
+      sysArray.push(self.nrel_vertex);
+      sysArray.push(self.nrel_radius);
+      sysArray.push(self.nrel_system_identifier);
+      sysArray.push(self.nrel_length);
+      sysArray.push(self.nrel_center_of_circle);
+      sysArray.push(self.nrel_value);
+      sysArray.push(self.nrel_area);
+      sysArray.push(self.nrel_perimeter);
+      sysArray.push(self.concept_square);
+      sysArray.push(self.chart_arguments);
+      sysArray.push(self.sc_garbage);
+      dfd.resolve(sysArray);
+      return dfd.promise();
+  },
+
+wipeOld: function () {
+    var addrsOfNodesToWipe = [];
+    var addrsOfArcsToWipe = [];
+    var self = this;
+    var dfd = new jQuery.Deferred();
+    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+        self.chart_arguments,
+        sc_type_arc_pos_const_perm,
+        sc_type_node | sc_type_const])
+        .done(function (res) {
+            self.getSystemAddrs().done(function(resSystemNodes){
+                var flag = true;
+                for (var i = 0; i < res.length; i++) {
+                    for (var j = 0; j< resSystemNodes.length; j++){
+                        if(res [i][2] == resSystemNodes[j]){
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
+                                self.sc_garbage, res [i][1]);
+                           flag = false;
+                        }
+                    }
+                    if(flag){
+                        addrsOfNodesToWipe.push(res[i][2]);
+                        addrsOfArcsToWipe.push(res[i][1]);
+                    }
+                    else{
+                        flag = true;
+                    }
+                }
+                for (i=0; i < addrsOfNodesToWipe.length; i++){
+                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
+                        self.sc_garbage, addrsOfNodesToWipe[i]);
+                }
+                for (i=0; i < addrsOfArcsToWipe; i++){
+                    window.sctpClient.erase_element(addrsOfArcsToWipe[i]).done(function(res){
+                        console.log("delete " + addrsOfArcsToWipe[i]);
+                    })
+                }
+            });
+            //console.log(addrsToWipe);
+        dfd.resolve();
+    }).fail(function () {
 //alert("fail in wipeOld");
-            dfd.resolve();
-        });
-//dfd.resolve();
-        return dfd.promise();
-    },
+        dfd.resolve();
+    });
+
+    return dfd.promise();
+},
+
     viewBasedKeyNode: function () {
         var addr;
         SCWeb.core.Server.resolveScAddr(['chart_arguments'], function (keynodes) {
@@ -449,13 +510,14 @@ Drawings.ScTranslator = {
                 });
         });
     },
+
     putModel: function (model) {
         var cleanup = this.wipeOld;
         var pushPts = this.pushPoints;
         var pushSh = this.pushShapes;
         var self = this;
         var dfd = this.getKeyNodes();
-        dfd.done(function () {
+        dfd.done(function (resArray) {
             return cleanup.call(self);
         });
         dfd.done(function () {
@@ -490,3 +552,4 @@ Drawings.ScTranslator = {
         });
     }
 };
+

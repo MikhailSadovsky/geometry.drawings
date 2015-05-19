@@ -61,6 +61,7 @@ Drawings.Model.prototype = {
 
         this.shapes.length = 0;
         this.points.length = 0;
+        Drawings.ScTranslator.wipeOld();
     },
 
     updated: function (objects) {

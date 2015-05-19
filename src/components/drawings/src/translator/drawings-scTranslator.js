@@ -512,14 +512,14 @@ wipeOld: function () {
     },
 
     putModel: function (model) {
-        var cleanup = this.wipeOld;
+        //var cleanup = this.wipeOld;
         var pushPts = this.pushPoints;
         var pushSh = this.pushShapes;
         var self = this;
         var dfd = this.getKeyNodes();
-        dfd.done(function (resArray) {
-            return cleanup.call(self);
-        });
+        //dfd.done(function (resArray) {
+        //    return cleanup.call(self);
+        //});
         dfd.done(function () {
             return pushPts.call(self, model.points).done(
                 function () {

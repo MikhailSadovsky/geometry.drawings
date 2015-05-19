@@ -40,13 +40,19 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 }
 
         });
+        if (points.length == 0){
+            dfd.resolve();
+            return dfd.promise();
+        }
         var dfd2 = drawPointsWithIdtf(points);
         dfd2.done(function (r) {
-         //   console.log("pointswithIdtf Translated");
+            //console.log("pointswithIdtf Translated");
             var res = drawAllSegments();
             res.done(function(r1){
-          var resOfLines = drawAllLines();
+               // console.log("segments Translated");
+                var resOfLines = drawAllLines();
                 resOfLines.done(function (res){
+                  //  console.log("lines Translated");
                     var resOfCircles = drawAllCircles();
                     resOfCircles.done(function(res2){
                         var resOfTriangles = drawAllTriangles();
@@ -87,7 +93,6 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             sc_type_arc_pos_const_perm,
                             self.keynodes.example]).
                             done(function(sys){
-                                console.log(sys[0][2]);
                                 window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                                     sys[0][2],
                                     sc_type_arc_common | sc_type_const,
@@ -102,7 +107,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         });
                                     }).
                                     fail(function(){
-                                        console.log("nooooo");
+                                        //console.log("nooooo");
                                     })
                             });
                     });
@@ -179,19 +184,19 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         self.model.updated([triangle]);
                                     });
                                     obj.translated = true;
-                                   // dfd.resolve();
+                                    dfd.resolve();
                                 });
                         })
                         .fail( function(){
 
-                            console.log("at fail___", end);
+                            //console.log("at fail___", end);
                            // dfd.resolve();
                         });
                 }
             }
 
         });
-        dfd.resolve();
+        //dfd.resolve();
         return dfd.promise();
 
     }
@@ -277,7 +282,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                                         circle.setRadius(resOfTranslRadDfd);
                                                         self.model.updated([circle]);
                                                         obj.translated = true;
-                                                       // dfd.resolve();
+                                                        dfd.resolve();
                                                     });
                                                 });
 
@@ -286,13 +291,13 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         })
                         .fail( function(){
 
-                            console.log("at fail___", end);
+                           // console.log("at fail___", end);
 
                         });
                 }
             }
         });
-        dfd.resolve();
+        //dfd.resolve();
         return dfd.promise();
     }
 
@@ -346,19 +351,19 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
                                             .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                                         obj.translated = true;
-                                      //  dfd.resolve();
+                                        dfd.resolve();
                                     });
                         })
                         .fail( function(){
 
-                            console.log("at fail___", end);
+                          //  console.log("at fail___", end);
                          //   dfd.resolve();
                         });
                 }
             }
         });
 
-        dfd.resolve();
+        //dfd.resolve();
         return dfd.promise();
     }
 
@@ -401,11 +406,13 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         });
                                     }).
                                     fail(function(){
-                                        console.log("nooooo");
+                                       // console.log("nooooo");
                                     })
                             });
                     });
 
+            }).fail(function(fail){
+                dfd.resolve();
             });
        // dfd.resolve();
         return dfd.promise();
@@ -440,6 +447,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     point2 = self.model.points[index];
                                 }
                             }
+                            //console.log("point1="+point1_addr);
+                            //console.log("point2="+point2_addr);
                             var segment = new Drawings.Segment(point1, point2);
                             segment.sc_addr = end;
                             self.model.addShape(segment);
@@ -449,20 +458,19 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id)
                                 .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+                            dfd.resolve();
                             var translateLen = translateRelation(end, self.keynodes.length);
                             translateLen.done(function(resDfd){
                               //  console.log("our content is " + resDfd);
                                 segment.setLength(resDfd);
                                 self.model.updated([segment]);
                                 obj.translated = true;
-
-                              //  dfd.resolve();
                             });
                         });
                 }
             }
         });
-            dfd.resolve();
+           // dfd.resolve();
         return dfd.promise();
     }
 
@@ -517,6 +525,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
     // points - array of points sc_addrs
     function drawPointsWithIdtf(points) {
+        //console.log("points here" + points);
         var dfd = new jQuery.Deferred();
         for (var i = 0; i < points.length; i++) {
             ( function(index){
@@ -533,7 +542,13 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
                     document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
                         .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-                    dfd.resolve();
+                   // console.log("point with idtf");
+                  //  console.log("index="+index);
+                    if (index == points.length - 1){
+                      //  console.log("resolved");
+                        dfd.resolve();
+                    }
+                    //dfd.resolve();
                 });
             });
             res1.fail(function () {
@@ -544,12 +559,17 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
                 document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
                     .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-
-                dfd.resolve();
+                //console.log("point bez idtf");
+                //console.log("index="+index);
+                if (index == points.length - 1){
+                    //console.log("resolved");
+                    dfd.resolve();
+                }
+                //dfd.resolve();
             });})(i);
 
         }
-       // dfd.resolve();
+       //dfd.resolve();
         return dfd.promise();
     }
 
@@ -561,6 +581,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 // check if object is an arc
             var dfd1 = drawAllPoints();
             dfd1.done(function (r) {
+                return;
                 //  drawAllSegments();
             });
 

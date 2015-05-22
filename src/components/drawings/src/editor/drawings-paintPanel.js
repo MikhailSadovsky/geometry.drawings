@@ -80,9 +80,23 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
         toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
 
-        $('#pointButton').click(function () {
-            paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT)
+        $("#pointButton").bind("contextmenu", function(e) {
+            e.preventDefault();
         });
+
+        $('#pointButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT);
+                        break;
+                    case 3:
+                        alert('Right Mouse button pressed.');
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
 
         $('#lineButton').click(function () {
             paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);

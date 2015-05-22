@@ -44,6 +44,11 @@ Drawings.GeomDrawWindow = function (sandbox) {
             dfd.resolve();
             return dfd.promise();
         }
+/*        var searchDef = searchDefinition(4292214785);
+        var searchDef = searchDefinition(1633026049);
+        searchDef.done(function(content){
+            alert(content);
+        });*/
         var dfd2 = drawPointsWithIdtf(points);
         dfd2.done(function (r) {
             //console.log("pointswithIdtf Translated");
@@ -69,50 +74,12 @@ Drawings.GeomDrawWindow = function (sandbox) {
         return dfd.promise();
     }
 
-    function SearchDefinition(concept_node){
+    function searchDefinition(link_node){
 
         var dfd = new jQuery.Deferred();
-        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5A_A_F_A_F, [
-            sc_type_node | sc_type_const,
-            sc_type_arc_pos_const_perm,
-            concept_node,
-            sc_type_arc_pos_const_perm,
-            self.keynodes.key_sc_element]).
-            done(function(definitionNodes){
-                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5A_A_F_A_F, [
-                    sc_type_node | sc_type_const,
-                    sc_type_arc_common | sc_type_const,
-                    definitionNodes[0][0],
-                    sc_type_arc_pos_const_perm,
-                    self.keynodes.text_translation]).
-                    done(function(translationNodes){
-                        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
-                            translationNodes[0][0],
-                            sc_type_arc_pos_const_perm,
-                            sc_type_node | sc_type_const,
-                            sc_type_arc_pos_const_perm,
-                            self.keynodes.example]).
-                            done(function(sys){
-                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
-                                    sys[0][2],
-                                    sc_type_arc_common | sc_type_const,
-                                    sc_type_link,
-                                    sc_type_arc_pos_const_perm,
-                                    self.keynodes.identifier]).
-                                    done(function(linkNodes){
-                                        //console.log("yes");
-                                        window.sctpClient.get_link_content(linkNodes[0][2],'string').done(function(content){
-                                            //console.log('content '+ content);
-                                            dfd.resolve(content);
-                                        });
-                                    }).
-                                    fail(function(){
-                                        //console.log("nooooo");
-                                    })
-                            });
-                    });
-
-            });
+        window.sctpClient.get_link_content(link_node,'string').done(function(content){
+            dfd.resolve(content);
+        });
         return dfd.promise();
     }
 

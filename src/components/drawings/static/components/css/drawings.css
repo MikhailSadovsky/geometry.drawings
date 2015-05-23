@@ -79,6 +79,10 @@
     background-size: cover;
 }
 
+textarea { 
+    width: 100%;
+    border:6px groove #6c5ef7;
+}
 
 
 .geometryEditor .board {

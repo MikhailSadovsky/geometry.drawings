@@ -512,6 +512,7 @@ wipeOld: function () {
     },
 
     putModel: function (model) {
+        SCWeb.ui.Locker.show();
         //var cleanup = this.wipeOld;
         var pushPts = this.pushPoints;
         var pushSh = this.pushShapes;
@@ -557,6 +558,7 @@ wipeOld: function () {
                                 .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                         }
                     }
+                    SCWeb.ui.Locker.hide();
                 });
         });
     }

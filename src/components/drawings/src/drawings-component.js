@@ -41,6 +41,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
         });
         if (points.length == 0){
+            SCWeb.ui.Locker.hide();
             dfd.resolve();
             return dfd.promise();
         }
@@ -62,7 +63,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     resOfCircles.done(function(res2){
                         var resOfTriangles = drawAllTriangles();
                         resOfTriangles.done(function(res3){
-
+                            SCWeb.ui.Locker.hide();
                         });
                     });
 
@@ -563,6 +564,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
         self.needUpdate = true;
         if (!self.structTimeout) {
             self.needUpdate = false;
+            SCWeb.ui.Locker.show();
             self.structTimeout = window.setTimeout(updateVisual, 1000);
         }
     }

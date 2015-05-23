@@ -151,7 +151,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         self.model.updated([triangle]);
                                     });
                                     obj.translated = true;
-                                    dfd.resolve();
+                                    //dfd.resolve();
                                 });
                         })
                         .fail( function(){
@@ -163,7 +163,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
             }
 
         });
-        //dfd.resolve();
+        dfd.resolve();
         return dfd.promise();
 
     }
@@ -249,7 +249,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                                         circle.setRadius(resOfTranslRadDfd);
                                                         self.model.updated([circle]);
                                                         obj.translated = true;
-                                                        dfd.resolve();
+                                                        //dfd.resolve();
                                                     });
                                                 });
 
@@ -264,7 +264,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 }
             }
         });
-        //dfd.resolve();
+        dfd.resolve();
         return dfd.promise();
     }
 
@@ -318,7 +318,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
                                             .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                                         obj.translated = true;
-                                        dfd.resolve();
+                                        //dfd.resolve();
                                     });
                         })
                         .fail( function(){
@@ -330,7 +330,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
             }
         });
 
-        //dfd.resolve();
+        dfd.resolve();
         return dfd.promise();
     }
 
@@ -425,7 +425,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
                             document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id)
                                 .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-                            dfd.resolve();
+                            //dfd.resolve();
                             var translateLen = translateRelation(end, self.keynodes.length);
                             translateLen.done(function(resDfd){
                               //  console.log("our content is " + resDfd);
@@ -437,7 +437,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 }
             }
         });
-           // dfd.resolve();
+        dfd.resolve();
         return dfd.promise();
     }
 

@@ -104,7 +104,7 @@ Drawings.Controller.prototype = {
     },
 
     _solvePerimeter: function(){
-        alert('Perimeter SOLVER is running!');
+        Drawings.ScTranslator.calcTrianglePerimeter(this.model);
     },
 
     _solveSquare: function(){

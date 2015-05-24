@@ -494,6 +494,24 @@ wipeOld: function () {
     return dfd.promise();
 },
 
+    calcTrianglePerimeter: function (model) {
+        $('#textArea').val('');
+        var triangleName = "";
+        for (var i = 0; i < model.shapes.length; i++) {
+            var triangle = model.shapes[i];
+            if (triangle.className == 'Triangle'){
+                var perim = 0;
+                if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
+                    perim += parseInt(triangle.segment1.length) + parseInt(triangle.segment2.length) + parseInt(triangle.segment3.length);
+                    if (triangle.name) {
+                        triangleName = triangle.name.charAt(7) + triangle.name.charAt(9) + triangle.name.charAt(11);
+                    }
+                    $('#textArea').val($('#textArea').val()+"Периметр треугольника " + triangleName + " равен: " + perim + "\n");
+                }
+            }
+        }
+    },
+
     viewBasedKeyNode: function () {
         var addr;
         SCWeb.core.Server.resolveScAddr(['chart_arguments'], function (keynodes) {

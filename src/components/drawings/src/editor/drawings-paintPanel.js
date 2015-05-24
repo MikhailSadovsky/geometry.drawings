@@ -80,6 +80,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<input id="fileInput" type="file">');
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
         toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
+        toolbar.append('<div id="solveButton" class="button solve" title="Вычислить"></div>');
 
         $("#pointButton").bind("contextmenu", function(e) {
             e.preventDefault();
@@ -99,10 +100,29 @@ Drawings.PaintPanel.prototype = {
             }
         );
 
+        $("#solveButton").bind("contextmenu", function(e) {
+            e.preventDefault();
+        });
+
+        $('#solveButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        break;
+                    case 3:
+                        paintPanel.controller._handleContextMenuSolverEvent(event);
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+
+
+
         $('#lineButton').mousedown(function(event) {
                 switch (event.which) {
                     case 1:
-                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
+                      //  paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
                         break;
                     case 3:
                         paintPanel.controller.lineController.handleContextDefinitionMenuEvent(event);

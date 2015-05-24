@@ -81,6 +81,37 @@ Drawings.Controller.prototype = {
         return point;
     },
 
+
+    _handleContextMenuSolverEvent: function (event) {
+
+        var controller = this;
+
+        var contextMenu = new Drawings.ContextMenu('#' + 'solver', event);
+
+        var setSolvePerimeterMenuItem = {
+            text: 'Вычислить периметр',
+            action: function () {
+                controller._solvePerimeter();
+            }
+        };
+        var setSolveSquareMenuItem = {
+            text: 'Вычислить площадь',
+            action: function () {
+                controller._solveSquare();
+            }
+        };
+        contextMenu.show([setSolvePerimeterMenuItem, setSolveSquareMenuItem]);
+    },
+
+    _solvePerimeter: function(){
+        alert('Perimeter SOLVER is running!');
+    },
+
+    _solveSquare: function(){
+        alert('Square SOLVER is running!');
+    },
+
+
     _createPoint: function (coordinates) {
         var point = new Drawings.Point(coordinates[0], coordinates[1]);
         this.model.addPoint(point);

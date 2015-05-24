@@ -82,6 +82,9 @@
 textarea { 
     width: 100%;
     border:6px groove #6c5ef7;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;	
 }
 
 

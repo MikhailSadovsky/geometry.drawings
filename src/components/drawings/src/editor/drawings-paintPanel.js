@@ -63,7 +63,7 @@ Drawings.PaintPanel.prototype = {
         container.append('<div id="geometryEditor" class="geometryEditor"></div>');
         var editor = $('#geometryEditor');
 
-        editor.append('<textarea rows="5"/>');
+        editor.append('<textarea id="textArea" rows="3"/>');
             // initialize toolbar markup
         editor.append('<div id="toolbar" class="toolbar"></div>');
 

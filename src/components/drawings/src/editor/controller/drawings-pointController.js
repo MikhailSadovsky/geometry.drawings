@@ -15,6 +15,7 @@ Drawings.PointController.prototype = {
 
         var contextMenu = new Drawings.ContextMenu('#' + jxgPoint.rendNode.id, event);
 
+
         var setNameMenuItem = {
             text: 'Задать имя точки',
             action: function () {
@@ -23,6 +24,22 @@ Drawings.PointController.prototype = {
         };
 
         contextMenu.show([setNameMenuItem]);
+    },
+
+    handleContextDefinitionMenuEvent: function (event){
+
+        var contextDefinitionMenu = new Drawings.ContextMenu('#' + 'pointDefinition', event);
+        var setDefinitionMenuItem = {
+            text: 'Просмотр определения',
+            action: function(){
+                window.sctpClient.get_link_content(1620377601,'string').done(function(content)
+                {
+
+                    $('#textArea').val(content);
+                });
+            }
+        }
+        contextDefinitionMenu.show([setDefinitionMenuItem]);
     },
 
     _setNameAction: function (point) {

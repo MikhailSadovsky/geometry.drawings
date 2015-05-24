@@ -26,6 +26,22 @@ Drawings.CircleController.prototype = {
         contextMenu.show([setRadiusMenuItem, setLengthMenuItem]);
     },
 
+    handleContextDefinitionMenuEvent: function (event){
+
+        var contextDefinitionMenu = new Drawings.ContextMenu('#' + 'circleDefinition', event);
+        var setDefinitionMenuItem = {
+            text: 'Просмотр определения',
+            action: function(){
+                window.sctpClient.get_link_content(565510145,'string').done(function(content)
+                {
+
+                    $('#textArea').val(content);
+                });
+            }
+        }
+        contextDefinitionMenu.show([setDefinitionMenuItem]);
+    },
+
     _setRadiusAction: function (circle) {
         var radiusLength = prompt('Введите длину радиуса');
 

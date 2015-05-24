@@ -75,14 +75,6 @@ Drawings.GeomDrawWindow = function (sandbox) {
         return dfd.promise();
     }
 
-    function searchDefinition(link_node){
-
-        var dfd = new jQuery.Deferred();
-        window.sctpClient.get_link_content(link_node,'string').done(function(content){
-            dfd.resolve(content);
-        });
-        return dfd.promise();
-    }
 
     function drawAllTriangles(){
 

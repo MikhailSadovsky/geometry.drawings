@@ -11,6 +11,7 @@ Drawings.Controller = function (paintPanel, model) {
     this.segmentController = new Drawings.SegmentController(this.model);
     this.triangleController = new Drawings.TriangleController(this.model);
     this.circleController = new Drawings.CircleController(this.model);
+    this.lineController = new Drawings.LineController(this.model);
 };
 
 Drawings.Controller.prototype = {

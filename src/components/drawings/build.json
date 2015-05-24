@@ -28,7 +28,8 @@
         "src/editor/controller/drawings-pointController.js",
         "src/editor/controller/drawings-segmentController.js",
         "src/editor/controller/drawings-triangleController.js",
-        "src/editor/controller/drawings-circleController.js"
+        "src/editor/controller/drawings-circleController.js",
+        "src/editor/controller/drawings-lineController.js"
     ],
 
     "component": "src/drawings-component.js",

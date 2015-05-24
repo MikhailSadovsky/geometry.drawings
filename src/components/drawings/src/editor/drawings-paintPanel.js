@@ -91,7 +91,7 @@ Drawings.PaintPanel.prototype = {
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT);
                         break;
                     case 3:
-                        alert('Right Mouse button pressed.');
+                        paintPanel.controller.pointController.handleContextDefinitionMenuEvent(event);
                         break;
                     default:
                         alert('You have a strange Mouse!');
@@ -99,20 +99,73 @@ Drawings.PaintPanel.prototype = {
             }
         );
 
-        $('#lineButton').click(function () {
-            paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
+        $('#lineButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
+                        break;
+                    case 3:
+                        paintPanel.controller.lineController.handleContextDefinitionMenuEvent(event);
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+        $("#lineButton").bind("contextmenu", function(e) {
+            e.preventDefault();
         });
 
-        $('#segmentButton').click(function () {
-            paintPanel.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
+        $('#segmentButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
+                        break;
+                    case 3:
+                        paintPanel.controller.segmentController.handleContextDefinitionMenuEvent(event);
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+        $("#segmentButton").bind("contextmenu", function(e) {
+            e.preventDefault();
         });
 
-        $('#triangleButton').click(function () {
-            paintPanel.controller.setDrawingMode(Drawings.DrawingMode.TRIANGLE);
+        $('#triangleButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.TRIANGLE);
+                        break;
+                    case 3:
+                        paintPanel.controller.triangleController.handleContextDefinitionMenuEvent(event);
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+        $("#triangleButton").bind("contextmenu", function(e) {
+            e.preventDefault();
         });
 
-        $('#circleButton').click(function () {
-            paintPanel.controller.setDrawingMode(Drawings.DrawingMode.CIRCLE);
+        $('#circleButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.CIRCLE);
+                        break;
+                    case 3:
+                        paintPanel.controller.circleController.handleContextDefinitionMenuEvent(event);
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+
+        $("#circleButton").bind("contextmenu", function(e) {
+            e.preventDefault();
         });
 
         $('#clearButton').click(function () {

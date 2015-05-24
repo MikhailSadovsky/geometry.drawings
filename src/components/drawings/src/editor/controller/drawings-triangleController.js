@@ -32,6 +32,22 @@ Drawings.TriangleController.prototype = {
         contextMenu.show([setSquareMenuItem, setPerimeterMenuItem]);
     },
 
+    handleContextDefinitionMenuEvent: function (event){
+
+        var contextDefinitionMenu = new Drawings.ContextMenu('#' + 'triangleDefinition', event);
+        var setDefinitionMenuItem = {
+            text: 'Просмотр определения',
+            action: function(){
+                window.sctpClient.get_link_content(4237623297,'string').done(function(content)
+                {
+
+                    $('#textArea').val(content);
+                });
+            }
+        }
+        contextDefinitionMenu.show([setDefinitionMenuItem]);
+    },
+
     _setPerimeterAction: function (triangle) {
         var perimeter = prompt('Введите периметр треугольника:');
 

@@ -79,6 +79,11 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.solve {
+    background: url("../images/drawings/bald.png") no-repeat;
+    background-size: cover;
+}
+
 textarea { 
     width: 100%;
     border:6px groove #6c5ef7;

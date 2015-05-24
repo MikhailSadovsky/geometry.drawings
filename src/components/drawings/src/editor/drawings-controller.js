@@ -108,7 +108,7 @@ Drawings.Controller.prototype = {
     },
 
     _solveSquare: function(){
-        alert('Square SOLVER is running!');
+        Drawings.ScTranslator.calcTriangleSquare(this.model);
     },
 
 

@@ -122,7 +122,7 @@ Drawings.PaintPanel.prototype = {
         $('#lineButton').mousedown(function(event) {
                 switch (event.which) {
                     case 1:
-                      //  paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
                         break;
                     case 3:
                         paintPanel.controller.lineController.handleContextDefinitionMenuEvent(event);

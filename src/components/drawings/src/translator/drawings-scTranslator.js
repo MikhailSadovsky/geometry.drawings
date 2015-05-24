@@ -209,39 +209,39 @@ Drawings.ScTranslator = {
                     if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
-                            window.sctpClient.create_node(sc_type_node | sc_type_const).done(function(createdNode){
-                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, createdNode);
-                                self.addFiveConstructionIntoBase(r, createdNode, self.nrel_radius,
-                                    self.chart_arguments, sc_type_arc_common | sc_type_const);
-                                var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
-                                arc1.done(function (r1) {
-                                    var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
-                                    arc2.done(function (r2) {
-                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_quantity);
-                                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
-                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
-                                            window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (value_node) {
-                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, value_node);
-                                                window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (answer_node) {
-                                                    self.addFiveConstruction(self.concept_quantity, quality_node, self.chart_arguments, sc_type_arc_pos_const_perm);
-                                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, answer_node);
-                                                    self.addFiveConstructionIntoBase(createdNode, quality_node, self.nrel_length,
-                                                        self.chart_arguments, sc_type_arc_common | sc_type_const);
-                                                    self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
-                                                        self.chart_arguments, sc_type_arc_common | sc_type_const);
-                                                    self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
-                                                    window.sctpClient.create_link().done(function (res) {
-                                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
-                                                        window.sctpClient.set_link_content(res, shape.radius);
-                                                        self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
-                                                            sc_type_arc_common | sc_type_const);
-                                                    });
+                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (createdNode) {
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, createdNode);
+                            self.addFiveConstructionIntoBase(r, createdNode, self.nrel_radius,
+                                self.chart_arguments, sc_type_arc_common | sc_type_const);
+                            var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
+                            arc1.done(function (r1) {
+                                var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
+                                arc2.done(function (r2) {
+                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_quantity);
+                                    window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
+                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
+                                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (value_node) {
+                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, value_node);
+                                            window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (answer_node) {
+                                                self.addFiveConstruction(self.concept_quantity, quality_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, answer_node);
+                                                self.addFiveConstructionIntoBase(createdNode, quality_node, self.nrel_length,
+                                                    self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                                self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
+                                                    self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                                self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                                window.sctpClient.create_link().done(function (res) {
+                                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
+                                                    window.sctpClient.set_link_content(res, shape.radius);
+                                                    self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
+                                                        sc_type_arc_common | sc_type_const);
                                                 });
                                             });
                                         });
                                     });
                                 });
                             });
+                        });
                     }
                     if (shape.length) {
                         var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
@@ -416,97 +416,121 @@ Drawings.ScTranslator = {
     },
 
 
+    getSystemAddrs: function () {
+        var self = this;
+        var dfd = new jQuery.Deferred();
+        var sysArray = [];
+        sysArray.push(self.concept_quantity);
+        sysArray.push(self.concept_segment);
+        sysArray.push(self.nrel_side);
+        sysArray.push(self.concept_triangle);
+        sysArray.push(self.concept_circle);
+        sysArray.push(self.concept_geometric_point);
+        sysArray.push(self.concept_straight_line);
+        sysArray.push(self.nrel_boundary_point);
+        sysArray.push(self.nrel_inclusion);
+        sysArray.push(self.nrel_vertex);
+        sysArray.push(self.nrel_radius);
+        sysArray.push(self.nrel_system_identifier);
+        sysArray.push(self.nrel_length);
+        sysArray.push(self.nrel_center_of_circle);
+        sysArray.push(self.nrel_value);
+        sysArray.push(self.nrel_area);
+        sysArray.push(self.nrel_perimeter);
+        sysArray.push(self.concept_square);
+        sysArray.push(self.chart_arguments);
+        sysArray.push(self.sc_garbage);
+        dfd.resolve(sysArray);
+        return dfd.promise();
+    },
 
-
-  getSystemAddrs: function(){
-      var self = this;
-      var dfd = new jQuery.Deferred();
-      var sysArray = [];
-      sysArray.push(self.concept_quantity);
-      sysArray.push(self.concept_segment);
-      sysArray.push(self.nrel_side);
-      sysArray.push(self.concept_triangle);
-      sysArray.push(self.concept_circle);
-      sysArray.push(self.concept_geometric_point);
-      sysArray.push(self.concept_straight_line);
-      sysArray.push(self.nrel_boundary_point);
-      sysArray.push(self.nrel_inclusion);
-      sysArray.push(self.nrel_vertex);
-      sysArray.push(self.nrel_radius);
-      sysArray.push(self.nrel_system_identifier);
-      sysArray.push(self.nrel_length);
-      sysArray.push(self.nrel_center_of_circle);
-      sysArray.push(self.nrel_value);
-      sysArray.push(self.nrel_area);
-      sysArray.push(self.nrel_perimeter);
-      sysArray.push(self.concept_square);
-      sysArray.push(self.chart_arguments);
-      sysArray.push(self.sc_garbage);
-      dfd.resolve(sysArray);
-      return dfd.promise();
-  },
-
-wipeOld: function () {
-    var addrsOfNodesToWipe = [];
-    var addrsOfArcsToWipe = [];
-    var self = this;
-    var dfd = new jQuery.Deferred();
-    window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
-        self.chart_arguments,
-        sc_type_arc_pos_const_perm,
-        sc_type_node | sc_type_const])
-        .done(function (res) {
-            self.getSystemAddrs().done(function(resSystemNodes){
-                var flag = true;
-                for (var i = 0; i < res.length; i++) {
-                    for (var j = 0; j< resSystemNodes.length; j++){
-                        if(res [i][2] == resSystemNodes[j]){
-                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
-                                self.sc_garbage, res [i][1]);
-                           flag = false;
+    wipeOld: function () {
+        var addrsOfNodesToWipe = [];
+        var addrsOfArcsToWipe = [];
+        var self = this;
+        var dfd = new jQuery.Deferred();
+        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+            self.chart_arguments,
+            sc_type_arc_pos_const_perm,
+            sc_type_node | sc_type_const])
+            .done(function (res) {
+                self.getSystemAddrs().done(function (resSystemNodes) {
+                    var flag = true;
+                    for (var i = 0; i < res.length; i++) {
+                        for (var j = 0; j < resSystemNodes.length; j++) {
+                            if (res [i][2] == resSystemNodes[j]) {
+                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
+                                    self.sc_garbage, res [i][1]);
+                                flag = false;
+                            }
+                        }
+                        if (flag) {
+                            addrsOfNodesToWipe.push(res[i][2]);
+                            addrsOfArcsToWipe.push(res[i][1]);
+                        }
+                        else {
+                            flag = true;
                         }
                     }
-                    if(flag){
-                        addrsOfNodesToWipe.push(res[i][2]);
-                        addrsOfArcsToWipe.push(res[i][1]);
+                    for (i = 0; i < addrsOfNodesToWipe.length; i++) {
+                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
+                            self.sc_garbage, addrsOfNodesToWipe[i]);
                     }
-                    else{
-                        flag = true;
+                    for (i = 0; i < addrsOfArcsToWipe; i++) {
+                        window.sctpClient.erase_element(addrsOfArcsToWipe[i]).done(function (res) {
+                            console.log("delete " + addrsOfArcsToWipe[i]);
+                        })
                     }
-                }
-                for (i=0; i < addrsOfNodesToWipe.length; i++){
-                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm,
-                        self.sc_garbage, addrsOfNodesToWipe[i]);
-                }
-                for (i=0; i < addrsOfArcsToWipe; i++){
-                    window.sctpClient.erase_element(addrsOfArcsToWipe[i]).done(function(res){
-                        console.log("delete " + addrsOfArcsToWipe[i]);
-                    })
-                }
-            });
-            //console.log(addrsToWipe);
-        dfd.resolve();
-    }).fail(function () {
+                });
+                //console.log(addrsToWipe);
+                dfd.resolve();
+            }).fail(function () {
 //alert("fail in wipeOld");
-        dfd.resolve();
-    });
+                dfd.resolve();
+            });
 
-    return dfd.promise();
-},
+        return dfd.promise();
+    },
 
     calcTrianglePerimeter: function (model) {
         $('#textArea').val('');
         var triangleName = "";
         for (var i = 0; i < model.shapes.length; i++) {
             var triangle = model.shapes[i];
-            if (triangle.className == 'Triangle'){
+            if (triangle.className == 'Triangle') {
                 var perim = 0;
                 if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
                     perim += parseInt(triangle.segment1.length) + parseInt(triangle.segment2.length) + parseInt(triangle.segment3.length);
                     if (triangle.name) {
                         triangleName = triangle.name.charAt(7) + triangle.name.charAt(9) + triangle.name.charAt(11);
+                    } else {
+                        triangleName = '';
                     }
-                    $('#textArea').val($('#textArea').val()+"Периметр треугольника " + triangleName + " равен: " + perim + "\n");
+                    $('#textArea').val($('#textArea').val() + "Периметр треугольника " + triangleName + " равен: " + perim + "\n");
+                }
+            }
+        }
+    },
+
+    calcTriangleSquare: function (model) {
+        $('#textArea').val('');
+        var triangleName = "";
+        for (var i = 0; i < model.shapes.length; i++) {
+            var triangle = model.shapes[i];
+            if (triangle.className == 'Triangle') {
+                var square = 0;
+                if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
+                    var side1 = parseInt(triangle.segment1.length);
+                    var side2 = parseInt(triangle.segment2.length);
+                    var side3 = parseInt(triangle.segment3.length)
+                    var p = (side1 + side2 + side3) / 2;
+                    square = Math.sqrt(p * (p - side1) * (p - side2) * (p - side3));
+                    if (triangle.name) {
+                        triangleName = triangle.name.charAt(7) + triangle.name.charAt(9) + triangle.name.charAt(11);
+                    } else {
+                        triangleName = '';
+                    }
+                    $('#textArea').val($('#textArea').val() + "Площадь треугольника " + triangleName + " равна: " + square + "\n");
                 }
             }
         }

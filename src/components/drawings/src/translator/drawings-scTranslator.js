@@ -506,7 +506,7 @@ Drawings.ScTranslator = {
                     } else {
                         triangleName = '';
                     }
-                    $('#textArea').val($('#textArea').val() + "Периметр треугольника " + triangleName + " равен: " + perim + "\n");
+                    $('#textArea').val($('#textArea').val() + "Perimeter of triangle " + triangleName + " is : " + perim + "\n");
                 }
             }
         }
@@ -530,7 +530,7 @@ Drawings.ScTranslator = {
                     } else {
                         triangleName = '';
                     }
-                    $('#textArea').val($('#textArea').val() + "Площадь треугольника " + triangleName + " равна: " + square + "\n");
+                    $('#textArea').val($('#textArea').val() + "Area of triangle  " + triangleName + " is : " + square + "\n");
                 }
             }
         }

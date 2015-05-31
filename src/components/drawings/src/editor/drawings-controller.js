@@ -158,6 +158,7 @@ Drawings.Controller.prototype = {
 
             this.points.length = 0;
         }
+        return segment;
     },
 
     _createCircleIfPossible: function () {
@@ -174,23 +175,41 @@ Drawings.Controller.prototype = {
         }
     },
 
+
+
+    _getOrCreateSegment: function (point1, point2) {
+
+        var segmentIsExist = false;
+        var possibleSegmentIndex;
+        for (var i = 0; i < this.model.getShapes().length; i++) {
+            if (this.model.getShapes()[i].className == "Segment") {
+                if (this.model.getShapes()[i].point1() == point1 && this.model.getShapes()[i].point2() == point2) {
+                    segmentIsExist = true;
+                    possibleSegmentIndex = i;
+                }
+            }
+            }
+            if (segmentIsExist) {
+                return this.model.getShapes()[possibleSegmentIndex];
+            }
+            else {
+                var segment = new Drawings.Segment(point1, point2);
+                segment.setName(Drawings.Utils.generateSegmentName(segment));
+
+                this.model.addShape(segment);
+                return segment;
+            }
+
+    },
+
     _createTriangleIfPossible: function () {
         if (this.points.length == 3) {
             var triangle = new Drawings.Triangle(this.points[0], this.points[1], this.points[2]);
             triangle.setName(Drawings.Utils.generateTriangleName(triangle));
 
-            var segment1 = new Drawings.Segment(this.points[0], this.points[1]);
-            segment1.setName(Drawings.Utils.generateSegmentName(segment1));
-
-            var segment2 = new Drawings.Segment(this.points[1], this.points[2]);
-            segment2.setName(Drawings.Utils.generateSegmentName(segment2));
-
-            var segment3 = new Drawings.Segment(this.points[2], this.points[0]);
-            segment3.setName(Drawings.Utils.generateSegmentName(segment3));
-
-            this.model.addShape(segment1);
-            this.model.addShape(segment2);
-            this.model.addShape(segment3);
+            var segment1 = this._getOrCreateSegment(this.points[0], this.points[1]);
+            var segment2 = this._getOrCreateSegment(this.points[1], this.points[2]);
+            var segment3 = this._getOrCreateSegment(this.points[2], this.points[0]);
 
             triangle.segment1 = segment1;
             triangle.segment2 = segment2;

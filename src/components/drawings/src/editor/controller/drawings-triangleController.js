@@ -15,6 +15,13 @@ Drawings.TriangleController.prototype = {
 
         var contextMenu = new Drawings.ContextMenu('#' + jxgTriangle.rendNode.id, event);
 
+        var setNameMenuItem = {
+            text: 'Задать имя',
+            action: function () {
+                controller._setNameAction(triangle);
+            }
+        };
+
         var setSquareMenuItem = {
             text: 'Задать площадь',
             action: function () {
@@ -29,7 +36,7 @@ Drawings.TriangleController.prototype = {
             }
         };
 
-        contextMenu.show([setSquareMenuItem, setPerimeterMenuItem]);
+        contextMenu.show([setNameMenuItem, setSquareMenuItem, setPerimeterMenuItem]);
     },
 
     handleContextDefinitionMenuEvent: function (event){
@@ -75,6 +82,15 @@ Drawings.TriangleController.prototype = {
 
         }
         contextDefinitionMenu.show([setDefinitionMenuItem]);
+    },
+
+    _setNameAction: function (triangle) {
+        var name = prompt('Введите имя треугольника:');
+
+        if (name != null) {
+            triangle.setName(name);
+            this.model.updated([triangle]);
+        }
     },
 
     _setPerimeterAction: function (triangle) {

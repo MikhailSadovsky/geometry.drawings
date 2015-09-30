@@ -115,12 +115,13 @@ Drawings.Controller.prototype = {
     _createPoint: function (coordinates) {
         var point = new Drawings.Point(coordinates[0], coordinates[1]);
         this.model.addPoint(point);
+        point.setName('Point');//there
+
         return point;
     },
 
     _addPoint: function (point) {
         this.points.push(point);
-
         if (this.drawingMode == Drawings.DrawingMode.POINT) {
             this.points.length = 0;
         }

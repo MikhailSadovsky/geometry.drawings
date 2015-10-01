@@ -553,6 +553,32 @@ Drawings.ScTranslator = {
         });
     },
 
+    /*  Call agent of searching semantic neighborhood,
+        send concept_segment node as parameter and add it in web window history
+     */
+    showSegmentNode: function () {
+        var addr;
+        // Resolve sc-addr. Get sc-addr of concept_segment node
+        SCWeb.core.Server.resolveScAddr(['concept_segment'], function (keynodes) {
+            addr = keynodes['concept_segment'];
+            // Resolve sc-addr of ui_menu_view_full_semantic_neighborhood node
+            SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
+                function (data) {
+                    // Get command of ui_menu_view_full_semantic_neighborhood
+                    var cmd = data["ui_menu_view_full_semantic_neighborhood"];
+                    // Simulate click on ui_menu_view_full_semantic_neighborhood button
+                    SCWeb.core.Server.doCommand(cmd,
+                        [addr], function (result) {
+                            // waiting for result
+                            if (result.question != undefined) {
+                                // append in history
+                                SCWeb.ui.WindowManager.appendHistoryItem(result.question);
+                            }
+                        });
+                });
+        });
+    },
+
     putModel: function (model) {
         SCWeb.ui.Locker.show();
         //var cleanup = this.wipeOld;

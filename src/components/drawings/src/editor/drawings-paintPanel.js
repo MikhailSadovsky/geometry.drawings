@@ -76,11 +76,19 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
 
+        // Add new button
+        toolbar.append('<div id="newButton" class="button new" title="Новая кнопка"></div>');
+
         toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
         toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
         toolbar.append('<div id="solveButton" class="button solve" title="Вычислить"></div>');
+
+        // New button should open segment semantic neighborhood
+        $('#newButton').click(function () {
+            paintPanel._showSegmentNode();
+        });
 
         $("#pointButton").bind("contextmenu", function(e) {
             e.preventDefault();
@@ -257,6 +265,11 @@ Drawings.PaintPanel.prototype = {
 
     _viewBasedKeyNode: function () {
         Drawings.ScTranslator.viewBasedKeyNode();
+    },
+
+    // add method call
+    _showSegmentNode: function () {
+        Drawings.ScTranslator.showSegmentNode();
     },
 
     _createBoard: function () {

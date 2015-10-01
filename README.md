@@ -2,6 +2,8 @@ Graphical user interface for intellectual systems based on OSTIS project.
 
 See more information at www.ostis.net
 
+See simple examples in "examples" branch commits since October 1, 2015
+
 Steps for running:
 
 1. Clone ostis geometry system:

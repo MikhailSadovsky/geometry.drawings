@@ -65,7 +65,7 @@
 }
 
 .geometryEditor .toolbar .button.solver {
-    background: url("../images/drawings/newButton.png") no-repeat;
+    background: url("../images/drawings/solver.png") no-repeat;
     background-size: cover;
 }
 

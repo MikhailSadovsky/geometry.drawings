@@ -579,6 +579,56 @@ Drawings.ScTranslator = {
         });
     },
 
+
+    /*  Call solver of finding definition. Solver generates rrel_finding_definition if finds it.
+        Search this definition and show in textarea.
+     */
+    findDefinitionBySolver: function () {
+        var addr;
+        var attr;
+        // Resolve rrel_finding_definition sc_addr
+        SCWeb.core.Server.resolveScAddr(['rrel_finding_definition'], function (keynodes) {
+            attr = keynodes['rrel_finding_definition'];
+        });
+        // Resolve node that definition want to find. For example, resolve concept_straight_line
+        SCWeb.core.Server.resolveScAddr(['concept_straight_line'], function (keynodes) {
+            addr = keynodes['concept_straight_line'];
+            // Resolve sc_addr of ui_menu_file_for_finding_definitions
+            SCWeb.core.Server.resolveScAddr(["ui_menu_file_for_finding_definitions"],
+                function (data) {
+                    // Get command of ui_menu_file_for_finding_definitions
+                    var cmd = data["ui_menu_file_for_finding_definitions"];
+                    // Call solver
+                    SCWeb.core.Server.doCommand(cmd,
+                        [addr], function (result) {
+                            if (result.question != undefined) {
+                                // waiting for 3 seconds
+                                var date = new Date();
+                                var curDate = null;
+                                do {curDate = new Date();}
+                                while (curDate-date < 3000);
+                                // Find link node with definition (search 5 element construction
+                                // between concept_straight_line with attribute rrel_finding_definition)
+                                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                                    addr,
+                                    sc_type_arc_pos_const_perm,
+                                    sc_type_link,
+                                    sc_type_arc_pos_const_perm,
+                                    attr]).
+                                    done(function(linkNode){
+                                        // Get definition text
+                                        window.sctpClient.get_link_content(linkNode[0][2],'string').done(function(content)
+                                        {
+                                            // Set text to text area
+                                            $('#textArea').val(content);
+                                        });
+                                    }).fail(function(r){console.log("fail")});
+                            }
+                        });
+                });
+        });
+    },
+
     putModel: function (model) {
         SCWeb.ui.Locker.show();
         //var cleanup = this.wipeOld;

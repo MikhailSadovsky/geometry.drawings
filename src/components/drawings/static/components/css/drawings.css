@@ -64,6 +64,11 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.solver {
+    background: url("../images/drawings/newButton.png") no-repeat;
+    background-size: cover;
+}
+
 .geometryEditor .toolbar .button.save {
     background: url("../images/drawings/save.jpg") no-repeat;
     background-size: cover;

@@ -79,6 +79,9 @@ Drawings.PaintPanel.prototype = {
         // Add new button
         toolbar.append('<div id="newButton" class="button new" title="Новая кнопка"></div>');
 
+        // Add solver button
+        toolbar.append('<div id="solverButton" class="button solver" title="Функция решателя"></div>');
+
         toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
@@ -88,6 +91,11 @@ Drawings.PaintPanel.prototype = {
         // New button should open segment semantic neighborhood
         $('#newButton').click(function () {
             paintPanel._showSegmentNode();
+        });
+
+        // Solver button should call solver fin
+        $('#solverButton').click(function () {
+            paintPanel._findDefinitionBySolver();
         });
 
         $("#pointButton").bind("contextmenu", function(e) {
@@ -270,6 +278,11 @@ Drawings.PaintPanel.prototype = {
     // add method call
     _showSegmentNode: function () {
         Drawings.ScTranslator.showSegmentNode();
+    },
+
+    // call solver method
+    _findDefinitionBySolver: function () {
+        Drawings.ScTranslator.findDefinitionBySolver();
     },
 
     _createBoard: function () {

@@ -525,6 +525,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     //console.log("resolved");
                     dfd.resolve();
                 }
+
                 //dfd.resolve();
             });})(i);
 

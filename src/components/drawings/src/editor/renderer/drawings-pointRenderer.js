@@ -28,7 +28,8 @@ Drawings.PointRenderer.prototype = {
             name: point.getName(),
             showInfobox: false,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            strokeWidth:4
         };
 
         var jxgPoint = this.board.create('point', [point.getX(), point.getY()], properties);

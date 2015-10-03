@@ -26,7 +26,8 @@ Drawings.LineRenderer.prototype = {
         var properties = {
             id: line.getId(),
             name: line.getName(),
-            strokeColor: strokeColor
+            strokeColor: strokeColor,
+            strokeWidth:4
         };
 
         this.board.create('line', [jxgPoint1, jxgPoint2], properties);

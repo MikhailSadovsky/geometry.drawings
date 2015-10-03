@@ -26,10 +26,10 @@ Drawings.LineController.prototype = {
                             SCWeb.core.Server.doCommand(cmd,
                                 [addr], function (result) {
                                     if (result.question != undefined) {
-/*                                        var date = new Date();
+                                        var date = new Date();
                                         var curDate = null;
                                         do {curDate = new Date();}
-                                        while (curDate-date < 3000);*/
+                                        while (curDate-date < 3000);
                                         window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                                             addr,
                                             sc_type_arc_pos_const_perm,

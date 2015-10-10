@@ -1,0 +1,23 @@
+ui_geometry_answer_area
+=> nrel_main_idtf:
+	[поле вывода ответа редактора геометрических чертежей] (* <- lang_ru;; *);
+	[geometry answer area] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент отображения ответа редактора геометрических чертежей] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [element, that shows geometry editor answer] (* <- lang_en;; *);; *);;
+	*);;
+
+
+

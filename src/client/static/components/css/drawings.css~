@@ -30,7 +30,7 @@
 }
 
 
-.geometryEditor .toolbar .button.point {
+#pointButton {
     background: url("../images/drawings/point.png") no-repeat;
     background-size: cover;
 }

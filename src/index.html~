@@ -24,7 +24,6 @@
 <body>
 
 <div id="container"></div>
-
 <script type="text/javascript">
     var model = new Drawings.Model();
     var paintPanel = new Drawings.PaintPanel('container', model);

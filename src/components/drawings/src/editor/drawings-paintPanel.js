@@ -60,27 +60,27 @@ Drawings.PaintPanel.prototype = {
         var paintPanel = this;
 
         // root element
-        container.append('<div id="geometryEditor" class="geometryEditor"></div>');
+        container.append('<div id="geometryEditor" class="sc-no-default-cmd geometryEditor" sc_addr="264896512"></div>');
         var editor = $('#geometryEditor');
 
-        editor.append('<textarea id="textArea" rows="3"/>');
+        editor.append('<textarea id="textArea" class="sc-no-default-cmd" sc_addr="984219648" rows="3"/>');
             // initialize toolbar markup
         editor.append('<div id="toolbar" class="toolbar"></div>');
 
         var toolbar = $('#toolbar');
-        toolbar.append('<div id="pointButton" class="button point" title="Точка"></div>');
-        toolbar.append('<div id="lineButton" class="button line" title="Прямая"></div>');
-        toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
-        toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
-        toolbar.append('<div id="circleButton" class="button circle" title="Окружность"></div>');
-        toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
-        toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
+        toolbar.append('<div id="pointButton" class="sc-no-default-cmd button point" sc_addr="1066008576" title="Точка"></div>');
+        toolbar.append('<div id="lineButton" class="sc-no-default-cmd button line" sc_addr="195690496" title="Прямая"></div>');
+        toolbar.append('<div id="segmentButton" class="sc-no-default-cmd button segment" sc_addr="348782592" title="Отрезок"></div>');
+        toolbar.append('<div id="triangleButton" class="sc-no-default-cmd button triangle" sc_addr="411697152" title="Треугольник"></div>');
+        toolbar.append('<div id="circleButton" class="sc-no-default-cmd button circle" sc_addr="113901568" title="Окружность"></div>');
+        toolbar.append('<div id="clearButton" class="sc-no-default-cmd button clear" title="Очистить" sc_addr="53084160"></div>');
+        toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" sc_addr="638189568" title="Сохранить"></div>');
 
-        toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
+        toolbar.append('<div id="load" class="sc-no-default-cmd button load" sc_addr="562692096" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
-        toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
-        toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
-        toolbar.append('<div id="solveButton" class="button solve" title="Вычислить"></div>');
+        toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" sc_addr="713687040" title="Синхронизация"></div>');
+        toolbar.append('<div id="viewButton" class="sc-no-default-cmd button view" sc_addr="791281664" title="Просмотр"></div>');
+        toolbar.append('<div id="solveButton" class="sc-no-default-cmd button solve" sc_addr="487194624" title="Вычислить"></div>');
 
         $("#pointButton").bind("contextmenu", function(e) {
             e.preventDefault();

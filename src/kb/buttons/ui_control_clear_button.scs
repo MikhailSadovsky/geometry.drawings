@@ -1,0 +1,24 @@
+ui_control_clear_button
+<- sc_node_not_relation;
+=> nrel_main_idtf:
+	[кнопка очистки] (* <- lang_ru;; *);
+	[clear button] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который очищает содержимое редактора геометрических чертежей] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that clears content of geometry editor] (* <- lang_en;; *);; *);;
+	*);;
+
+
+

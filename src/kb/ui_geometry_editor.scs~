@@ -1,0 +1,23 @@
+ui_control_draw_point_button
+=> nrel_main_idtf:
+	[кнопка рисования точки] (* <- lang_ru;; *);
+	[drawing point button] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который включает режим рисования точки. В данном режиме при щелчке в области рисования редактора геометрических чертежей будет нарисована точка] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that turns on draw point mode. Point will be drawn on click on the drawing space.] (* <- lang_en;; *);; *);;
+	*);;
+
+
+

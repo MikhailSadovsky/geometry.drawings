@@ -60,27 +60,82 @@ Drawings.PaintPanel.prototype = {
         var paintPanel = this;
 
         // root element
-        container.append('<div id="geometryEditor" class="sc-no-default-cmd geometryEditor" sc_addr="264896512"></div>');
+        container.append('<div id="geometryEditor" class="sc-no-default-cmd geometryEditor"></div>');
         var editor = $('#geometryEditor');
 
-        editor.append('<textarea id="textArea" class="sc-no-default-cmd" sc_addr="984219648" rows="3"/>');
+        SCWeb.core.Server.resolveScAddr(['ui_geometry_editor',
+        ], function (keynodes) {
+            editor.attr("sc_addr", keynodes['ui_geometry_editor']);
+        });
+
+        editor.append('<textarea id="textArea" class="sc-no-default-cmd" rows="3"/>');
+        SCWeb.core.Server.resolveScAddr(['ui_geometry_answer_area',
+        ], function (keynodes) {
+            $('#textArea').attr("sc_addr", keynodes['ui_geometry_answer_area']);
+        });
             // initialize toolbar markup
         editor.append('<div id="toolbar" class="toolbar"></div>');
 
         var toolbar = $('#toolbar');
-        toolbar.append('<div id="pointButton" class="sc-no-default-cmd button point" sc_addr="1066008576" title="Точка"></div>');
-        toolbar.append('<div id="lineButton" class="sc-no-default-cmd button line" sc_addr="195690496" title="Прямая"></div>');
-        toolbar.append('<div id="segmentButton" class="sc-no-default-cmd button segment" sc_addr="348782592" title="Отрезок"></div>');
-        toolbar.append('<div id="triangleButton" class="sc-no-default-cmd button triangle" sc_addr="411697152" title="Треугольник"></div>');
-        toolbar.append('<div id="circleButton" class="sc-no-default-cmd button circle" sc_addr="113901568" title="Окружность"></div>');
-        toolbar.append('<div id="clearButton" class="sc-no-default-cmd button clear" title="Очистить" sc_addr="53084160"></div>');
-        toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" sc_addr="638189568" title="Сохранить"></div>');
+        toolbar.append('<div id="pointButton" class="sc-no-default-cmd button point" title="Точка"></div>');
+        toolbar.append('<div id="lineButton" class="sc-no-default-cmd button line" title="Прямая"></div>');
+        toolbar.append('<div id="segmentButton" class="sc-no-default-cmd button segment" title="Отрезок"></div>');
+        toolbar.append('<div id="triangleButton" class="sc-no-default-cmd button triangle" title="Треугольник"></div>');
+        toolbar.append('<div id="circleButton" class="sc-no-default-cmd button circle" title="Окружность"></div>');
+        toolbar.append('<div id="clearButton" class="sc-no-default-cmd button clear" title="Очистить"></div>');
+        toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
 
-        toolbar.append('<div id="load" class="sc-no-default-cmd button load" sc_addr="562692096" title="Загрузить"></div>');
+        toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
-        toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" sc_addr="713687040" title="Синхронизация"></div>');
-        toolbar.append('<div id="viewButton" class="sc-no-default-cmd button view" sc_addr="791281664" title="Просмотр"></div>');
-        toolbar.append('<div id="solveButton" class="sc-no-default-cmd button solve" sc_addr="487194624" title="Вычислить"></div>');
+        toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" title="Синхронизация"></div>');
+        toolbar.append('<div id="viewButton" class="sc-no-default-cmd button view" title="Просмотр"></div>');
+        toolbar.append('<div id="solveButton" class="sc-no-default-cmd button solve" title="Вычислить"></div>');
+
+        // Resolving
+        SCWeb.core.Server.resolveScAddr(['ui_control_clear_button',
+        ], function (keynodes) {
+            $('#clearButton').attr("sc_addr", keynodes['ui_control_clear_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_circle_button',
+        ], function (keynodes) {
+            $('#circleButton').attr("sc_addr", keynodes['ui_control_draw_circle_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_line_button',
+        ], function (keynodes) {
+            $('#lineButton').attr("sc_addr", keynodes['ui_control_draw_line_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_point_button',
+        ], function (keynodes) {
+            $('#pointButton').attr("sc_addr", keynodes['ui_control_draw_point_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_segment_button',
+        ], function (keynodes) {
+            $('#segmentButton').attr("sc_addr", keynodes['ui_control_draw_segment_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_triangle_button',
+        ], function (keynodes) {
+            $('#triangleButton').attr("sc_addr", keynodes['ui_control_draw_triangle_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_geometry_calculation_button',
+        ], function (keynodes) {
+            $('#solveButton').attr("sc_addr", keynodes['ui_control_geometry_calculation_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_load_button',
+        ], function (keynodes) {
+            $('#load').attr("sc_addr", keynodes['ui_control_load_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_save_button',
+        ], function (keynodes) {
+            $('#saveToFile').attr("sc_addr", keynodes['ui_control_save_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_synchronization_button',
+        ], function (keynodes) {
+            $('#translateButton').attr("sc_addr", keynodes['ui_control_synchronization_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_view_chart_arguments_button',
+        ], function (keynodes) {
+            $('#viewButton').attr("sc_addr", keynodes['ui_control_view_chart_arguments_button']);
+        });
 
         $("#pointButton").bind("contextmenu", function(e) {
             e.preventDefault();

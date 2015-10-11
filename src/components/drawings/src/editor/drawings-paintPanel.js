@@ -87,6 +87,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#pointButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT);
@@ -105,6 +108,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#solveButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         break;
@@ -120,6 +126,9 @@ Drawings.PaintPanel.prototype = {
 
 
         $('#lineButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
@@ -137,6 +146,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#segmentButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
@@ -154,6 +166,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#triangleButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.TRIANGLE);
@@ -171,6 +186,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#circleButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.CIRCLE);
@@ -189,14 +207,23 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#clearButton').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel.model.clear();
         });
 
         $('#saveToFile').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel._saveToFile();
         });
 
         $('#load').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             $("#fileInput").click();
         });
 
@@ -205,10 +232,16 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#translateButton').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel._translate();
         });
 
         $('#viewButton').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel._viewBasedKeyNode();
         });
 

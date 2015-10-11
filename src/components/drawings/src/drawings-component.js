@@ -669,6 +669,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
         self.needUpdate = true;
         self.requestUpdate();
     });
+
     this.eventStructUpdate = function (added, element, arc) {
         window.sctpClient.get_arc(arc).done(function (r) {
             var addr = r[1];

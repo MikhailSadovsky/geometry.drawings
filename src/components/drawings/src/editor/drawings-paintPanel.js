@@ -17,6 +17,7 @@ Drawings.PaintPanel = function (containerId, model) {
 Drawings.PaintPanel.prototype = {
 
     init: function () {
+
         this._initMarkup(this.containerId);
 
         this.board = this._createBoard();
@@ -63,15 +64,23 @@ Drawings.PaintPanel.prototype = {
         container.append('<div id="geometryEditor" class="geometryEditor"></div>');
         var editor = $('#geometryEditor');
 
-        editor.append('<ul id="sectionWindow" class="sc-no-default-cmd nav nav-pills nav-stacked" sc_addr="183107584"></ul>');
+        editor.append('<ul id="sectionWindow" class="sc-no-default-cmd nav nav-pills nav-stacked"></ul>');
         var sectionWindow = $('#sectionWindow');
+        SCWeb.core.Server.resolveScAddr(['ui_control_section_window',
+        ], function (keynodes) {
+            sectionWindow.attr("sc_addr", keynodes['ui_control_section_window']);
+        });
         sectionWindow.append('<li class="active"><a href="#">Section 1</a></li>');
         sectionWindow.append('<li><a href="#">Section 2</a></li>');
         sectionWindow.append('<li><a href="#">Section 3</a></li>');
         sectionWindow.append('<li><a href="#">Section 4</a></li>');
 
-        editor.append('<ul id="subsectionWindow" class="sc-no-default-cmd nav nav-pills nav-stacked" sc_addr="237633536"></ul>');
+        editor.append('<ul id="subsectionWindow" class="sc-no-default-cmd nav nav-pills nav-stacked"></ul>');
         var subsectionWindow = $('#subsectionWindow');
+        SCWeb.core.Server.resolveScAddr(['ui_control_subsection_window',
+        ], function (keynodes) {
+            subsectionWindow.attr("sc_addr", keynodes['ui_control_subsection_window']);
+        });
         subsectionWindow.append('<li class="active"><a href="#">Subsection 1</a></li>');
         subsectionWindow.append('<li><a href="#">Subsection 2</a></li>');
         subsectionWindow.append('<li><a href="#">Subsection 3</a></li>');

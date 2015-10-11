@@ -63,7 +63,21 @@ Drawings.PaintPanel.prototype = {
         container.append('<div id="geometryEditor" class="geometryEditor"></div>');
         var editor = $('#geometryEditor');
 
-        editor.append('<textarea id="textArea" rows="3"/>');
+        editor.append('<ul id="sectionWindow" class="sc-no-default-cmd nav nav-pills nav-stacked" sc_addr="183107584"></ul>');
+        var sectionWindow = $('#sectionWindow');
+        sectionWindow.append('<li class="active"><a href="#">Section 1</a></li>');
+        sectionWindow.append('<li><a href="#">Section 2</a></li>');
+        sectionWindow.append('<li><a href="#">Section 3</a></li>');
+        sectionWindow.append('<li><a href="#">Section 4</a></li>');
+
+        editor.append('<ul id="subsectionWindow" class="sc-no-default-cmd nav nav-pills nav-stacked" sc_addr="237633536"></ul>');
+        var subsectionWindow = $('#subsectionWindow');
+        subsectionWindow.append('<li class="active"><a href="#">Subsection 1</a></li>');
+        subsectionWindow.append('<li><a href="#">Subsection 2</a></li>');
+        subsectionWindow.append('<li><a href="#">Subsection 3</a></li>');
+        subsectionWindow.append('<li><a href="#">Subsection 4</a></li>');
+        editor.append(subsectionWindow);
+/*        editor.append('<textarea id="textArea" rows="3"/>');
             // initialize toolbar markup
         editor.append('<div id="toolbar" class="toolbar"></div>');
 
@@ -86,7 +100,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<input id="fileInput" type="file">');
         toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
         toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
-        toolbar.append('<div id="solveButton" class="button solve" title="Вычислить"></div>');
+        toolbar.append('<div id="solveButton" class="button solve" title="Вычислить"></div>');*/
 
         // New button should open segment semantic neighborhood
         $('#newButton').click(function () {
@@ -229,7 +243,7 @@ Drawings.PaintPanel.prototype = {
         });
 
         // initialize board
-        editor.append('<div id="board" class="board jxgbox"></div>');
+        //editor.append('<div id="board" class="board jxgbox"></div>');
     },
 
     _saveToFile: function () {

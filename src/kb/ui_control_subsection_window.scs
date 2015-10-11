@@ -1,0 +1,21 @@
+ui_control_subsection_window
+<- sc_node_struct;
+=> nrel_main_idtf:
+	[Окно для отображения подразделов] (* <- lang_ru;; *);
+	[Subsection window] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который отображает подразделы интеллектуальной справочной ситемы] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that shows intelligent system subsections] (* <- lang_en;; *);; *);;
+	*);;

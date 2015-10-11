@@ -3,6 +3,21 @@
     height: 100%;
 }
 
+#sectionWindow {
+    width: 30%;	
+    padding: 20px;
+    display: inline-block;
+    margin-right: 20px;	
+    border-style: solid;	
+}
+
+#subsectionWindow {
+    width: 30%;	
+    padding: 20px;
+    display: inline-block;
+    border-style: solid;	
+}
+
 .geometryEditor .toolbar {
     width: 10%;
     height: 100%;

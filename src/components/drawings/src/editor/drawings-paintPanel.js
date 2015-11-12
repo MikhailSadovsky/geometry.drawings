@@ -17,6 +17,7 @@ Drawings.PaintPanel = function (containerId, model) {
 Drawings.PaintPanel.prototype = {
 
     init: function () {
+        $('#window-header-tools').hide();
         this._initMarkup(this.containerId);
 
         this.board = this._createBoard();

@@ -500,6 +500,10 @@ Drawings.ScTranslator = {
             if (triangle.className == 'Triangle') {
                 var perim = 0;
                 if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
+                    if (!this.isCorrectTriangle(triangle.segment1.length, triangle.segment2.length, triangle.segment3.length)) {
+                        $('#textArea').val('Incorrect values of triangle sides. Please, correct it.');
+                        return;
+                    }
                     perim += parseInt(triangle.segment1.length) + parseInt(triangle.segment2.length) + parseInt(triangle.segment3.length);
                     if (triangle.name) {
                         triangleName = triangle.name.charAt(7) + triangle.name.charAt(9) + triangle.name.charAt(11);
@@ -512,6 +516,13 @@ Drawings.ScTranslator = {
         }
     },
 
+    isCorrectTriangle: function (side1, side2,side3) {
+        if ((side1 + side2 > side3) || (side1 + side3 > side2) || (side3 + side2 > side1)) {
+            return false;
+        }
+        return true;
+    },
+
     calcTriangleSquare: function (model) {
         $('#textArea').val('');
         var triangleName = "";
@@ -522,7 +533,11 @@ Drawings.ScTranslator = {
                 if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
                     var side1 = parseInt(triangle.segment1.length);
                     var side2 = parseInt(triangle.segment2.length);
-                    var side3 = parseInt(triangle.segment3.length)
+                    var side3 = parseInt(triangle.segment3.length);
+                    if (!this.isCorrectTriangle(side1, side2, side3)) {
+                        $('#textArea').val('Incorrect values of triangle sides. Please, correct it.');
+                        return;
+                    }
                     var p = (side1 + side2 + side3) / 2;
                     square = Math.sqrt(p * (p - side1) * (p - side2) * (p - side3));
                     if (triangle.name) {

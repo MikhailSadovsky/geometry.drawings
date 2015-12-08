@@ -28,6 +28,12 @@ Drawings.Utils = {
         })
     },
 
+    selectAngles: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Angle;
+        })
+    },
+
     selectCircles: function (objects) {
         return objects.filter(function (object) {
             return object instanceof Drawings.Circle;
@@ -47,6 +53,11 @@ Drawings.Utils = {
     getFillColor: function (shape) {
         return shape.sc_addr == null ? Drawings.FILL_COLOR : Drawings.TRANSLATED_FILL_COLOR;
     },
+
+
+
+
+
 
     getJxgObjectById: function (board, id) {
         return board.select(function (jxgObject) {
@@ -88,6 +99,14 @@ Drawings.Utils = {
         var point3Name = triangle.point3().getName();
         return point1Name && point2Name && point3Name ?
         'Треугк(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
+    },
+
+    generateAngleName: function (angle) {
+        var point1Name = angle.point1().getName();
+        var point2Name = angle.point2().getName();
+        var point3Name = angle.point3().getName();
+        return point1Name && point2Name && point3Name ?
+        'Угол(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },
 
     randomUUID: function () {

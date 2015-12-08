@@ -14,7 +14,8 @@ Drawings.DrawingMode = {
     LINE: 1,
     SEGMENT: 2,
     TRIANGLE: 3,
-    CIRCLE: 4
+    CIRCLE: 4,
+    ANGLE: 5
 };
 
 Drawings.FILL_COLOR = "DodgerBlue";

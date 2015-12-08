@@ -12,6 +12,7 @@ Drawings.Controller = function (paintPanel, model) {
     this.triangleController = new Drawings.TriangleController(this.model);
     this.circleController = new Drawings.CircleController(this.model);
     this.lineController = new Drawings.LineController(this.model);
+    this.angleController = new Drawings.AngleController(this.model);
 };
 
 Drawings.Controller.prototype = {
@@ -136,6 +137,9 @@ Drawings.Controller.prototype = {
         else if (this.drawingMode == Drawings.DrawingMode.CIRCLE) {
             this._createCircleIfPossible();
         }
+        else if (this.drawingMode == Drawings.DrawingMode.ANGLE) {
+            this._createAngleIfPossible();
+        }
     },
 
     _createLineIfPossible: function () {
@@ -221,6 +225,18 @@ Drawings.Controller.prototype = {
         }
     },
 
+
+    _createAngleIfPossible: function () {
+        if (this.points.length == 3) {
+            var angle = new Drawings.Angle(this.points[0], this.points[1], this.points[2]);
+            angle.setName(Drawings.Utils.generateAngleName(angle));
+
+            this.model.addShape(angle);
+
+            this.points.length = 0;
+        }
+    },
+
     _handleRightMouseDownEvent: function (event) {
         var jxgObjects = this.paintPanel.getJxgObjects(event);
         var objects = Drawings.Utils.toModelObjects(this.model, jxgObjects);
@@ -229,6 +245,7 @@ Drawings.Controller.prototype = {
         var segments = Drawings.Utils.selectSegments(objects);
         var triangles = Drawings.Utils.selectTriangles(objects);
         var circles = Drawings.Utils.selectCircles(objects);
+        var angles = Drawings.Utils.selectAngles(objects);
 
         if (points.length > 0) {
             var jxgPoint = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), points[0].getId());
@@ -238,14 +255,20 @@ Drawings.Controller.prototype = {
             var jxgSegment = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), segments[0].getId());
             this.segmentController.handleContextMenuEvent(jxgSegment, event);
         }
+        else if (angles.length > 0) {
+            var jxgAngle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), angles[0].getId());
+            this.angleController.handleContextMenuEvent(jxgAngle, event);
+        }
         else if (triangles.length > 0) {
             var jxgTriangle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), triangles[0].getId());
             this.triangleController.handleContextMenuEvent(jxgTriangle, event);
         }
         else if (circles.length > 0) {
             var jxgCircle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), circles[0].getId());
-            this.circleController.handleContextMenuEvent(jxgCircle, event);
+            this.angleController.handleContextMenuEvent(jxgCircle, event);
         }
+
+
     },
 
     _getDistanceBetweenEvents: function (event1, event2) {

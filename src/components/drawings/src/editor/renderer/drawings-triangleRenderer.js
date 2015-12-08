@@ -32,6 +32,7 @@ Drawings.TriangleRenderer.prototype = {
         var jxgPoint2 = Drawings.Utils.getJxgObjectById(this.board, triangle.point2().getId());
         var jxgPoint3 = Drawings.Utils.getJxgObjectById(this.board, triangle.point3().getId());
 
+
         var strokeColor = Drawings.Utils.getStrokeColor(triangle);
         var fillColor = Drawings.Utils.getFillColor(triangle);
 
@@ -45,8 +46,10 @@ Drawings.TriangleRenderer.prototype = {
             fillColor: fillColor
         };
 
+
+      //  return  this.board.create('angle',  [jxgPoint3, jxgPoint2, jxgPoint1], {type:'sector', orthoType:'square', orthoSensitivity:2, radius: 5});
         return this.board.create('polygon', [jxgPoint1, jxgPoint2, jxgPoint3], properties);
-    },
+            },
 
     _drawTriangleSquare: function (jxgTriangle, triangle) {
         var point1 = triangle.point1();

@@ -31,6 +31,7 @@ Drawings.PaintPanel.prototype = {
         this.rendererMap["Segment"] = new Drawings.SegmentRenderer(this.board);
         this.rendererMap["Triangle"] = new Drawings.TriangleRenderer(this.board);
         this.rendererMap["Circle"] = new Drawings.CircleRenderer(this.board);
+        this.rendererMap["Angle"] = new Drawings.AngleRenderer(this.board);
     },
 
     getBoard: function () {
@@ -74,6 +75,7 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
         toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
         toolbar.append('<div id="circleButton" class="button circle" title="Окружность"></div>');
+        toolbar.append('<div id="angleButton" class="button angle" title="Угол"></div>');
         toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
 
@@ -170,6 +172,27 @@ Drawings.PaintPanel.prototype = {
         $("#triangleButton").bind("contextmenu", function(e) {
             e.preventDefault();
         });
+
+
+        $('#angleButton').mousedown(function(event) {
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.ANGLE);
+                        break;
+                    case 3:
+                        console.log('todo definition');
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+        $("#angleButton").bind("contextmenu", function(e) {
+            e.preventDefault();
+        });
+
+
+
 
         $('#circleButton').mousedown(function(event) {
                 switch (event.which) {

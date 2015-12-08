@@ -15,7 +15,6 @@ Drawings.PointController.prototype = {
 
         var contextMenu = new Drawings.ContextMenu('#' + jxgPoint.rendNode.id, event);
 
-
         var setNameMenuItem = {
             text: 'Задать имя точки',
             action: function () {

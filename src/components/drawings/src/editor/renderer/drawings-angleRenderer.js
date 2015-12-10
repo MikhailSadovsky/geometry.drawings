@@ -37,7 +37,7 @@ Drawings.AngleRenderer.prototype = {
 
         var properties = {
             id: angle.getId(),
-            name: angle.getName() + ' = ' + value,
+            name: angle.getName() + ' = ' + value + '\u00B0',
             straightFirst: false,
             straightLast: false,
             hasInnerPoints: true,

@@ -118,7 +118,7 @@ Drawings.Utils = {
         if(point2Name == '') {point2Name = 'Point';}
         if(point3Name == '') {point3Name = 'Point';}
         return point1Name && point2Name && point3Name ?
-        'Угол(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
+        'Angle(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },
 
     randomUUID: function () {

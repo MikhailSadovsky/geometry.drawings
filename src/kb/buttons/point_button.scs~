@@ -1,9 +1,0 @@
-sc_node_not_relation -> point_button;;
-
-point_button => nrel_main_idtf:
-	[кнопка рисования точки]
-	(* <- lang_ru;; *);
-	[drawing point button]
-	(* <- lang_en;;	*);;
-
-

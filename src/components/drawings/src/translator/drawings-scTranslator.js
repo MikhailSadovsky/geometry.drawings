@@ -34,6 +34,13 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("concept_segment"));
         my_array.push(this.getKeyNode("nrel_side"));
         my_array.push(this.getKeyNode("concept_triangle"));
+        my_array.push(this.getKeyNode('nrel_side_of_angle'));
+        my_array.push(this.getKeyNode('nrel_vertex_of_angle'));
+        my_array.push(this.getKeyNode('nrel_angle_measure'));
+        my_array.push(this.getKeyNode("concept_angle"));
+        my_array.push(this.getKeyNode("concept_acute_angle"));
+        my_array.push(this.getKeyNode("concept_obtuse_angle"));
+        my_array.push(this.getKeyNode("concept_right_angle"));
         my_array.push(this.getKeyNode("concept_circle"));
         my_array.push(this.getKeyNode("concept_geometric_point"));// ?
         my_array.push(this.getKeyNode("concept_straight_line"));
@@ -198,6 +205,58 @@ Drawings.ScTranslator = {
                     for (var i = 0; i < points.length; i++) {
                         self.addFiveConstruction(r, points[i].sc_addr, self.chart_arguments, sc_type_arc_pos_const_perm);
                     }
+                }
+                if (shape.className == 'Angle') {
+                    if (shape.getValue() != undefined) {
+                        if (shape.getValue() < 90 || shape.getValue() == undefined) {
+                            shapeType = self.concept_acute_angle;
+                            console.log("acute");
+                        } else if (shape.getValue() > 90) {
+                            shapeType = self.concept_obtuse_angle;
+                        } else {
+                            shapeType = self.concept_right_angle;
+                        }
+                    } else {
+                        shapeType = self.concept_angle;
+                    }
+                    self.addFiveConstructionIntoBase(r, shape.vertex.sc_addr, self.nrel_vertex_of_angle,
+                        self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    self.addFiveConstructionIntoBase(r, shape.segment1.sc_addr, self.nrel_side_of_angle,
+                        self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    self.addFiveConstructionIntoBase(r, shape.segment2.sc_addr, self.nrel_side_of_angle,
+                        self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    if (shape.getValue()) {
+                        self.addConstructionWithValueAndQuantity(self.nrel_angle_measure, shape.getValue());
+                        var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_angle_measure);
+                        arc1.done(function (r1) {
+                            var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_angle_measure);
+                            arc2.done(function (r2) {
+                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.concept_quantity);
+                                window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
+                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
+                                    window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (value_node) {
+                                        window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, value_node);
+                                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (answer_node) {
+                                            self.addFiveConstruction(self.concept_quantity, quality_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, answer_node);
+                                            self.addFiveConstructionIntoBase(r, quality_node, self.nrel_angle_measure,
+                                                self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                            self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
+                                                self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                            self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
+                                            window.sctpClient.create_link().done(function (res) {
+                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
+                                                window.sctpClient.set_link_content(res, shape.getValue());
+                                                self.addFiveConstructionIntoBase(answer_node, res, self.nrel_system_identifier, self.chart_arguments,
+                                                    sc_type_arc_common | sc_type_const);
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    }
+
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
@@ -424,6 +483,13 @@ Drawings.ScTranslator = {
         sysArray.push(self.concept_segment);
         sysArray.push(self.nrel_side);
         sysArray.push(self.concept_triangle);
+        sysArray.push(self.nrel_angle_measure);
+        sysArray.push(self.nrel_side_of_angle);
+        sysArray.push(self.nrel_vertex_of_angle);
+        sysArray.push(self.concept_angle);
+        sysArray.push(self.concept_right_angle);
+        sysArray.push(self.concept_obtuse_angle);
+        sysArray.push(self.concept_acute_angle);
         sysArray.push(self.concept_circle);
         sysArray.push(self.concept_geometric_point);
         sysArray.push(self.concept_straight_line);

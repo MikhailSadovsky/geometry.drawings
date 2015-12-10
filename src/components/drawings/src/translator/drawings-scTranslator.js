@@ -500,7 +500,7 @@ Drawings.ScTranslator = {
             if (triangle.className == 'Triangle') {
                 var perim = 0;
                 if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
-                    if (triangle.name) {
+                    if (triangle.name && triangle.name != 'Triangle(Point;Point;Point)') {
                         triangleName = triangle.name.charAt(7) + triangle.name.charAt(9) + triangle.name.charAt(11);
                     } else {
                         triangleName = '';
@@ -534,7 +534,7 @@ Drawings.ScTranslator = {
             if (triangle.className == 'Triangle') {
                 var square = 0;
                 if (triangle.segment1.length != undefined && triangle.segment2.length != undefined && triangle.segment3.length != undefined) {
-                    if (triangle.name) {
+                    if (triangle.name && triangle.name != 'Triangle(Point;Point;Point)') {
                         triangleName = triangle.name.charAt(7) + triangle.name.charAt(9) + triangle.name.charAt(11);
                     } else {
                         triangleName = '';

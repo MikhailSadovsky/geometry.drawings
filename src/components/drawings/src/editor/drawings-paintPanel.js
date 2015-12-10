@@ -62,34 +62,91 @@ Drawings.PaintPanel.prototype = {
         var paintPanel = this;
 
         // root element
-        container.append('<div id="geometryEditor" class="geometryEditor"></div>');
+        container.append('<div id="geometryEditor" class="sc-no-default-cmd geometryEditor"></div>');
         var editor = $('#geometryEditor');
 
-        editor.append('<textarea id="textArea" rows="3"/>');
+        SCWeb.core.Server.resolveScAddr(['ui_geometry_editor',
+        ], function (keynodes) {
+            editor.attr("sc_addr", keynodes['ui_geometry_editor']);
+        });
+
+        editor.append('<textarea id="textArea" class="sc-no-default-cmd" rows="3"/>');
+        SCWeb.core.Server.resolveScAddr(['ui_geometry_answer_area',
+        ], function (keynodes) {
+            $('#textArea').attr("sc_addr", keynodes['ui_geometry_answer_area']);
+        });
             // initialize toolbar markup
         editor.append('<div id="toolbar" class="toolbar"></div>');
 
         var toolbar = $('#toolbar');
-        toolbar.append('<div id="pointButton" class="button point" title="Точка"></div>');
-        toolbar.append('<div id="lineButton" class="button line" title="Прямая"></div>');
-        toolbar.append('<div id="segmentButton" class="button segment" title="Отрезок"></div>');
-        toolbar.append('<div id="triangleButton" class="button triangle" title="Треугольник"></div>');
-        toolbar.append('<div id="circleButton" class="button circle" title="Окружность"></div>');
+        toolbar.append('<div id="pointButton" class="sc-no-default-cmd button point" title="Точка"></div>');
+        toolbar.append('<div id="lineButton" class="sc-no-default-cmd button line" title="Прямая"></div>');
+        toolbar.append('<div id="segmentButton" class="sc-no-default-cmd button segment" title="Отрезок"></div>');
+        toolbar.append('<div id="triangleButton" class="sc-no-default-cmd button triangle" title="Треугольник"></div>');
+        toolbar.append('<div id="circleButton" class="sc-no-default-cmd button circle" title="Окружность"></div>');
+        toolbar.append('<div id="clearButton" class="sc-no-default-cmd button clear" title="Очистить"></div>');
+        toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
         toolbar.append('<div id="angleButton" class="button angle" title="Угол"></div>');
-        toolbar.append('<div id="clearButton" class="button clear" title="Очистить"></div>');
-        toolbar.append('<div id="saveToFile" class="button save" title="Сохранить"></div>');
-
-        toolbar.append('<div id="load" class="button load" title="Загрузить"></div>');
+        toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
-        toolbar.append('<div id="translateButton" class="button translate" title="Синхронизация"></div>');
-        toolbar.append('<div id="viewButton" class="button view" title="Просмотр"></div>');
-        toolbar.append('<div id="solveButton" class="button solve" title="Вычислить"></div>');
+        toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" title="Синхронизация"></div>');
+        toolbar.append('<div id="viewButton" class="sc-no-default-cmd button view" title="Просмотр"></div>');
+        toolbar.append('<div id="solveButton" class="sc-no-default-cmd button solve" title="Вычислить"></div>');
+
+        // Resolving
+        SCWeb.core.Server.resolveScAddr(['ui_control_clear_button',
+        ], function (keynodes) {
+            $('#clearButton').attr("sc_addr", keynodes['ui_control_clear_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_circle_button',
+        ], function (keynodes) {
+            $('#circleButton').attr("sc_addr", keynodes['ui_control_draw_circle_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_line_button',
+        ], function (keynodes) {
+            $('#lineButton').attr("sc_addr", keynodes['ui_control_draw_line_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_point_button',
+        ], function (keynodes) {
+            $('#pointButton').attr("sc_addr", keynodes['ui_control_draw_point_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_segment_button',
+        ], function (keynodes) {
+            $('#segmentButton').attr("sc_addr", keynodes['ui_control_draw_segment_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_triangle_button',
+        ], function (keynodes) {
+            $('#triangleButton').attr("sc_addr", keynodes['ui_control_draw_triangle_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_geometry_calculation_button',
+        ], function (keynodes) {
+            $('#solveButton').attr("sc_addr", keynodes['ui_control_geometry_calculation_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_load_button',
+        ], function (keynodes) {
+            $('#load').attr("sc_addr", keynodes['ui_control_load_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_save_button',
+        ], function (keynodes) {
+            $('#saveToFile').attr("sc_addr", keynodes['ui_control_save_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_synchronization_button',
+        ], function (keynodes) {
+            $('#translateButton').attr("sc_addr", keynodes['ui_control_synchronization_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_view_chart_arguments_button',
+        ], function (keynodes) {
+            $('#viewButton').attr("sc_addr", keynodes['ui_control_view_chart_arguments_button']);
+        });
 
         $("#pointButton").bind("contextmenu", function(e) {
             e.preventDefault();
         });
 
         $('#pointButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POINT);
@@ -108,6 +165,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#solveButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         break;
@@ -123,6 +183,9 @@ Drawings.PaintPanel.prototype = {
 
 
         $('#lineButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.LINE);
@@ -140,6 +203,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#segmentButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.SEGMENT);
@@ -157,6 +223,9 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#triangleButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.TRIANGLE);
@@ -172,7 +241,6 @@ Drawings.PaintPanel.prototype = {
         $("#triangleButton").bind("contextmenu", function(e) {
             e.preventDefault();
         });
-
 
         $('#angleButton').mousedown(function(event) {
                 switch (event.which) {
@@ -191,10 +259,10 @@ Drawings.PaintPanel.prototype = {
             e.preventDefault();
         });
 
-
-
-
         $('#circleButton').mousedown(function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.CIRCLE);
@@ -213,14 +281,23 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#clearButton').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel.model.clear();
         });
 
         $('#saveToFile').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel._saveToFile();
         });
 
         $('#load').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             $("#fileInput").click();
         });
 
@@ -229,10 +306,16 @@ Drawings.PaintPanel.prototype = {
         });
 
         $('#translateButton').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel._translate();
         });
 
         $('#viewButton').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
             paintPanel._viewBasedKeyNode();
         });
 

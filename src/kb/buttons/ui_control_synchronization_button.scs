@@ -1,0 +1,23 @@
+ui_control_synchronization_button
+=> nrel_main_idtf:
+	[кнопка синхронизации] (* <- lang_ru;; *);
+	[synchronization button] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который сохраняет содержимое редактора геометрических чертежей в базу знаний] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that saves content of geometry editor into knowledge base] (* <- lang_en;; *);; *);;
+	*);;
+
+
+

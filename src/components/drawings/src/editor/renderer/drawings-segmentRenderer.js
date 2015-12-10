@@ -34,7 +34,8 @@ Drawings.SegmentRenderer.prototype = {
             name: segment.getName(),
             straightFirst: false,
             straightLast: false,
-            strokeColor: strokeColor
+            strokeColor: strokeColor,
+            strokeWidth:4
         };
 
         return this.board.create('line', [jxgPoint1, jxgPoint2], properties);

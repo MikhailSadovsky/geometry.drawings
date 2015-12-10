@@ -78,27 +78,36 @@ Drawings.Utils = {
     generateLineName: function (line) {
         var point1Name = line.point1().getName();
         var point2Name = line.point2().getName();
-        return point1Name && point2Name ? 'Прямая(' + point1Name + ';' + point2Name + ')' : '';
+        if(point1Name == '') {point1Name = 'Point';}
+        if(point2Name == '') {point2Name = 'Point';}
+        return point1Name && point2Name ? 'Straight_Line(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     generateSegmentName: function (segment) {
         var point1Name = segment.point1().getName();
         var point2Name = segment.point2().getName();
-        return point1Name && point2Name ? 'Отр(' + point1Name + ';' + point2Name + ')' : '';
+        if(point1Name == '') {point1Name = 'Point';}
+        if(point2Name == '') {point2Name = 'Point';}
+        return point1Name && point2Name ? 'Segment(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     generateCircleName: function (circle) {
         var point1Name = circle.point1().getName();
         var point2Name = circle.point2().getName();
-        return point1Name && point2Name ? 'Окр(' + point1Name + ';' + point2Name + ')' : '';
+        if(point1Name == '') {point1Name = 'Point Centre';}
+        if(point2Name == '') {point2Name = 'Point';}
+        return point1Name && point2Name ? 'Circle(' + point1Name + ';' + point2Name + ')' : '';
     },
 
     generateTriangleName: function (triangle) {
         var point1Name = triangle.point1().getName();
         var point2Name = triangle.point2().getName();
         var point3Name = triangle.point3().getName();
+        if(point1Name == '') {point1Name = 'Point';}
+        if(point2Name == '') {point2Name = 'Point';}
+        if(point3Name == '') {point3Name = 'Point';}
         return point1Name && point2Name && point3Name ?
-        'Треугк(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
+        'Triangle(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },
 
     generateAngleName: function (angle) {

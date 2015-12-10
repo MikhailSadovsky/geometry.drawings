@@ -1,0 +1,23 @@
+ui_control_geometry_calculation_button
+=> nrel_main_idtf:
+	[кнопка геометрических вычислений] (* <- lang_ru;; *);
+	[geometry calculation button] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который осуществляет геометрические вычисления и отображает результат в поле вывода ответа] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that calls geometic calculations and shows results in the geometry answer area] (* <- lang_en;; *);; *);;
+	*);;
+
+
+

@@ -1,0 +1,24 @@
+ui_control_draw_segment_button
+<- sc_node_not_relation;
+=> nrel_main_idtf:
+	[кнопка рисования отрезка] (* <- lang_ru;; *);
+	[drawing segment button] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который включает режим рисования отрезка. В данном режиме после двух щелчков в разных местах области рисования редактора геометрических чертежей будут нарисаны две точки, через которые будет проведен отрезок] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that turns on draw segment mode. Click twice on the defferent parts of drawing space. Two points will be drawn and segment will be drawn between them.] (* <- lang_en;; *);; *);;
+	*);;
+
+
+

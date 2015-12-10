@@ -22,13 +22,14 @@ Drawings.PointRenderer.prototype = {
     _drawPoint: function (point) {
         var strokeColor = Drawings.Utils.getStrokeColor(point);
         var fillColor = Drawings.Utils.getFillColor(point);
-
+        var namePoint = (point.getName() == 'Point') ? '': point.getName();
         var properties = {
             id: point.getId(),
-            name: point.getName(),
+            name: namePoint,
             showInfobox: false,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            strokeWidth:4
         };
 
         var jxgPoint = this.board.create('point', [point.getX(), point.getY()], properties);

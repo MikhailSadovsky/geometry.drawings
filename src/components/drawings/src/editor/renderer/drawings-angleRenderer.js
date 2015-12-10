@@ -29,7 +29,6 @@ Drawings.AngleRenderer.prototype = {
         var jxgPoint3 = Drawings.Utils.getJxgObjectById(this.board, angle.point3().getId());
 
 
-
         var properties = {
             id: angle.getId(),
             name: angle.getName(),

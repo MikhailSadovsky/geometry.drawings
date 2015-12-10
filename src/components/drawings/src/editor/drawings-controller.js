@@ -231,8 +231,14 @@ Drawings.Controller.prototype = {
             var angle = new Drawings.Angle(this.points[0], this.points[1], this.points[2]);
             angle.setName(Drawings.Utils.generateAngleName(angle));
 
-            this.model.addShape(angle);
+            var segment1 = this._getOrCreateSegment(this.points[1],this.points[2]);
+            var segment2 = this._getOrCreateSegment(this.points[1],this.points[0]);
 
+            angle.segment1 = segment1;
+            angle.segment2 = segment2;
+            angle.vertex = this.points[1];
+
+            this.model.addShape(angle);
             this.points.length = 0;
         }
     },

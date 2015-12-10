@@ -83,9 +83,9 @@ Drawings.PaintPanel.prototype = {
         toolbar.append('<div id="segmentButton" class="sc-no-default-cmd button segment" title="Отрезок"></div>');
         toolbar.append('<div id="triangleButton" class="sc-no-default-cmd button triangle" title="Треугольник"></div>');
         toolbar.append('<div id="circleButton" class="sc-no-default-cmd button circle" title="Окружность"></div>');
+        toolbar.append('<div id="angleButton" class="button angle" title="Угол"></div>');
         toolbar.append('<div id="clearButton" class="sc-no-default-cmd button clear" title="Очистить"></div>');
         toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
-        toolbar.append('<div id="angleButton" class="button angle" title="Угол"></div>');
         toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
         toolbar.append('<input id="fileInput" type="file">');
         toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" title="Синхронизация"></div>');

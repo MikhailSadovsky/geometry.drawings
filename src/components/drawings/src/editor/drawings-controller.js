@@ -188,7 +188,9 @@ Drawings.Controller.prototype = {
         var possibleSegmentIndex;
         for (var i = 0; i < this.model.getShapes().length; i++) {
             if (this.model.getShapes()[i].className == "Segment") {
-                if (this.model.getShapes()[i].point1() == point1 && this.model.getShapes()[i].point2() == point2) {
+                if ((this.model.getShapes()[i].point1() == point1 && this.model.getShapes()[i].point2() == point2) ||
+                    (this.model.getShapes()[i].point1() == point2 && this.model.getShapes()[i].point2() == point1)
+                ) {
                     segmentIsExist = true;
                     possibleSegmentIndex = i;
                 }

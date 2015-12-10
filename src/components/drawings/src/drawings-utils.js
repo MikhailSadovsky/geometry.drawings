@@ -114,6 +114,9 @@ Drawings.Utils = {
         var point1Name = angle.point1().getName();
         var point2Name = angle.point2().getName();
         var point3Name = angle.point3().getName();
+        if(point1Name == '') {point1Name = 'Point';}
+        if(point2Name == '') {point2Name = 'Point';}
+        if(point3Name == '') {point3Name = 'Point';}
         return point1Name && point2Name && point3Name ?
         'Угол(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
     },

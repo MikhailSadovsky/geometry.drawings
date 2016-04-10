@@ -68,29 +68,32 @@ Drawings.PaintPanel.prototype = {
         ], function (keynodes) {
             editor.attr("sc_addr", keynodes['ui_geometry_editor']);
         });
-
-        editor.append('<textarea id="textArea" class="sc-no-default-cmd" rows="3"/>');
-        SCWeb.core.Server.resolveScAddr(['ui_geometry_answer_area',
-        ], function (keynodes) {
-            $('#textArea').attr("sc_addr", keynodes['ui_geometry_answer_area']);
-        });
             // initialize toolbar markup
         editor.append('<div id="toolbar" class="toolbar"></div>');
+        // initialize board
+        editor.append('<div id="board" class="board jxgbox"></div>');
 
         var toolbar = $('#toolbar');
-        toolbar.append('<div id="pointButton" class="sc-no-default-cmd button point" title="Точка"></div>');
-        toolbar.append('<div id="lineButton" class="sc-no-default-cmd button line" title="Прямая"></div>');
-        toolbar.append('<div id="segmentButton" class="sc-no-default-cmd button segment" title="Отрезок"></div>');
-        toolbar.append('<div id="triangleButton" class="sc-no-default-cmd button triangle" title="Треугольник"></div>');
-        toolbar.append('<div id="circleButton" class="sc-no-default-cmd button circle" title="Окружность"></div>');
-        toolbar.append('<div id="angleButton" class="button angle" title="Угол"></div>');
+
+        /*      toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
+         toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
+         toolbar.append('<input id="fileInput" type="file">');*/
+
+        toolbar.append('<div id="shapesButton" class="sc-no-default-cmd button triangle">' +
+        '<button data-toggle="clickover" data-title="" title="Выбор фигуры" data-placement="right" class="sc-no-default-cmd button triangle"></button></div>');
         toolbar.append('<div id="clearButton" class="sc-no-default-cmd button clear" title="Очистить"></div>');
-        toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
-        toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
-        toolbar.append('<input id="fileInput" type="file">');
-        toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" title="Синхронизация"></div>');
-        toolbar.append('<div id="viewButton" class="sc-no-default-cmd button view" title="Просмотр"></div>');
         toolbar.append('<div id="solveButton" class="sc-no-default-cmd button solve" title="Вычислить"></div>');
+        toolbar.append('<div id="viewButton" class="sc-no-default-cmd button view" title="Просмотр"></div>');
+        toolbar.append('<div id="translateButton" class="sc-no-default-cmd button translate" title="Синхронизация"></div>');
+
+        var allDrawButtons ='<div id="pointButton" class="sc-no-default-cmd button point" title="Точка"></div>' +
+            '<div id="lineButton" class="sc-no-default-cmd button line" title="Прямая"></div>' +
+            '<div id="segmentButton" class="sc-no-default-cmd button segment" title="Отрезок"></div>' +
+            '<div id="triangleButton" class="sc-no-default-cmd button triangle" title="Треугольник"></div>' +
+            '<div id="circleButton" class="sc-no-default-cmd button circle" title="Окружность"></div>' +
+            '<div id="angleButton" class="button angle" title="Угол"></div>';
+
+        $('#shapesButton').popover({animation:true, content:allDrawButtons, html:true});
 
         // Resolving
         SCWeb.core.Server.resolveScAddr(['ui_control_clear_button',
@@ -138,11 +141,7 @@ Drawings.PaintPanel.prototype = {
             $('#viewButton').attr("sc_addr", keynodes['ui_control_view_chart_arguments_button']);
         });
 
-        $("#pointButton").bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
-
-        $('#pointButton').mousedown(function(event) {
+        $('#toolbar').on('click', '#pointButton', function(event) {
                 if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
                     return;
                 }
@@ -181,7 +180,8 @@ Drawings.PaintPanel.prototype = {
 
 
 
-        $('#lineButton').mousedown(function(event) {
+        $('#toolbar').on('click', '#lineButton', function(event) {
+                event.preventDefault();
                 if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
                     return;
                 }
@@ -197,11 +197,8 @@ Drawings.PaintPanel.prototype = {
                 }
             }
         );
-        $("#lineButton").bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
 
-        $('#segmentButton').mousedown(function(event) {
+        $('#toolbar').on('click', '#segmentButton', function(event) {
                 if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
                     return;
                 }
@@ -217,11 +214,8 @@ Drawings.PaintPanel.prototype = {
                 }
             }
         );
-        $("#segmentButton").bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
 
-        $('#triangleButton').mousedown(function(event) {
+        $('#toolbar').on('click', '#triangleButton', function(event) {
                 if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
                     return;
                 }
@@ -237,11 +231,8 @@ Drawings.PaintPanel.prototype = {
                 }
             }
         );
-        $("#triangleButton").bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
 
-        $('#angleButton').mousedown(function(event) {
+        $('#toolbar').on('click', '#angleButton', function(event) {
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.ANGLE);
@@ -254,11 +245,8 @@ Drawings.PaintPanel.prototype = {
                 }
             }
         );
-        $("#angleButton").bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
 
-        $('#circleButton').mousedown(function(event) {
+        $('#toolbar').on('click', '#circleButton', function(event) {
                 if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
                     return;
                 }
@@ -274,10 +262,6 @@ Drawings.PaintPanel.prototype = {
                 }
             }
         );
-
-        $("#circleButton").bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
 
         $('#clearButton').click(function () {
             if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
@@ -318,8 +302,6 @@ Drawings.PaintPanel.prototype = {
             paintPanel._viewBasedKeyNode();
         });
 
-        // initialize board
-        editor.append('<div id="board" class="board jxgbox"></div>');
     },
 
     _saveToFile: function () {
@@ -373,8 +355,16 @@ Drawings.PaintPanel.prototype = {
             unitX: 20,
             unitY: 20
         };
-
         var board = JXG.JSXGraph.initBoard('board', properties);
+
+        board.create('text',[5, 6, 'Задача'],
+            {strokeColor:'blue',id:'task_txt', fontSize:'25'});
+        board.create('line',[[24,6],[24,-8]], {straightFirst:false, straightLast:false, strokeWidth:2});
+        board.create('text',[25, 5, 'Дано:'],
+            {strokeColor:'blue',id:'conditions_txt', fontSize:'20'});
+        board.create('line',[[24,-3],[42,-3]], {straightFirst:false, straightLast:false, strokeWidth:2});
+        board.create('text',[25, -4, 'Найти:'],
+            {strokeColor:'blue',id:'question_txt', fontSize:'20'});
 
         var paintPanel = this;
 

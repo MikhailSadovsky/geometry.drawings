@@ -36,10 +36,12 @@ Drawings.Controller.prototype = {
             this._handleLeftMouseDownEvent(event);
         }
         else if (event.type == 'mouseup' && event.which == LEFT_MOUSE_BUTTON) {
-            this._handleLeftMouseUpEvent(event);
-        }
-        else if (event.type == 'mousedown' && event.which == RIGHT_MOUSE_BUTTON) {
-            this._handleRightMouseDownEvent(event);
+            if (!event.shiftKey) {
+                this._handleLeftMouseUpEvent(event);
+            }
+            else {
+                this._handleLeftMouseUpShiftEvent(event);
+            }
         }
     },
 
@@ -246,7 +248,7 @@ Drawings.Controller.prototype = {
         }
     },
 
-    _handleRightMouseDownEvent: function (event) {
+    _handleLeftMouseUpShiftEvent: function (event) {
         var jxgObjects = this.paintPanel.getJxgObjects(event);
         var objects = Drawings.Utils.toModelObjects(this.model, jxgObjects);
 

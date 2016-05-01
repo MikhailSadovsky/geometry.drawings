@@ -376,6 +376,9 @@ Drawings.PaintPanel.prototype = {
             paintPanel.controller.handleEvent(event);
         });
 
+         board.on('keydown', function (event) {
+            paintPanel.controller.handleEvent(event);
+        });
         return board;
     },
 

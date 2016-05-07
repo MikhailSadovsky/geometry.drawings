@@ -11,15 +11,19 @@ Drawings.PolygonRenderer.prototype = {
     render: function (polygon) {
         var jxgPolygon = this._drawPolygon(polygon);
 
-        // if (polygon.getPerimeter() != null) {
-        //     this._drawPolygonPerimeter(jxgPolygon, polygon);
-        // }
+        if (polygon.getSquare() != null) {
+            this._drawPolygonSquare(jxgPolygon, polygon);
+        }
+        if (polygon.getPerimeter() != null) {
+            this._drawPolygonPerimeter(jxgPolygon, polygon);
+        }
     },
 
     erase: function(polygon) {
         var jxgPolygon = Drawings.Utils.getJxgObjectById(this.board, polygon.getId());
 
-        // this._erasePolygonPerimeter(jxgPolygon);
+        this._erasePolygonSquare(jxgPolygon);
+        this._erasePolygonPerimeter(jxgPolygon);
         this._erasePolygon(jxgPolygon);
     },
 
@@ -48,33 +52,66 @@ Drawings.PolygonRenderer.prototype = {
         return this.board.create('polygon', jxgPoints, properties);
     },
 
-    // _drawPolygonPerimeter: function (jxgPolygon, polygon) {
-    //     var point1 = triangle.point1();
-    //     var point2 = triangle.point2();
-    //     var point3 = triangle.point3();
+    _drawPolygonSquare: function (jxgPolygon, polygon) {
+        var means = this._getMeanPosFuncs(polygon);
 
-    //     var labelX = function () {
-    //         return (point1.getX() + point2.getX() + point3.getX()) / 3;
-    //     };
+        var properties = {
+            fontSize: 13
+        };
 
-    //     var labelY = function () {
-    //         return (point1.getY() + point2.getY() + point3.getY()) / 3 + 0.7;
-    //     };
+        jxgPolygon.textLabelSquare = this.board.create('text', [means[0], means[1], "square = " + polygon.getSquare()], properties);
+    },
 
-    //     var properties = {
-    //         fontSize: 13
-    //     };
+    _drawPolygonPerimeter: function (jxgPolygon, polygon) {
+        var means = this._getMeanPosFuncs(polygon, [0, 0.7]);
 
-    //     jxgTriangle.textLabelPerimeter = this.board.create('text', [labelX, labelY, "perimeter = " + triangle.getPerimeter()], properties);
-    // },
+        var properties = {
+            fontSize: 13
+        };
 
-    // _erasePolygonPerimeter: function(jxgPolygon) {
-    //     if (jxgPolygon.textLabelPerimeter) {
-    //         this.board.removeObject(jxgPolygon.textLabelPerimeter);
-    //     }
-    // },
+        jxgPolygon.textLabelPerimeter = this.board.create('text', [means[0], means[1], "perimeter = " + polygon.getPerimeter()], properties);
+    },
+
+    _erasePolygonSquare: function(jxgPolygon) {
+        if (jxgPolygon.textLabelSquare) {
+            this.board.removeObject(jxgPolygon.textLabelSquare);
+        }
+    },
+
+    _erasePolygonPerimeter: function(jxgPolygon) {
+        if (jxgPolygon.textLabelPerimeter) {
+            this.board.removeObject(jxgPolygon.textLabelPerimeter);
+        }
+    },
 
     _erasePolygon: function(jxgPolygon) {
         this.board.removeObject(jxgPolygon);
+    },
+
+    _getMeanPosFuncs: function (polygon, offset) {
+        var polygonPoints = polygon.getPoints();
+        if (!offset) var offset = [0, 0];
+
+        var meanX = function () {
+            var mean = 0;
+            for (var i = 0; i < polygonPoints.length; i++) {
+                mean += polygonPoints[i].getX();
+            }
+            mean /= polygonPoints.length;
+            mean += offset[0];
+            return mean;
+        }
+
+        var meanY = function () {
+            var mean = 0;
+            for (var i = 0; i < polygonPoints.length; i++) {
+                mean += polygonPoints[i].getY();
+            }
+            mean /= polygonPoints.length;
+            mean += offset[1];
+            return mean;
+        }
+
+        return [meanX, meanY];
     }
 };

@@ -127,7 +127,7 @@ Drawings.Utils = {
             if (i < points.length - 1) name += ';';
         }
 
-        return name;
+        return name + ')';
     },
 
     generateAngleName: function (angle) {

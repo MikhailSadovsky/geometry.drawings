@@ -20,6 +20,13 @@ Drawings.PolygonController.prototype = {
             }
         };
 
+        var setSquareMenuItem = {
+            text: 'Задать площадь',
+            action: function () {
+                controller._setSquareAction(polygon);
+            }
+        };
+
         var setPerimeterMenuItem = {
             text: 'Задать периметр',
             action: function () {
@@ -27,16 +34,7 @@ Drawings.PolygonController.prototype = {
             }
         };
 
-// 
-//
-// 
-        var setAsMamkuMenuItem = {
-            text: 'Отделать как твою мамку',
-            action: function () {
-            }
-        };
-
-        contextMenu.show([setNameMenuItem, setPerimeterMenuItem, setAsMamkuMenuItem]);
+        contextMenu.show([setNameMenuItem, setSquareMenuItem, setPerimeterMenuItem]);
     },
 
     handleContextDefinitionMenuEvent: function (event){
@@ -49,7 +47,7 @@ Drawings.PolygonController.prototype = {
                 SCWeb.core.Server.resolveScAddr(['rrel_finding_definition'], function (keynodes) {
                     attr = keynodes['rrel_finding_definition'];
                 });
-                SCWeb.core.Server.resolveScAddr(['concept_triangle'], function (keynodes) {
+                SCWeb.core.Server.resolveScAddr(['concept_polygon'], function (keynodes) {
                     addr = keynodes['concept_polygon'];
                     SCWeb.core.Server.resolveScAddr(["ui_menu_file_for_finding_definitions"],
                         function (data) {

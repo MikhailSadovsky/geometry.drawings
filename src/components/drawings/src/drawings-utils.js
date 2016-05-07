@@ -28,6 +28,12 @@ Drawings.Utils = {
         })
     },
 
+    selectPolygons: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Polygon;
+        })
+    },
+
     selectAngles: function (objects) {
         return objects.filter(function (object) {
             return object instanceof Drawings.Angle;

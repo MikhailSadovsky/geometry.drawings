@@ -36,6 +36,7 @@ Drawings.JsonTranslator = {
         parseMethodsMap["Segment"] = this._parseJsonSegment;
         parseMethodsMap["Circle"] = this._parseJsonCircle;
         parseMethodsMap["Triangle"] = this._parseJsonTriangle;
+        parseMethodsMap["Polygon"] = this._parseJsonPolygon;
 
         jsonShapes.forEach(function (jsonShape) {
             var shape = parseMethodsMap[jsonShape.className](jsonShape, points);
@@ -87,5 +88,20 @@ Drawings.JsonTranslator = {
         triangle.setName(jsonTriangle.name);
         triangle.setSquare(jsonTriangle.square);
         return triangle;
+    },
+
+    _parseJsonPolygon: function(jsonPolygon, points) {
+        var pointsCount = jsonPolygon.points.length;
+        var pointObjects = [];
+
+        for (var i = 0 i < pointsCount; i++) {
+            var point = Drawings.Utils.getObjectById(points, jsonPolygon.points[i].id);
+            pointObjects.push(point);
+        }
+
+        var polygon = new Drawings.Polygon(pointObjects);
+        polygon.setId(jsonPolygon.id);
+        polygon.setName(jsonPolygon.name);
+        return polygon;
     }
 };

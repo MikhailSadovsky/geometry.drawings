@@ -91,10 +91,10 @@ Drawings.JsonTranslator = {
     },
 
     _parseJsonPolygon: function(jsonPolygon, points) {
-        var pointsCount = jsonPolygon.points.length;
+        var totalPoints = jsonPolygon.points.length;
         var pointObjects = [];
 
-        for (var i = 0 i < pointsCount; i++) {
+        for (var i = 0; i < totalPoints; i++) {
             var point = Drawings.Utils.getObjectById(points, jsonPolygon.points[i].id);
             pointObjects.push(point);
         }

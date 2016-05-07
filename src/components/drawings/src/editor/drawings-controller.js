@@ -10,6 +10,7 @@ Drawings.Controller = function (paintPanel, model) {
     this.pointController = new Drawings.PointController(this.model);
     this.segmentController = new Drawings.SegmentController(this.model);
     this.triangleController = new Drawings.TriangleController(this.model);
+    this.polygonController = new Drawings.PolygonController(this.model);
     this.circleController = new Drawings.CircleController(this.model);
     this.lineController = new Drawings.LineController(this.model);
     this.angleController = new Drawings.AngleController(this.model);
@@ -137,6 +138,9 @@ Drawings.Controller.prototype = {
         else if (this.drawingMode == Drawings.DrawingMode.TRIANGLE) {
             this._createTriangleIfPossible();
         }
+        else if (this.drawingMode == Drawings.DrawingMode.POLYGON) {
+            this._createPolygonIfPossible();
+        }
         else if (this.drawingMode == Drawings.DrawingMode.CIRCLE) {
             this._createCircleIfPossible();
         }
@@ -228,6 +232,25 @@ Drawings.Controller.prototype = {
 
             this.points.length = 0;
         }
+    },
+
+    _createPolygonIfPossible: function () {
+        if (this.points.length < 3)
+            return;
+
+        var firstPoint = this.points[0].getId();
+        var lastPoint = this.points[this.points.length - 1].getId();
+
+        if (firstPoint !== lastPoint)
+            return;
+
+        var polygonPoints = this.points.slice(0, -1);
+        var polygon = new Drawings.Polygon(polygonPoints);
+        polygon.setName(Drawings.Utils.generatePolygonName(polygon));
+
+        this.model.addShape(polygon);
+
+        this.points.length = 0;
     },
 
 

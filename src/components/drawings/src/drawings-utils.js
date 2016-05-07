@@ -28,12 +28,6 @@ Drawings.Utils = {
         })
     },
 
-    selectPolygons: function (objects) {
-        return objects.filter(function (object) {
-            return object instanceof Drawings.Polygon;
-        })
-    },
-
     selectAngles: function (objects) {
         return objects.filter(function (object) {
             return object instanceof Drawings.Angle;
@@ -43,6 +37,12 @@ Drawings.Utils = {
     selectCircles: function (objects) {
         return objects.filter(function (object) {
             return object instanceof Drawings.Circle;
+        })
+    },
+
+    selectPolygons: function (objects) {
+        return objects.filter(function (object) {
+            return object instanceof Drawings.Polygon;
         })
     },
 
@@ -114,6 +114,20 @@ Drawings.Utils = {
         if(point3Name == '') {point3Name = 'Point';}
         return point1Name && point2Name && point3Name ?
         'Triangle(' + point1Name + ';' + point2Name + ';' + point3Name + ')' : '';
+    },
+
+    generatePolygonName: function (polygon) {
+        var points = polygon.getPoints();
+        var name = "Polygon(";
+
+        for (var i = 0; i < points.length; i++) {
+            var pointName = points[i].getName();
+            if (pointName == '') pointName = 'Point' + i;
+            name += pointName;
+            if (i < points.length - 1) name += ';';
+        }
+
+        return name;
     },
 
     generateAngleName: function (angle) {

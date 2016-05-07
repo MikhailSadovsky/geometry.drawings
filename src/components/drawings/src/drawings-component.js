@@ -586,6 +586,12 @@ Drawings.GeomDrawWindow = function (sandbox) {
         self.needUpdate = true;
         self.requestUpdate();
     });
+    SCWeb.core.Server.resolveScAddr(['concept_polygon',
+    ], function (keynodes) {
+        self.keynodes.polygon = keynodes['concept_polygon'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
     SCWeb.core.Server.resolveScAddr(['concept_circle',
     ], function (keynodes) {
         self.keynodes.circle = keynodes['concept_circle'];

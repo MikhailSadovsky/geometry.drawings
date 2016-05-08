@@ -63,7 +63,10 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     resOfCircles.done(function(res2){
                         var resOfTriangles = drawAllTriangles();
                         resOfTriangles.done(function(res3){
-                            SCWeb.ui.Locker.hide();
+                            drawAllPolygons()
+                            .done(function () {
+                                SCWeb.ui.Locker.hide();
+                            });
                         });
                     });
 
@@ -161,7 +164,88 @@ Drawings.GeomDrawWindow = function (sandbox) {
 
     }
 
+    function drawAllPolygons() {
+        var dfd = new jQuery.Deferred();
 
+        for (var key in scElements) {
+            var elem = scElements[key];
+            if (!elem || elem.translated) continue;
+
+            // check if element is an arc
+            if (!(elem.data.type & sc_type_arc_pos_const_perm)) continue;
+
+            var begin = elem.data.begin;
+            var end = elem.data.end;
+
+            if (!end || (begin != self.keynodes.polygon)) continue;
+
+            window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                    end,
+                    sc_type_arc_common | sc_type_const,
+                    sc_type_node | sc_type_const,
+                    sc_type_arc_pos_const_perm,
+                    self.keynodes.vertex]
+            )
+            .done(function (res) {
+                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_3F_A_A, [
+                        self.keynodes.point,
+                        sc_type_arc_pos_const_perm,
+                        sc_type_node | sc_type_const]
+                )
+                .done(function (iteratingPoints) {
+                    var pointsAddrs = [];
+
+                    for(var resInd = 0; resInd < res.length; resInd++ )
+                    for(var i = 0; i < iteratingPoints.length; i++) {
+                        var point = res[resInd][2];
+                        if(point == iteratingPoints[i][2]) {
+                            pointsAddrs.push(point);
+                        }
+                    }
+
+                    var polygonPoints = [];
+                    var modelPoints = self.model.points;
+                    for (var i = 0; i < pointsAddrs.length; i++) {
+                        var pointAddr = pointsAddrs[i];
+                        for (var k = 0; k < modelPoints.length; k++) {
+                            if (modelPoints[k].sc_addr == pointAddr) {
+                                polygonPoints.push(modelPoints[k]);
+                                break;
+                            }
+                        }
+                    }
+
+                    var polygon = new Drawings.Polygon(polygonPoints);
+                    polygon.sc_addr = end;
+                    self.model.addShape(polygon);
+
+                    var board = self.paintPanel.board;
+                    document.getElementById(Drawings.Utils.getJxgObjectById(board, polygon.getId()).rendNode.id)
+                        .setAttribute('sc_addr', end);
+                    document.getElementById(Drawings.Utils.getJxgObjectById(board, polygon.getId()).rendNode.id)
+                        .setAttribute("class", 'sc-no-default-cmd');
+                    
+                    translateRelation(end, self.keynodes.area)
+                    .done(function(square) {
+                        polygon.setSquare(square);
+                        self.model.updated([polygon]);
+                    });
+
+                    translateRelation(end, self.keynodes.perimeter)
+                    .done(function(perimeter) {
+                        polygon.setPerimeter(perimeter);
+                        self.model.updated([polygon]);
+                    });
+
+                    elem.translated = true;
+                    dfd.resolve();
+                });
+            });
+        }
+
+        // dfd.resolve();
+        return dfd.promise();
+    }
 
 
     function drawAllCircles() {
@@ -465,6 +549,22 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addPoint(point3);
                     self.model.addShape(triangle);
                     document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
+                    obj.translated = true;
+                } else if (end && (begin == self.keynodes.polygon)) {
+                    console.log("update draw polygon");
+                    var polygonPoints = [];
+
+                    // TODO Take real number of points?
+                    polygonPoints.length = Math.floor(Math.random() * 5 + 3); // 3 to 8 points
+
+                    for (var i = 0; i < polygonPoints.length; i++) {
+                        polygonPoints[i] = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                    }
+
+                    var polygon = new Drawings.Polygon(polygonPoints);
+                    self.model.addPoints(polygonPoints);
+                    self.model.addShape(polygon);
+                    document.getElementById(self.model.paintPanel._getJxgObjectById(polygon.getId()).rendNode.id).setAttribute('sc_addr', end);
                     obj.translated = true;
                 } else if (end && (begin == self.keynodes.circle)) {
                     console.log("update draw circle");

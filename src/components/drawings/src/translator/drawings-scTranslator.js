@@ -56,6 +56,7 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("nrel_perimeter"));
         my_array.push(this.getKeyNode("concept_square"));
         my_array.push(this.getKeyNode("chart_arguments"));
+        my_array.push(this.getKeyNode("concept_polygon"));
         my_array.push(this.getKeyNode("sc_garbage")); // 15
         $.when.apply($, my_array).done(function () {
             dfd.resolve(my_array);
@@ -415,6 +416,18 @@ Drawings.ScTranslator = {
 
                 }
 
+                if (shape.className == 'Polygon') {
+                    shapeType = self.concept_polygon;
+                    for (var i = 0; i < points.length; i++) {
+                        self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    }
+                    for (var i = 0; i < shape.segments.length; i++) {
+                        self.addFiveConstructionIntoBase(r, shape.segments[i].sc_addr, self.nrel_side,
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    }
+                }
+
                 if ("" != shape.name) {
                     window.sctpClient.create_link().done(function (res) {
                         window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
@@ -505,6 +518,7 @@ Drawings.ScTranslator = {
         sysArray.push(self.nrel_perimeter);
         sysArray.push(self.concept_square);
         sysArray.push(self.chart_arguments);
+        sysArray.push(self.concept_polygon);
         sysArray.push(self.sc_garbage);
         dfd.resolve(sysArray);
         return dfd.promise();

@@ -8,6 +8,7 @@
         "src/model/drawings-line.js",
         "src/model/drawings-segment.js",
         "src/model/drawings-triangle.js",
+        "src/model/drawings-polygon.js",
         "src/model/drawings-circle.js",
         "src/model/drawings-model.js",
         "src/model/drawings-angle.js",
@@ -24,12 +25,14 @@
         "src/editor/renderer/drawings-lineRenderer.js",
         "src/editor/renderer/drawings-segmentRenderer.js",
         "src/editor/renderer/drawings-triangleRenderer.js",
+        "src/editor/renderer/drawings-polygonRenderer.js",
         "src/editor/renderer/drawings-circleRenderer.js",
         "src/editor/renderer/drawings-angleRenderer.js",
 
         "src/editor/controller/drawings-pointController.js",
         "src/editor/controller/drawings-segmentController.js",
         "src/editor/controller/drawings-triangleController.js",
+        "src/editor/controller/drawings-polygonController.js",
         "src/editor/controller/drawings-circleController.js",
         "src/editor/controller/drawings-lineController.js",
         "src/editor/controller/drawings-angleController.js"

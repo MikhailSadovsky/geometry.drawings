@@ -54,6 +54,11 @@
     background-size: cover;
 }
 
+.geometryEditor .toolbar .button.polygon {
+    background: url("../images/drawings/polygon.png") no-repeat;
+    background-size: cover;
+}
+
 .geometryEditor .toolbar .button.circle {
     background: url("../images/drawings/circle.jpg") no-repeat;
     background-size: cover;

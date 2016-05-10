@@ -10,6 +10,7 @@ Drawings.Controller = function (paintPanel, model) {
     this.pointController = new Drawings.PointController(this.model);
     this.segmentController = new Drawings.SegmentController(this.model);
     this.triangleController = new Drawings.TriangleController(this.model);
+    this.polygonController = new Drawings.PolygonController(this.model);
     this.circleController = new Drawings.CircleController(this.model);
     this.lineController = new Drawings.LineController(this.model);
     this.angleController = new Drawings.AngleController(this.model);
@@ -137,6 +138,9 @@ Drawings.Controller.prototype = {
         else if (this.drawingMode == Drawings.DrawingMode.TRIANGLE) {
             this._createTriangleIfPossible();
         }
+        else if (this.drawingMode == Drawings.DrawingMode.POLYGON) {
+            this._createPolygonIfPossible();
+        }
         else if (this.drawingMode == Drawings.DrawingMode.CIRCLE) {
             this._createCircleIfPossible();
         }
@@ -230,6 +234,41 @@ Drawings.Controller.prototype = {
         }
     },
 
+    _createPolygonIfPossible: function () {
+        // [Working] Deny point repeat
+        //
+        // var lastPoint = this.points[this.points.length - 1];
+        // var index = this.points.indexOf(lastPoint);
+        // if (index > 0 && index < this.points.length - 1) {
+        //     this.points.pop();
+        //     return;
+        // }
+
+        if (this.points.length < 3)
+            return;
+
+        var firstPoint = this.points[0];
+        var lastPoint = this.points[this.points.length - 1];
+
+        if (firstPoint !== lastPoint)
+            return;
+
+        var polygonPoints = this.points.slice(0, -1);
+        var polygon = new Drawings.Polygon(polygonPoints);
+        polygon.setName(Drawings.Utils.generatePolygonName(polygon));
+
+        polygon.segments = [];
+        for (var i = 0; i < polygonPoints.length; i++) {
+            var nextIndex = i < polygonPoints.length - 1 ? i + 1 : 0;
+            var segment = this._getOrCreateSegment(this.points[i], this.points[nextIndex]);
+            polygon.segments.push(segment);
+        }
+
+        this.model.addShape(polygon);
+
+        this.points.length = 0;
+    },
+
 
     _createAngleIfPossible: function () {
         if (this.points.length == 3) {
@@ -255,6 +294,7 @@ Drawings.Controller.prototype = {
         var points = Drawings.Utils.selectPoints(objects);
         var segments = Drawings.Utils.selectSegments(objects);
         var triangles = Drawings.Utils.selectTriangles(objects);
+        var polygons = Drawings.Utils.selectPolygons(objects);
         var circles = Drawings.Utils.selectCircles(objects);
         var angles = Drawings.Utils.selectAngles(objects);
 
@@ -274,12 +314,14 @@ Drawings.Controller.prototype = {
             var jxgTriangle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), triangles[0].getId());
             this.triangleController.handleContextMenuEvent(jxgTriangle, event);
         }
+        else if (polygons.length > 0) {
+            var jxgPolygon = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), polygons[0].getId());
+            this.polygonController.handleContextMenuEvent(jxgPolygon, event);
+        }
         else if (circles.length > 0) {
             var jxgCircle = Drawings.Utils.getJxgObjectById(this.paintPanel.getBoard(), circles[0].getId());
             this.angleController.handleContextMenuEvent(jxgCircle, event);
         }
-
-
     },
 
     _getDistanceBetweenEvents: function (event1, event2) {

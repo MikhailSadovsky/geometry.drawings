@@ -29,6 +29,7 @@ Drawings.PaintPanel.prototype = {
         this.rendererMap["Line"] = new Drawings.LineRenderer(this.board);
         this.rendererMap["Segment"] = new Drawings.SegmentRenderer(this.board);
         this.rendererMap["Triangle"] = new Drawings.TriangleRenderer(this.board);
+        this.rendererMap["Polygon"] = new Drawings.PolygonRenderer(this.board);
         this.rendererMap["Circle"] = new Drawings.CircleRenderer(this.board);
         this.rendererMap["Angle"] = new Drawings.AngleRenderer(this.board);
     },
@@ -90,6 +91,7 @@ Drawings.PaintPanel.prototype = {
             '<div id="lineButton" class="sc-no-default-cmd button line" title="Прямая"></div>' +
             '<div id="segmentButton" class="sc-no-default-cmd button segment" title="Отрезок"></div>' +
             '<div id="triangleButton" class="sc-no-default-cmd button triangle" title="Треугольник"></div>' +
+            '<div id="polygonButton" class="sc-no-default-cmd button polygon" title="Многоугольник"></div>' +
             '<div id="circleButton" class="sc-no-default-cmd button circle" title="Окружность"></div>' +
             '<div id="angleButton" class="button angle" title="Угол"></div>';
 
@@ -119,6 +121,10 @@ Drawings.PaintPanel.prototype = {
         SCWeb.core.Server.resolveScAddr(['ui_control_draw_triangle_button',
         ], function (keynodes) {
             $('#triangleButton').attr("sc_addr", keynodes['ui_control_draw_triangle_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_draw_polygon_button',
+        ], function (keynodes) {
+            $('#polygonButton').attr("sc_addr", keynodes['ui_control_draw_polygon_button']);
         });
         SCWeb.core.Server.resolveScAddr(['ui_control_geometry_calculation_button',
         ], function (keynodes) {
@@ -222,6 +228,23 @@ Drawings.PaintPanel.prototype = {
                 switch (event.which) {
                     case 1:
                         paintPanel.controller.setDrawingMode(Drawings.DrawingMode.TRIANGLE);
+                        break;
+                    case 3:
+                        paintPanel.controller.triangleController.handleContextDefinitionMenuEvent(event);
+                        break;
+                    default:
+                        alert('You have a strange Mouse!');
+                }
+            }
+        );
+
+        $('#toolbar').on('click', '#polygonButton', function(event) {
+                if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                    return;
+                }
+                switch (event.which) {
+                    case 1:
+                        paintPanel.controller.setDrawingMode(Drawings.DrawingMode.POLYGON);
                         break;
                     case 3:
                         paintPanel.controller.triangleController.handleContextDefinitionMenuEvent(event);

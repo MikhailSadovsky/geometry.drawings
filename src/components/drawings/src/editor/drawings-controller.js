@@ -37,11 +37,10 @@ Drawings.Controller.prototype = {
             this._handleLeftMouseDownEvent(event);
         }
         else if (event.type == 'mouseup' && event.which == LEFT_MOUSE_BUTTON) {
-            if (!event.shiftKey) {
-                this._handleLeftMouseUpEvent(event);
-            }
-            else {
-                this._handleLeftMouseUpShiftEvent(event);
+            if (event.shiftKey){
+                this._handleRightMouseDownEvent(event);
+            } else {
+            this._handleLeftMouseUpEvent(event);
             }
         }
     },

@@ -38,10 +38,9 @@ Drawings.Controller.prototype = {
         }
         else if (event.type == 'mouseup' && event.which == LEFT_MOUSE_BUTTON) {
             if (event.shiftKey){
-                this._handleRightMouseDownEvent(event);
-            } else {
-            this._handleLeftMouseUpEvent(event);
+                this._handleLeftShiftEvent(event);
             }
+            this._handleLeftMouseUpEvent(event);
         }
     },
 
@@ -286,7 +285,7 @@ Drawings.Controller.prototype = {
         }
     },
 
-    _handleLeftMouseUpShiftEvent: function (event) {
+    _handleLeftShiftEvent: function (event) {
         var jxgObjects = this.paintPanel.getJxgObjects(event);
         var objects = Drawings.Utils.toModelObjects(this.model, jxgObjects);
 

@@ -76,9 +76,9 @@ Drawings.PaintPanel.prototype = {
 
         var toolbar = $('#toolbar');
 
-        /*      toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
-         toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
-         toolbar.append('<input id="fileInput" type="file">');*/
+        toolbar.append('<div id="saveToFile" class="sc-no-default-cmd button save" title="Сохранить"></div>');
+        toolbar.append('<div id="load" class="sc-no-default-cmd button load" title="Загрузить"></div>');
+        toolbar.append('<input id="fileInput" type="file">');
 
         toolbar.append('<div id="shapesButton" class="sc-no-default-cmd button triangle">' +
         '<button data-toggle="clickover" data-title="" title="Выбор фигуры" data-placement="right" class="sc-no-default-cmd button triangle"></button></div>');

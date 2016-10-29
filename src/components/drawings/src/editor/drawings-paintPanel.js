@@ -13,7 +13,7 @@ Drawings.PaintPanel = function (containerId, model) {
 
     this.rendererMap = {};
 };
-
+Drawings.PaintPanel.paintObjects = [];
 Drawings.PaintPanel.prototype = {
 
     init: function () {
@@ -82,9 +82,14 @@ Drawings.PaintPanel.prototype = {
                 applet3d.attr("sc_addr", keynodes['ui_applet3d']);
         });
         editor.append("<div id='applet_container'></div>");
-        this._initGeometryApplet();       
+        this._initGeometryApplet();
+        var names = [];
+        setTimeout(function() {
+        // register add, remove, rename and update listeners
+            var applet = document.ggbApplet;
+            applet.registerAddListener('controlAddListener');
+        }, 8000);
     },
-
     _initGeometryApplet: function() {
         var parameters = {
             "id":"ggbApplet",
@@ -102,16 +107,25 @@ Drawings.PaintPanel.prototype = {
             "capturingThreshold":null,
             "showToolBarHelp":false,
             "errorDialogsActive":true,
-            "useBrowserForJS":false,
+            "useBrowserForJS":true,
             "allowStyleBar":false};
-        var applet = new GGBApplet(parameters, '5.0', 'applet_container');
+        var applet = new GGBApplet(parameters, '5.0');
+
         applet.inject('applet_container');
         $('#applet2d').click(function(event) {
             ggbApplet.setPerspective('2');
-            ggbApplet.setLogging('true');
+            //ggbApplet.setLogging('true');
         });
         $('#applet3d').click(function() {
             ggbApplet.setPerspective('5');
-        })
+        });
     }
 };
+function controlAddListener(objName) {
+    var objects = this.Drawings.PaintPanel.paintObjects;
+    var object = {
+        'name': objName,
+        'type': ggbApplet.getObjectType(objName)
+    };
+    objects.splice(objects, 0, object);
+}

@@ -1,0 +1,21 @@
+ui_applet2d
+<- sc_node_not_relation;
+=> nrel_main_idtf:
+	[редактор 2D чертежей] (* <- lang_ru;; *);
+	[2D editor] (* <- lang_en;; *);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [элемент управления, который позволяет осуществлять создание и редактирование 2D геометрических чертежей] (* <- lang_ru;; *);; *);;
+	*);
+
+<- rrel_key_sc_element:
+	...
+	(*
+	<- sc_explanation;;
+	<= nrel_sc_text_translation:
+		... (* -> [control that allows 2D geometric drawings creating and editing.] (* <- lang_en;; *);; *);;
+	*);;

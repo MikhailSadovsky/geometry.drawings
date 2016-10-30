@@ -81,6 +81,12 @@ Drawings.PaintPanel.prototype = {
             ], function (keynodes) {
                 applet3d.attr("sc_addr", keynodes['ui_applet3d']);
         });
+        editor.append("<button type='button' id='synchronize' class='btn btn-success sc-no-default-cmd'>синхронизация</button>");
+        var synchronize = $('#synchronize');
+        SCWeb.core.Server.resolveScAddr(['ui_control_synchronization_button',
+            ], function (keynodes) {
+                synchronize.attr("sc_addr", keynodes['ui_control_synchronization_button']);
+        });
         editor.append("<div id='applet_container'></div>");
         this._initGeometryApplet();
         var names = [];

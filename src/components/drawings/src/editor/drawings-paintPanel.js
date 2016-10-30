@@ -85,9 +85,11 @@ Drawings.PaintPanel.prototype = {
         this._initGeometryApplet();
         var names = [];
         setTimeout(function() {
-        // register add, remove, rename and update listeners
             var applet = document.ggbApplet;
-            applet.registerAddListener('controlAddListener');
+            applet.registerAddListener('addObjectListener');
+            applet.registerRemoveListener('removeObjectListener');
+            applet.registerRenameListener('renameObjectListener');
+            applet.registerUpdateListener('updateObjectListener');
         }, 8000);
     },
     _initGeometryApplet: function() {
@@ -121,11 +123,49 @@ Drawings.PaintPanel.prototype = {
         });
     }
 };
-function controlAddListener(objName) {
+function addObjectListener(objName) {
     var objects = this.Drawings.PaintPanel.paintObjects;
     var object = {
         'name': objName,
-        'type': ggbApplet.getObjectType(objName)
+        'type': ggbApplet.getObjectType(objName),
+        'xCoord': ggbApplet.getXcoord(objName),
+        'yCoord': ggbApplet.getYcoord(objName),
+        'zCoord': ggbApplet.getZcoord(objName),
+        'value': ggbApplet.getValueString(objName),
+        'defenition': ggbApplet.getDefinitionString(objName)
     };
     objects.splice(objects, 0, object);
+    console.log(objects);
+}
+function removeObjectListener(objName) {
+    var objects = this.Drawings.PaintPanel.paintObjects;
+    objects.forEach(function(item, i, objects) {
+        if (item.name === objName) {
+            objects.splice(i, 1);
+        }
+    });
+    console.log('objName', objects);
+}
+function renameObjectListener(oldObjName, newObjName) {
+    var objects = this.Drawings.PaintPanel.paintObjects;
+    objects.forEach(function(item, i, objects) {
+        if (item.name === oldObjName) {
+            item.name = newObjName;
+        }
+    });
+    console.log('objName', objects);
+}
+function updateObjectListener(objName) {
+    var objects = this.Drawings.PaintPanel.paintObjects;
+    objects.forEach(function(item, i, objects) {
+        if (item.name === objName) {
+            item.type = ggbApplet.getObjectType(objName);
+            item.xCoord = ggbApplet.getXcoord(objName);
+            item.yCoord = ggbApplet.getYcoord(objName);
+            item.zCoord = ggbApplet.getZcoord(objName);
+            item.value = ggbApplet.getValueString(objName);
+            item.defenition = ggbApplet.getDefinitionString(objName);
+        }
+    });
+    console.log('objName', objects);
 }

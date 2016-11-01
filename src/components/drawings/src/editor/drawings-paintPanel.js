@@ -97,7 +97,28 @@ Drawings.PaintPanel.prototype = {
             applet.registerRenameListener('renameObjectListener');
             applet.registerUpdateListener('updateObjectListener');
         }, 8000);
+
+       $('#synchronize').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
+            paintPanel._translate();
+	});
     },
+
+    _translate: function () {
+	var objects = Drawings.PaintPanel.paintObjects;
+	var paintPanel = this;
+	objects.forEach(function(item, i, objects) {
+		if (item.type === 'point') { 
+			var point = new Drawings.Point(item.xCoord, item.yCoord);
+			point.setName(item.name);
+			paintPanel.model.addPoint(point);
+		}
+ 	});
+        Drawings.ScTranslator.putModel(paintPanel.model);
+     },
+
     _initGeometryApplet: function() {
         var parameters = {
             "id":"ggbApplet",

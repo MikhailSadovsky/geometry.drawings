@@ -69,18 +69,18 @@ Drawings.Model.prototype = {
     },
 
     onUpdate: function (callback) {
-        this.onUpdateCallback = callback;
+       // this.onUpdateCallback = callback;
     },
 
     _added: function (objectsToAdd) {
-        this.onUpdateCallback([], objectsToAdd, [])
+      //  this.onUpdateCallback([], objectsToAdd, [])
     },
 
     _updated: function (objectsToUpdate) {
-        this.onUpdateCallback([], [], objectsToUpdate);
+      //  this.onUpdateCallback([], [], objectsToUpdate);
     },
 
     _removed: function (objectsToRemove) {
-        this.onUpdateCallback(objectsToRemove, [], []);
+       // this.onUpdateCallback(objectsToRemove, [], []);
     }
 };

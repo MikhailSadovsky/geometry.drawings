@@ -19,10 +19,6 @@ Drawings.PaintPanel.prototype = {
     init: function () {
         this._initMarkup(this.containerId);
 
-        //this.board = this._createBoard();
-
-        //this._configureModel();
-
         this.controller = new Drawings.Controller(this, this.model);
 
         this.rendererMap["Point"] = new Drawings.PointRenderer(this.board);
@@ -69,25 +65,28 @@ Drawings.PaintPanel.prototype = {
         ], function (keynodes) {
             editor.attr("sc_addr", keynodes['ui_geometry_editor']);
         });
-        editor.append("<button type='button' id='applet2d' class='btn btn-success sc-no-default-cmd'>2D</button>");
+        editor.append("<div id='objects_button'></div>");
+        editor.append("<div id='geometry_editor_container'></div>");
+        var geometry_editor_container = $('#geometry_editor_container');
+        geometry_editor_container.append("<button type='button' id='applet2d' class='btn btn-success sc-no-default-cmd'>2D</button>");
         var applet2d = $('#applet2d');
         SCWeb.core.Server.resolveScAddr(['ui_applet2d',
             ], function (keynodes) {
                 applet2d.attr("sc_addr", keynodes['ui_applet2d']);
         });
-        editor.append("<button type='button' id='applet3d' class='btn btn-success sc-no-default-cmd'>3D</button>");
+        geometry_editor_container.append("<button type='button' id='applet3d' class='btn btn-success sc-no-default-cmd'>3D</button>");
         var applet3d = $('#applet3d');
         SCWeb.core.Server.resolveScAddr(['ui_applet3d',
             ], function (keynodes) {
                 applet3d.attr("sc_addr", keynodes['ui_applet3d']);
         });
-        editor.append("<button type='button' id='synchronize' class='btn btn-success sc-no-default-cmd'>синхронизация</button>");
+        geometry_editor_container.append("<button type='button' id='synchronize' class='btn btn-success sc-no-default-cmd'>синхронизация</button>");
         var synchronize = $('#synchronize');
         SCWeb.core.Server.resolveScAddr(['ui_control_synchronization_button',
             ], function (keynodes) {
                 synchronize.attr("sc_addr", keynodes['ui_control_synchronization_button']);
         });
-        editor.append("<div id='applet_container'></div>");
+        geometry_editor_container.append("<div id='applet_container'></div>");
         this._initGeometryApplet();
         var names = [];
         setTimeout(function() {
@@ -96,14 +95,44 @@ Drawings.PaintPanel.prototype = {
             applet.registerRemoveListener('removeObjectListener');
             applet.registerRenameListener('renameObjectListener');
             applet.registerUpdateListener('updateObjectListener');
-        }, 8000);
+        }, 6000);
 
        $('#synchronize').click(function () {
             if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
                 return;
             }
             paintPanel._translate();
-	});
+	   });
+    },
+
+    _initGeometryApplet: function() {
+        var parameters = {
+            "id":"ggbApplet",
+            "showToolBar":true,
+            "borderColor":null,
+            "showMenuBar":false,
+            "showAlgebraInput":false,
+            "showResetIcon":true,
+            "showTutorialLink": false,
+            "showLogging":true,
+            "enableLabelDrags":true,
+            "enableShiftDragZoom":true,
+            "enableRightClick":true,
+            "enableDialogActive":true,
+            "capturingThreshold":null,
+            "showToolBarHelp":false,
+            "errorDialogsActive":true,
+            "useBrowserForJS":true,
+            "allowStyleBar":false};
+        var applet = new GGBApplet(parameters, '5.0');
+
+        applet.inject('applet_container');
+        $('#applet2d').click(function(event) {
+            ggbApplet.setPerspective('2');
+        });
+        $('#applet3d').click(function() {
+            ggbApplet.setPerspective('5');
+        });
     },
 
     _translate: function () {
@@ -144,39 +173,28 @@ Drawings.PaintPanel.prototype = {
             }
      	});
         Drawings.ScTranslator.putModel(paintPanel.model);
-    },
-
-    _initGeometryApplet: function() {
-        var parameters = {
-            "id":"ggbApplet",
-            "showToolBar":true,
-            "borderColor":null,
-            "showMenuBar":false,
-            "showAlgebraInput":false,
-            "showResetIcon":true,
-            "showTutorialLink": false,
-            "showLogging":true,
-            "enableLabelDrags":true,
-            "enableShiftDragZoom":true,
-            "enableRightClick":true,
-            "enableDialogActive":true,
-            "capturingThreshold":null,
-            "showToolBarHelp":false,
-            "errorDialogsActive":true,
-            "useBrowserForJS":true,
-            "allowStyleBar":false};
-        var applet = new GGBApplet(parameters, '5.0');
-
-        applet.inject('applet_container');
-        $('#applet2d').click(function(event) {
-            ggbApplet.setPerspective('2');
-            //ggbApplet.setLogging('true');
-        });
-        $('#applet3d').click(function() {
-            ggbApplet.setPerspective('5');
-        });
-    }
+    } 
 };
+
+function translateObjTypesToSc(type) {
+    switch (type) {
+        case 'point': {
+            return 'concept_geometric_point';
+            break;
+        }
+        case 'line': {
+            return 'concept_straight_line';
+            break;
+        }
+        case 'segment': {
+            return 'concept_segment';
+            break;
+        }
+        default: {
+            return 'concept_geometric_figure';
+        }
+    }
+}
 function addObjectListener(objName) {
     var objects = this.Drawings.PaintPanel.paintObjects;
     var object = {
@@ -190,7 +208,16 @@ function addObjectListener(objName) {
     };
     objects.splice(objects, 0, object);
     console.log(objects);
-}
+    $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
+    var scNode = translateObjTypesToSc(object.type);
+    var nodes;
+    SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
+        nodes = keynodes;
+            nodes.point = keynodes[scNode];
+        }
+    );
+    $('#' + objName).attr('sc_addr', nodes.point);
+};
 function removeObjectListener(objName) {
     var objects = this.Drawings.PaintPanel.paintObjects;
     objects.forEach(function(item, i, objects) {
@@ -199,6 +226,7 @@ function removeObjectListener(objName) {
         }
     });
     console.log('objName', objects);
+    $('#' + objName).remove();
 }
 function renameObjectListener(oldObjName, newObjName) {
     var objects = this.Drawings.PaintPanel.paintObjects;
@@ -208,6 +236,7 @@ function renameObjectListener(oldObjName, newObjName) {
         }
     });
     console.log('objName', objects);
+    $('#' + oldObjName).text(nexObjName);
 }
 function updateObjectListener(objName) {
     var objects = this.Drawings.PaintPanel.paintObjects;

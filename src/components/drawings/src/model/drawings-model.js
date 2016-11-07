@@ -35,9 +35,41 @@ Drawings.Model.prototype = {
         return Drawings.Utils.getObjectById(this.shapes, shapeId);
     },
 
+    getPointByName: function (name) {
+        for (var i = 0; i<this.points.length; i++){
+            if (this.points[i].name == name)
+                return this.points[i];
+        }
+        return null;
+        /*$.each(this.points, function(i, item){
+            if (item.name == name)
+                {
+                    return item;
+                }
+        });
+        return null;*/
+    },
+
+    getShapeByName: function (name) {    
+        for (var i = 0; i<this.shapes.length; i++){
+                if (this.shapes[i].name == name)
+                    return this.shapes[i];
+            }
+        return null;
+        /*$.each(this.shapes, function(i, item){
+            if (item.name == name)
+                {
+                    return item;
+                }
+        });
+        return null;*/
+    },
+ 
     addPoint: function (point) {
-        this.points.push(point);
-        this._added([point]);
+        if (this.getPointByName(point.name) == null){
+            this.points.push(point);
+            this._added([point]);
+        }
     },
 
     addPoints: function (points) {
@@ -46,8 +78,10 @@ Drawings.Model.prototype = {
     },
 
     addShape: function (shape) {
-        this.shapes.push(shape);
-        this._added([shape]);
+        if (this.getShapeByName(shape.name) == null){
+            this.shapes.push(shape);
+            this._added([shape]);
+        }
     },
 
     addShapes: function (shapes) {

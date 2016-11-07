@@ -212,11 +212,23 @@ function addObjectListener(objName) {
     var scNode = translateObjTypesToSc(object.type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
-        nodes = keynodes;
+            nodes = keynodes;
             nodes.point = keynodes[scNode];
         }
     );
     $('#' + objName).attr('sc_addr', nodes.point);
+    setTimeout(function(){
+        var number;
+        objects.forEach(function(item, i) {
+            if (item.name == objName) {
+                number = objects.length - (i + 1);
+            }
+        });
+        var elem = $('.elem')[number];
+        var margin = ($(elem).outerHeight(true) - 20) / 2;
+        $('#' + objName).css('margin', margin + 'px 0px');
+        $('.marblePanel').css('display', 'none');
+    }, 200);
 };
 function removeObjectListener(objName) {
     var objects = this.Drawings.PaintPanel.paintObjects;

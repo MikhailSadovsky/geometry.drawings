@@ -107,49 +107,44 @@ Drawings.PaintPanel.prototype = {
     },
 
     _translate: function () {
-	var objects = Drawings.PaintPanel.paintObjects;
-	var paintPanel = this;
-	objects.forEach(function(item, i, objects) {
-		if (item.type === 'point') { 
-			var point = new Drawings.Point(item.xCoord, item.yCoord);
-			point.setName(item.name);
-			paintPanel.model.addPoint(point);
-		}
-		else
-		if (item.type === 'segment') {
-            //console.log(item.name);
-            var pointOneName = item.defenition.substring(item.defenition.indexOf("[")+1, item.defenition.indexOf(", "));
-            var pointOne = paintPanel.model.getPointByName(pointOneName);
-            if (pointOne == null)
-                objects.forEach(function(item, i, objects) {
-                    if (item.name == pointOneName){
-                        pointOne = new Drawings.Point(item.xCoord, item.yCoord);
-                        pointOne.setName(item.name);
-                        paintPanel.model.addPoint(pointOne);
-                    }
-                });
-            var pointTwoName = item.defenition.substring(item.defenition.indexOf(", ")+2, item.defenition.indexOf("]"));
-            var pointTwo = paintPanel.model.getPointByName(pointTwoName);
-            if (pointTwo == null)
-                objects.forEach(function(item, i, objects) {
-                    if (item.name == pointTwoName){
-                        pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
-                        pointTwo.setName(item.name);
-                        paintPanel.model.addPoint(pointTwo);
-                    }
-                });
-            var segment = new Drawings.Segment(pointOne, pointTwo);
-            segment.setLength(Math.sqrt(Math.pow(pointOne.x-pointTwo.x,2)+Math.pow(pointOne.y-pointTwo.y,2)));
-            segment.name = Drawings.Utils.generateSegmentName(segment);
-            paintPanel.model.addShape(segment);
-            /*var segment = new Drawings.Segment(point, point);
-            console.log("Segment, motherfucker!");
-            point.setName(item.name);
-            paintPanel.model.addPoint(point);*/
-        }
- 	});
+    	var objects = Drawings.PaintPanel.paintObjects;
+    	var paintPanel = this;
+    	objects.forEach(function(item, i, objects) {
+    		if (item.type === 'point') { 
+    			var point = new Drawings.Point(item.xCoord, item.yCoord);
+    			point.setName(item.name);
+    			paintPanel.model.addPoint(point);
+    		}
+    		else
+    		if (item.type === 'segment') {
+                var pointOneName = item.defenition.substring(item.defenition.indexOf("[")+1, item.defenition.indexOf(", "));
+                var pointOne = paintPanel.model.getPointByName(pointOneName);
+                if (pointOne == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointOneName){
+                            pointOne = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointOne.setName(item.name);
+                            paintPanel.model.addPoint(pointOne);
+                        }
+                    });
+                var pointTwoName = item.defenition.substring(item.defenition.indexOf(", ")+2, item.defenition.indexOf("]"));
+                var pointTwo = paintPanel.model.getPointByName(pointTwoName);
+                if (pointTwo == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointTwoName){
+                            pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointTwo.setName(item.name);
+                            paintPanel.model.addPoint(pointTwo);
+                        }
+                    });
+                var segment = new Drawings.Segment(pointOne, pointTwo);
+                segment.setLength(item.value);
+                segment.name = Drawings.Utils.generateSegmentName(segment);
+                paintPanel.model.addShape(segment);
+            }
+     	});
         Drawings.ScTranslator.putModel(paintPanel.model);
-     },
+    },
 
     _initGeometryApplet: function() {
         var parameters = {

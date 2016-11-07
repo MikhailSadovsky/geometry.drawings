@@ -97,7 +97,55 @@ Drawings.PaintPanel.prototype = {
             applet.registerRenameListener('renameObjectListener');
             applet.registerUpdateListener('updateObjectListener');
         }, 8000);
+
+       $('#synchronize').click(function () {
+            if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {
+                return;
+            }
+            paintPanel._translate();
+	});
     },
+
+    _translate: function () {
+    	var objects = Drawings.PaintPanel.paintObjects;
+    	var paintPanel = this;
+    	objects.forEach(function(item, i, objects) {
+    		if (item.type === 'point') { 
+    			var point = new Drawings.Point(item.xCoord, item.yCoord);
+    			point.setName(item.name);
+    			paintPanel.model.addPoint(point);
+    		}
+    		else
+    		if (item.type === 'segment') {
+                var pointOneName = item.defenition.substring(item.defenition.indexOf("[")+1, item.defenition.indexOf(", "));
+                var pointOne = paintPanel.model.getPointByName(pointOneName);
+                if (pointOne == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointOneName){
+                            pointOne = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointOne.setName(item.name);
+                            paintPanel.model.addPoint(pointOne);
+                        }
+                    });
+                var pointTwoName = item.defenition.substring(item.defenition.indexOf(", ")+2, item.defenition.indexOf("]"));
+                var pointTwo = paintPanel.model.getPointByName(pointTwoName);
+                if (pointTwo == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointTwoName){
+                            pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointTwo.setName(item.name);
+                            paintPanel.model.addPoint(pointTwo);
+                        }
+                    });
+                var segment = new Drawings.Segment(pointOne, pointTwo);
+                segment.setLength(item.value);
+                segment.name = Drawings.Utils.generateSegmentName(segment);
+                paintPanel.model.addShape(segment);
+            }
+     	});
+        Drawings.ScTranslator.putModel(paintPanel.model);
+    },
+
     _initGeometryApplet: function() {
         var parameters = {
             "id":"ggbApplet",

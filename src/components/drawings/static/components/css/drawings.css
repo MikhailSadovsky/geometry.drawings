@@ -22,5 +22,8 @@
     border-color: rgb(0, 0, 255);
 }
 #geometry_applet_container {
-    diaplay: inline-block;
+    display: inline-block;
+}
+#applet_container {
+    display: inline-block;
 }

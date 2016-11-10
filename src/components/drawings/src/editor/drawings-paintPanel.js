@@ -146,7 +146,7 @@ Drawings.PaintPanel.prototype = {
     		}
     		else
     		if (item.type === 'segment') {
-                var pointOneName = item.defenition.substring(item.defenition.indexOf("[")+1, item.defenition.indexOf(", "));
+                var pointOneName = item.definition.substring(item.definition.indexOf("[")+1, item.definition.indexOf(", "));
                 var pointOne = paintPanel.model.getPointByName(pointOneName);
                 if (pointOne == null)
                     objects.forEach(function(item, i, objects) {
@@ -156,7 +156,7 @@ Drawings.PaintPanel.prototype = {
                             paintPanel.model.addPoint(pointOne);
                         }
                     });
-                var pointTwoName = item.defenition.substring(item.defenition.indexOf(", ")+2, item.defenition.indexOf("]"));
+                var pointTwoName = item.definition.substring(item.definition.indexOf(", ")+2, item.definition.indexOf("]"));
                 var pointTwo = paintPanel.model.getPointByName(pointTwoName);
                 if (pointTwo == null)
                     objects.forEach(function(item, i, objects) {
@@ -170,6 +170,33 @@ Drawings.PaintPanel.prototype = {
                 segment.setLength(item.value.substring(item.value.indexOf("= ")+2, item.value.length));
                 segment.name = Drawings.Utils.generateSegmentName(segment);
                 paintPanel.model.addShape(segment);
+            }
+            else 
+            if (item.type === 'line') {
+            	var pos = 0;
+                var pointOneName = item.definition.substring(13, pos = item.definition.indexOf(" ", 14));
+                var pointOne = paintPanel.model.getPointByName(pointOneName);
+                if (pointOne == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointOneName){
+                            pointOne = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointOne.setName(item.name);
+                            paintPanel.model.addPoint(pointOne);
+                        }
+                    });
+                var pointTwoName = item.definition.substring(pos + 3, item.definition.length);
+                var pointTwo = paintPanel.model.getPointByName(pointTwoName);
+                if (pointTwo == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointTwoName){
+                            pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointTwo.setName(item.name);
+                            paintPanel.model.addPoint(pointTwo);
+                        }
+                    });
+                var line = new Drawings.Line(pointOne, pointTwo);
+                line.name = Drawings.Utils.generateLineName(line);
+                paintPanel.model.addShape(line);
             }
      	});
         Drawings.ScTranslator.putModel(paintPanel.model);
@@ -204,7 +231,7 @@ function addObjectListener(objName) {
         'yCoord': ggbApplet.getYcoord(objName),
         'zCoord': ggbApplet.getZcoord(objName),
         'value': ggbApplet.getValueString(objName),
-        'defenition': ggbApplet.getDefinitionString(objName)
+        'definition': ggbApplet.getDefinitionString(objName)
     };
     objects.splice(objects, 0, object);
     console.log(objects);
@@ -259,7 +286,7 @@ function updateObjectListener(objName) {
             item.yCoord = ggbApplet.getYcoord(objName);
             item.zCoord = ggbApplet.getZcoord(objName);
             item.value = ggbApplet.getValueString(objName);
-            item.defenition = ggbApplet.getDefinitionString(objName);
+            item.definition = ggbApplet.getDefinitionString(objName);
         }
     });
     console.log('objName', objects);

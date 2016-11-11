@@ -167,7 +167,7 @@ Drawings.PaintPanel.prototype = {
                         }
                     });
                 var segment = new Drawings.Segment(pointOne, pointTwo);
-                segment.setLength(item.value);
+                segment.setLength(item.value.substring(item.value.indexOf("= ")+2, item.value.length));
                 segment.name = Drawings.Utils.generateSegmentName(segment);
                 paintPanel.model.addShape(segment);
             }

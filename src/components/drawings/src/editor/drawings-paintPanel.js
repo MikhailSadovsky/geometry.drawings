@@ -14,6 +14,7 @@ Drawings.PaintPanel = function (containerId, model) {
     this.rendererMap = {};
 };
 Drawings.PaintPanel.paintObjects = [];
+Drawings.PaintPanel.paintPoints = [];
 Drawings.PaintPanel.prototype = {
 
     init: function () {
@@ -217,33 +218,52 @@ function translateObjTypesToSc(type) {
             return 'concept_segment';
             break;
         }
+        case 'triangle': {
+            return 'concept_triangle';
+            break;
+        }
+        case 'circle': {
+            return 'concept_circle';
+            break;
+        }
         default: {
             return 'concept_geometric_figure';
         }
     }
 }
 function addObjectListener(objName) {
-    var objects = this.Drawings.PaintPanel.paintObjects;
-    var object = {
+    var objects = ggbApplet.getObjectType(objName) === 'point'
+        ? this.Drawings.PaintPanel.paintObjects
+        : this.Drawings.PaintPanel.paintPoints;
+
+    var object = ggbApplet.getObjectType(objName) === 'point' ?
+    {
         'name': objName,
         'type': ggbApplet.getObjectType(objName),
         'xCoord': ggbApplet.getXcoord(objName),
         'yCoord': ggbApplet.getYcoord(objName),
         'zCoord': ggbApplet.getZcoord(objName),
         'value': ggbApplet.getValueString(objName),
-        'definition': ggbApplet.getDefinitionString(objName)
+        'defenition': ggbApplet.getDefinitionString(objName)
+    }
+    : {
+        'name': objName,
+        'type': ggbApplet.getObjectType(objName),
+        'value': ggbApplet.getValueString(objName),
+        'defenition': ggbApplet.getDefinitionString(objName)
     };
     objects.splice(objects, 0, object);
     console.log(objects);
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
-    var scNode = translateObjTypesToSc(object.type);
+    var type = object.type;
+    var scNode = translateObjTypesToSc(type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
             nodes = keynodes;
-            nodes.point = keynodes[scNode];
+            nodes[type] = keynodes[scNode];
+            $('#' + objName).attr('sc_addr', nodes[type]);
         }
     );
-    $('#' + objName).attr('sc_addr', nodes.point);
     setTimeout(function(){
         var number;
         objects.forEach(function(item, i) {

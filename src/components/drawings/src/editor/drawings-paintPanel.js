@@ -137,7 +137,7 @@ Drawings.PaintPanel.prototype = {
     },
 
     _translate: function () {
-    	var objects = Drawings.PaintPanel.paintObjects;
+        var objects = Drawings.PaintPanel.paintPoints;
     	var paintPanel = this;
     	objects.forEach(function(item, i, objects) {
     		if (item.type === 'point') { 
@@ -145,7 +145,9 @@ Drawings.PaintPanel.prototype = {
     			point.setName(item.name);
     			paintPanel.model.addPoint(point);
     		}
-    		else
+        });
+        objects = Drawings.PaintPanel.paintObjects;
+        objects.forEach(function(item,i, objects){
     		if (item.type === 'segment') {
                 var pointOneName = item.definition.substring(item.definition.indexOf("[")+1, item.definition.indexOf(", "));
                 var pointOne = paintPanel.model.getPointByName(pointOneName);
@@ -226,6 +228,12 @@ function translateObjTypesToSc(type) {
             return 'concept_circle';
             break;
         }
+        case 'angle': {
+            return 'concept_angle';
+        }
+        case 'polygon': {
+            return 'concept_polygon';
+        }
         default: {
             return 'concept_geometric_figure';
         }
@@ -244,13 +252,13 @@ function addObjectListener(objName) {
         'yCoord': ggbApplet.getYcoord(objName),
         'zCoord': ggbApplet.getZcoord(objName),
         'value': ggbApplet.getValueString(objName),
-        'defenition': ggbApplet.getDefinitionString(objName)
+        'definition': ggbApplet.getDefinitionString(objName)
     }
     : {
         'name': objName,
         'type': ggbApplet.getObjectType(objName),
         'value': ggbApplet.getValueString(objName),
-        'defenition': ggbApplet.getDefinitionString(objName)
+        'definition': ggbApplet.getDefinitionString(objName)
     };
     objects.splice(objects, 0, object);
     console.log(objects);

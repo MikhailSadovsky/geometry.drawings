@@ -14,6 +14,7 @@ Drawings.PaintPanel = function (containerId, model) {
     this.rendererMap = {};
 };
 Drawings.PaintPanel.paintObjects = [];
+Drawings.PaintPanel.paintPoints = [];
 Drawings.PaintPanel.prototype = {
 
     init: function () {
@@ -136,7 +137,7 @@ Drawings.PaintPanel.prototype = {
     },
 
     _translate: function () {
-    	var objects = Drawings.PaintPanel.paintObjects;
+        var objects = Drawings.PaintPanel.paintPoints;
     	var paintPanel = this;
     	objects.forEach(function(item, i, objects) {
     		if (item.type === 'point') { 
@@ -144,7 +145,9 @@ Drawings.PaintPanel.prototype = {
     			point.setName(item.name);
     			paintPanel.model.addPoint(point);
     		}
-    		else
+        });
+        objects = Drawings.PaintPanel.paintObjects;
+        objects.forEach(function(item,i, objects){
     		if (item.type === 'segment') {
                 var pointOneName = item.definition.substring(item.definition.indexOf("[")+1, item.definition.indexOf(", "));
                 var pointOne = paintPanel.model.getPointByName(pointOneName);
@@ -217,14 +220,32 @@ function translateObjTypesToSc(type) {
             return 'concept_segment';
             break;
         }
+        case 'triangle': {
+            return 'concept_triangle';
+            break;
+        }
+        case 'circle': {
+            return 'concept_circle';
+            break;
+        }
+        case 'angle': {
+            return 'concept_angle';
+        }
+        case 'polygon': {
+            return 'concept_polygon';
+        }
         default: {
             return 'concept_geometric_figure';
         }
     }
 }
 function addObjectListener(objName) {
-    var objects = this.Drawings.PaintPanel.paintObjects;
-    var object = {
+    var objects = ggbApplet.getObjectType(objName) === 'point'
+        ? this.Drawings.PaintPanel.paintObjects
+        : this.Drawings.PaintPanel.paintPoints;
+
+    var object = ggbApplet.getObjectType(objName) === 'point' ?
+    {
         'name': objName,
         'type': ggbApplet.getObjectType(objName),
         'xCoord': ggbApplet.getXcoord(objName),
@@ -232,18 +253,25 @@ function addObjectListener(objName) {
         'zCoord': ggbApplet.getZcoord(objName),
         'value': ggbApplet.getValueString(objName),
         'definition': ggbApplet.getDefinitionString(objName)
+    }
+    : {
+        'name': objName,
+        'type': ggbApplet.getObjectType(objName),
+        'value': ggbApplet.getValueString(objName),
+        'definition': ggbApplet.getDefinitionString(objName)
     };
     objects.splice(objects, 0, object);
     console.log(objects);
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
-    var scNode = translateObjTypesToSc(object.type);
+    var type = object.type;
+    var scNode = translateObjTypesToSc(type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
             nodes = keynodes;
-            nodes.point = keynodes[scNode];
+            nodes[type] = keynodes[scNode];
+            $('#' + objName).attr('sc_addr', nodes[type]);
         }
     );
-    $('#' + objName).attr('sc_addr', nodes.point);
     setTimeout(function(){
         var number;
         objects.forEach(function(item, i) {

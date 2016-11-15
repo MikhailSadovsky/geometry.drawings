@@ -280,7 +280,7 @@ function addObjectListener(objName) {
             }
         });
         var elem = $('.elem')[number];
-        var margin = ($(elem).outerHeight(true) - 20) / 2;
+        var margin = ($(elem).outerHeight(true) - 20);
         $('#' + objName).css('margin', margin + 'px 0px');
         $('.marblePanel').css('display', 'none');
     }, 200);

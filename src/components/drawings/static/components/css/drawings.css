@@ -6,11 +6,15 @@
 }
 
 #objects_button {
-    width: 20px;
+    width: 40px;
+    height: 464px;
+    overflow-y: auto;
     display: inline-block;
     float: left;
     position: relative;
     top: 88px;
+    margin-left: -10px;
+    direction: rtl;
 }
 #objects_button .obj_button {
     height: 20px;
@@ -20,10 +24,15 @@
     border-radius: 50%;
     border-width: 1px;
     border-color: rgb(0, 0, 255);
+    display: block;
 }
 #geometry_applet_container {
     display: inline-block;
 }
 #applet_container {
-    display: inline-block;
+    position: relative;
+    left:30px;
+}
+#applet_2d {
+    margin-left: 30px;
 }

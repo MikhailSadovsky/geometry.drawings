@@ -22,6 +22,19 @@ Drawings.Triangle.prototype.point3 = function () {
     return this.points[2];
 };
 
+/*
+Drawings.Triangle.prototype.segment1 = function () {
+
+};
+
+Drawings.Triangle.prototype.segment2 = function () {
+    
+};
+
+Drawings.Triangle.prototype.segment3 = function () {
+    
+};*/
+
 Drawings.Triangle.prototype.setSquare = function (square) {
     this.square = square;
 };

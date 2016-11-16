@@ -341,16 +341,16 @@ Drawings.ScTranslator = {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
-                    if (!shape.hasOwnProperty('shapes')) {
+                    /*if (!shape.hasOwnProperty('shapes')) {
                         shape.shapes = [];
                         shape.shapes[0] = shape.segment1;
                         shape.shapes[1] = shape.segment2;
                         shape.shapes[2] = shape.segment3;
                     }
-                    for (var i = 0; i < shape.shapes.length; i++) {
-                        self.addFiveConstructionIntoBase(r, shape.shapes[i].sc_addr, self.nrel_side,
+                    for (var j = 0; j < shape.shapes.length; j++) {
+                        self.addFiveConstructionIntoBase(r, shape.shapes[j].sc_addr, self.nrel_side,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
-                    }
+                    }*/
                     if (shape.perimeter) {
                         var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_perimeter);
                         arc1.done(function (r1) {

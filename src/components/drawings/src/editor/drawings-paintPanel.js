@@ -201,6 +201,75 @@ Drawings.PaintPanel.prototype = {
                 line.name = Drawings.Utils.generateLineName(line);
                 paintPanel.model.addShape(line);
             }
+            else 
+            if (item.type === 'angle') {
+                var pos = 0;
+                var pointOneName = item.definition.substring(15, pos = item.definition.indexOf(", ", 16));
+                var pointOne = paintPanel.model.getPointByName(pointOneName);
+                if (pointOne == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointOneName){
+                            pointOne = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointOne.setName(item.name);
+                            paintPanel.model.addPoint(pointOne);
+                        }
+                    });
+                var pointTwoName = item.definition.substring(pos + 2, pos = item.definition.indexOf(", ", pos + 1));
+                var pointTwo = paintPanel.model.getPointByName(pointTwoName);
+                if (pointTwo == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointTwoName){
+                            pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointTwo.setName(item.name);
+                            paintPanel.model.addPoint(pointTwo);
+                        }
+                    });
+                var pointThreeName = item.definition.substring(pos + 2, pos = item.definition.length);
+                var pointThree = paintPanel.model.getPointByName(pointThreeName);
+                if (pointThree == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointThreeName){
+                            pointThree = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointThree.setName(item.name);
+                            paintPanel.model.addPoint(pointThree);
+                        }
+                    });
+                var angle = new Drawings.Angle(pointOne, pointTwo, pointThree);
+                angle.name = Drawings.Utils.generateAngleName(angle);
+                angle.setValue(item.value.substring(item.value.indexOf("= ")+2, pos = item.value.length-1));
+                paintPanel.model.addShape(angle);
+            }
+            else
+            if (item.type === 'circle') {
+                var pos = 0;
+                var pointOneName = item.definition.substring(29, pos = item.definition.indexOf(" ", 30));
+                var pointOne = paintPanel.model.getPointByName(pointOneName);
+                if (pointOne == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointOneName){
+                            pointOne = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointOne.setName(item.name);
+                            paintPanel.model.addPoint(pointOne);
+                        }
+                    });
+                var pointTwoName = item.definition.substring(item.definition.indexOf("в ")+2, item.definition.length);
+                var pointTwo = paintPanel.model.getPointByName(pointTwoName);
+                if (pointTwo == null)
+                    objects.forEach(function(item, i, objects) {
+                        if (item.name == pointTwoName){
+                            pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
+                            pointTwo.setName(item.name);
+                            paintPanel.model.addPoint(pointTwo);
+                        }
+                    });
+                var circle = new Drawings.Circle(pointTwo, pointOne);
+                circle.setCenter(pointTwo);
+                circle.setRadius(Math.sqrt(Math.pow(pointOne.x-pointTwo.x,2)+Math.pow(pointOne.y-pointTwo.y,2)));                                                                     //radius
+                circle.setLength(circle.getRadius()*Math.PI*2);
+                circle.name = Drawings.Utils.generateCircleName(circle);
+                paintPanel.model.addShape(circle);
+            }
+
      	});
         Drawings.ScTranslator.putModel(paintPanel.model);
     } 

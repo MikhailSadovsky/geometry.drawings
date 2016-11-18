@@ -22,18 +22,18 @@ Drawings.Triangle.prototype.point3 = function () {
     return this.points[2];
 };
 
-/*
-Drawings.Triangle.prototype.segment1 = function () {
 
+Drawings.Triangle.prototype.segment1 = function () {
+    return Drawings.Controller._getOrCreateSegment(this.point1, this.point2);
 };
 
 Drawings.Triangle.prototype.segment2 = function () {
-    
+    return Drawings.Controller._getOrCreateSegment(this.point1, this.point3);
 };
 
 Drawings.Triangle.prototype.segment3 = function () {
-    
-};*/
+    return Drawings.Controller._getOrCreateSegment(this.point2, this.point3);
+};
 
 Drawings.Triangle.prototype.setSquare = function (square) {
     this.square = square;

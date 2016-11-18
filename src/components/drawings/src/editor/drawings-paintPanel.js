@@ -228,8 +228,56 @@ Drawings.PaintPanel.prototype = {
                             paintPanel.model.addPoint(pointThree);
                         }
                     });
+                var segmentOneName1 = "Segment(" + pointOneName + ";" + pointTwoName + ")";
+                var segmentOneName2 = "Segment(" + pointTwoName + ";" + pointOneName + ")";
+                var segmentOne = paintPanel.model.getShapeByName(segmentOneName1);
+                if (segmentOne == null)
+                {
+                    segmentOne = paintPanel.model.getShapeByName(segmentOneName2);
+                    if(segmentOne == null)
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == segmentOneName1){
+                                segmentOne = new Drawings.Segment(pointOne, pointTwo);
+                                segmentOne.setName(item.name);
+                                paintPanel.model.addShape(segmentOne);
+                            }
+                        });
+                }
+                var segmentTwoName1 = "Segment(" + pointOneName + ";" + pointThreeName + ")";
+                var segmentTwoName2 = "Segment(" + pointThreeName + ";" + pointOneName + ")";
+                var segmentTwo = paintPanel.model.getShapeByName(segmentTwoName1);
+                if (segmentTwo == null)
+                {
+                    segmentTwo = paintPanel.model.getShapeByName(segmentTwoName2);
+                    if(segmentTwo == null)
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == segmentTwoName1){
+                                segmentTwo = new Drawings.Segment(pointOne, pointTwo);
+                                segmentTwo.setName(item.name);
+                                paintPanel.model.addShape(segmentTwo);
+                            }
+                        });
+                }  
+                var segmentThreeName1 = "Segment(" + pointTwoName + ";" + pointThreeName + ")";
+                var segmentThreeName2 = "Segment(" + pointThreeName + ";" + pointTwoName + ")";
+                var segmentThree = paintPanel.model.getShapeByName(segmentThreeName1);
+                if (segmentThree == null)
+                {
+                    segmentThree = paintPanel.model.getShapeByName(segmentThreeName2);
+                    if(segmentThree == null)
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == segmentThreeName1){
+                                segmentThree = new Drawings.Segment(pointOne, pointTwo);
+                                segmentThree.setName(item.name);
+                                paintPanel.model.addShape(segmentThree);
+                            }
+                        });
+                }
                 var triangle = new Drawings.Triangle(pointOne, pointTwo, pointThree);
                 triangle.name = Drawings.Utils.generateTriangleName(triangle); 
+                triangle.segment1 = segmentOne;
+                triangle.segment2 = segmentTwo;
+                triangle.segment3 = segmentThree;
                 paintPanel.model.addShape(triangle);
             }
      	});

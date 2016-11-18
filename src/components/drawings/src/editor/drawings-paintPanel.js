@@ -318,6 +318,13 @@ function translateObjTypesToSc(type) {
         }
     }
 }
+<<<<<<< HEAD
+=======
+function addObjectListener(objName) {
+    var objects = ggbApplet.getObjectType(objName) === 'point'
+        ? this.Drawings.PaintPanel.paintPoints
+        : this.Drawings.PaintPanel.paintObjects;
+>>>>>>> 45f2fb69d3bdafae1a33883f27d595a7173e32b8
 
 function addObjectListener(objName) {
     var objects = this.Drawings.PaintPanel.paintObjects;
@@ -362,7 +369,9 @@ function addObjectListener(objName) {
     }, 200);
 };
 function removeObjectListener(objName) {
-    var objects = this.Drawings.PaintPanel.paintObjects;
+    var objects = ggbApplet.getObjectType(objName) === 'point'
+        ? this.Drawings.PaintPanel.paintPoints
+        : this.Drawings.PaintPanel.paintObjects;
     objects.forEach(function(item, i, objects) {
         if (item.name === objName) {
             objects.splice(i, 1);
@@ -372,7 +381,9 @@ function removeObjectListener(objName) {
     $('#' + objName).remove();
 }
 function renameObjectListener(oldObjName, newObjName) {
-    var objects = this.Drawings.PaintPanel.paintObjects;
+    var objects = ggbApplet.getObjectType(objName) === 'point'
+        ? this.Drawings.PaintPanel.paintPoints
+        : this.Drawings.PaintPanel.paintObjects;
     objects.forEach(function(item, i, objects) {
         if (item.name === oldObjName) {
             item.name = newObjName;
@@ -382,7 +393,9 @@ function renameObjectListener(oldObjName, newObjName) {
     $('#' + oldObjName).text(nexObjName);
 }
 function updateObjectListener(objName) {
-    var objects = this.Drawings.PaintPanel.paintObjects;
+    var objects = ggbApplet.getObjectType(objName) === 'point'
+        ? this.Drawings.PaintPanel.paintPoints
+        : this.Drawings.PaintPanel.paintObjects;
     objects.forEach(function(item, i, objects) {
         if (item.name === objName) {
             item.type = ggbApplet.getObjectType(objName);

@@ -347,8 +347,8 @@ Drawings.ScTranslator = {
                         shape.shapes[1] = shape.segment2;
                         shape.shapes[2] = shape.segment3;
                     }
-                    for (var i = 0; i < shape.shapes.length; i++) {
-                        self.addFiveConstructionIntoBase(r, shape.shapes[i].sc_addr, self.nrel_side,
+                    for (var j = 0; j < shape.shapes.length; j++) {
+                        self.addFiveConstructionIntoBase(r, shape.shapes[j].sc_addr, self.nrel_side,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
                     if (shape.perimeter) {

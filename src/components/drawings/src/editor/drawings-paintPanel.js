@@ -345,11 +345,13 @@ function addObjectListener(objName) {
     objects.splice(objects, 0, object);
     console.log(objects);
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
-    var scNode = translateObjTypesToSc(object.type);
+    var type = object.type;
+-   var scNode = translateObjTypesToSc(type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
             nodes = keynodes;
-            nodes.point = keynodes[scNode];
+            nodes[type] = keynodes[scNode];
+-            $('#' + objName).attr('sc_addr', nodes[type]);
         }
     );
     $('#' + objName).attr('sc_addr', nodes.point);
@@ -361,7 +363,7 @@ function addObjectListener(objName) {
             }
         });
         var elem = $('.elem')[number];
-        var margin = ($(elem).outerHeight(true) - 20) / 2;
+        var margin = ($(elem).outerHeight(true) - 20);
         $('#' + objName).css('margin', margin + 'px 0px');
         $('.marblePanel').css('display', 'none');
     }, 200);

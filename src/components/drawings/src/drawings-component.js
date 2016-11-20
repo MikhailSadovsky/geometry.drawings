@@ -53,7 +53,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
         var dfd2 = drawPointsWithIdtf(points);
         dfd2.done(function (r) {
             //console.log("pointswithIdtf Translated");
-            var res = drawAllSegments();
+        /*    var res = drawAllSegments();
             res.done(function(r1){
                // console.log("segments Translated");
                 var resOfLines = drawAllLines();
@@ -64,15 +64,15 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         var resOfTriangles = drawAllTriangles();
                         resOfTriangles.done(function(res3){
                             drawAllPolygons()
-                            .done(function () {
+                            .done(function () {*/
                                 SCWeb.ui.Locker.hide();
-                            });
+        /*                    });
                         });
                     });
 
                 });
 
-            });
+            });*/
         });
         dfd.resolve();
         return dfd.promise();
@@ -130,9 +130,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     triangle.sc_addr = end;
                                     self.model.addShape(triangle);
                                     //adding sc-addr
-                                    document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                    document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
-                                        .setAttribute("class", 'sc-no-default-cmd');
+     //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
+     //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
+     //                                   .setAttribute("class", 'sc-no-default-cmd');
                                     var translateSquare = translateRelation(end, self.keynodes.area);
                                     translateSquare.done(function(resDfd) {
                                         //console.log("our content is " + resDfd);
@@ -220,10 +220,10 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addShape(polygon);
 
                     var board = self.paintPanel.board;
-                    document.getElementById(Drawings.Utils.getJxgObjectById(board, polygon.getId()).rendNode.id)
-                        .setAttribute('sc_addr', end);
-                    document.getElementById(Drawings.Utils.getJxgObjectById(board, polygon.getId()).rendNode.id)
-                        .setAttribute("class", 'sc-no-default-cmd');
+     //               document.getElementById(Drawings.Utils.getJxgObjectById(board, polygon.getId()).rendNode.id)
+     //                   .setAttribute('sc_addr', end);
+     //               document.getElementById(Drawings.Utils.getJxgObjectById(board, polygon.getId()).rendNode.id)
+     //                   .setAttribute("class", 'sc-no-default-cmd');
                     
                     translateRelation(end, self.keynodes.area)
                     .done(function(square) {
@@ -304,9 +304,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                             circle.sc_addr = end;
                                             self.model.addShape(circle);
                                             //adding sc-addr
-                                            document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                            document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id)
-                                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+     //                                       document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
+     //                                       document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id)
+     //                                           .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                                             var translateLen = translateRelation(end, self.keynodes.length);
                                             translateLen.done(function(resDfd) {
                                                 //console.log("our content is " + resDfd);
@@ -391,9 +391,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     line.sc_addr = end;
                                     self.model.addShape(line);
                                     //adding sc-addr
-                                    document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
-                                        document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
-                                            .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+     //                               document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
+     //                                   document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
+     //                                       .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                                         obj.translated = true;
                                         //dfd.resolve();
                                     });
@@ -499,9 +499,9 @@ Drawings.GeomDrawWindow = function (sandbox) {
                             //adding sc-addr
                            // console.log("THe resvar is ", resvar);
                            // console.log("THe second end is ", end);
-                            document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
-                            document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id)
-                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+    //                        document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id).setAttribute('sc_addr', end);
+    //                       document.getElementById(self.model.paintPanel._getJxgObjectById(segment.getId()).rendNode.id)
+    //                           .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                             //dfd.resolve();
                             var translateLen = translateRelation(end, self.keynodes.length);
                             translateLen.done(function(resDfd){
@@ -536,7 +536,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addPoint(point1);
                     self.model.addPoint(point2);
                     self.model.addShape(line);
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
+     //               document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
                     obj.translated = true;
                 } else if (end && (begin == self.keynodes.triangle)) {
                     console.log("update draw triangle");
@@ -548,7 +548,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addPoint(point2);
                     self.model.addPoint(point3);
                     self.model.addShape(triangle);
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
+     //               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
                     obj.translated = true;
                 } else if (end && (begin == self.keynodes.polygon)) {
                     console.log("update draw polygon");
@@ -564,7 +564,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     var polygon = new Drawings.Polygon(polygonPoints);
                     self.model.addPoints(polygonPoints);
                     self.model.addShape(polygon);
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(polygon.getId()).rendNode.id).setAttribute('sc_addr', end);
+     //               document.getElementById(self.model.paintPanel._getJxgObjectById(polygon.getId()).rendNode.id).setAttribute('sc_addr', end);
                     obj.translated = true;
                 } else if (end && (begin == self.keynodes.circle)) {
                     console.log("update draw circle");
@@ -574,7 +574,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     self.model.addPoint(point1);
                     self.model.addPoint(point2);
                     self.model.addShape(circle);
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
+   //                 document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
                     obj.translated = true;
                 }
                 dfd.resolve();
@@ -599,9 +599,11 @@ Drawings.GeomDrawWindow = function (sandbox) {
                     point.sc_addr = points[index];
                     self.model.addPoint(point);
                     //adding sc-addr
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                    document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
-                        .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+                    document.ggbApplet.evalCommand(idtf + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
+                     $('#' + idtf).attr('sc_addr', points[index]);
+    //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
+    //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
+    //                    .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                    // console.log("point with idtf");
                   //  console.log("index="+index);
                     if (index == points.length - 1){
@@ -613,12 +615,15 @@ Drawings.GeomDrawWindow = function (sandbox) {
             });
             res1.fail(function () {
                 var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                point.name = "A_" + index; 
                 point.sc_addr = points[index];
                 self.model.addPoint(point);
+                document.ggbApplet.evalCommand(idtf + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
+                $('#' + idtf).attr('sc_addr', points[index]);
                 //adding sc-addr
-                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
-                    .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+    //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
+    //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
+    //                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
                 //console.log("point bez idtf");
                 //console.log("index="+index);
                 if (index == points.length - 1){

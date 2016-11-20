@@ -618,8 +618,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 point.name = "A_" + index; 
                 point.sc_addr = points[index];
                 self.model.addPoint(point);
-                document.ggbApplet.evalCommand(idtf + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
-                $('#' + idtf).attr('sc_addr', points[index]);
+                document.ggbApplet.evalCommand(point.name + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
+                $('#' + point.name).attr('sc_addr', points[index]);
                 //adding sc-addr
     //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
     //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)

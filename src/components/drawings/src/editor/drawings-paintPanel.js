@@ -395,6 +395,9 @@ function translateObjTypesToSc(type) {
         case 'polygon': {
             return 'concept_polygon';
         }
+        case 'square': {
+            return 'concept_square';
+        }
         default: {
             return 'concept_geometric_figure';
         }
@@ -423,9 +426,12 @@ function addObjectListener(objName) {
     };
     objects.splice(objects, 0, object);
     console.log(objects);
+    correctGeogebraTypes(objects);
+
+
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
     var type = object.type;
-   var scNode = translateObjTypesToSc(type);
+    var scNode = translateObjTypesToSc(type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
             nodes = keynodes;
@@ -433,19 +439,7 @@ function addObjectListener(objName) {
             $('#' + objName).attr('sc_addr', nodes[type]);
         }
     );
-    $('#' + objName).attr('sc_addr', nodes.point);
-    setTimeout(function(){
-        var number;
-        objects.forEach(function(item, i) {
-            if (item.name == objName) {
-                number = objects.length - (i + 1);
-            }
-        });
-        var elem = $('.elem')[number];
-        var margin = ($(elem).outerHeight(true) - 20);
-        $('#' + objName).css('margin', margin + 'px 0px');
-        $('.marblePanel').css('display', 'none');
-    }, 200);
+    setTimeout(correctGeogebraStyles(objName), 0);
 };
 function removeObjectListener(objName) {
     var objects = ggbApplet.getObjectType(objName) === 'point'
@@ -487,3 +481,30 @@ function updateObjectListener(objName) {
     });
     console.log('objName', objects);
 }
+
+function correctGeogebraStyles(objName) {
+    var elemNumber = $('.elem').length - 1;
+    var elem = $('.elem')[elemNumber];
+    var margin = ($(elem).outerHeight(true) - 20);
+    $('#' + objName).css('margin', margin + 'px 0px');
+    $('.marblePanel').css('display', 'none');
+}
+function correctGeogebraTypes(objects) {
+    objects.forEach(function(object) {
+        if (object.type === 'polygon' && +object.definition.substr(20, 1) == 4) {
+            object.type = 'square';
+            var scNode = translateObjTypesToSc(object.type);
+            var nodes;
+            SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
+                    nodes = keynodes;
+                    nodes[object.type] = keynodes[scNode];
+                    $('#' + object.name).attr('sc_addr', nodes[object.type]);
+                }
+            );
+        }
+    });
+}
+
+//у правильных многоугольников type poligon и definition состоит из 
+//"Многоугольник[вершины, количество]"
+//у неправильных четырехугольников type quadrilateral

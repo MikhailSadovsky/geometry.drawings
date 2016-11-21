@@ -87,14 +87,11 @@ Drawings.PaintPanel.prototype = {
                 synchronize.attr("sc_addr", keynodes['ui_control_synchronization_button']);
         });
         geometry_editor_container.append("<div id='applet_container'></div>");
-        this._initGeometryApplet();
+
+        Drawings.Applet.initApplet();
         var names = [];
         setTimeout(function() {
-            var applet = document.ggbApplet;
-            applet.registerAddListener('addObjectListener');
-            applet.registerRemoveListener('removeObjectListener');
-            applet.registerRenameListener('renameObjectListener');
-            applet.registerUpdateListener('updateObjectListener');
+            Drawings.Applet.addListeners();
         }, 6000);
 
        $('#synchronize').click(function () {
@@ -104,37 +101,6 @@ Drawings.PaintPanel.prototype = {
             paintPanel._translate();
 	   });
     },
-
-    _initGeometryApplet: function() {
-        var parameters = {
-            "id":"ggbApplet",
-            "showToolBar":true,
-            "borderColor":null,
-            "showMenuBar":false,
-            "showAlgebraInput":false,
-            "showResetIcon":true,
-            "showTutorialLink": false,
-            "showLogging":true,
-            "enableLabelDrags":true,
-            "enableShiftDragZoom":true,
-            "enableRightClick":true,
-            "enableDialogActive":true,
-            "capturingThreshold":null,
-            "showToolBarHelp":false,
-            "errorDialogsActive":true,
-            "useBrowserForJS":true,
-            "allowStyleBar":false};
-        var applet = new GGBApplet(parameters, '5.0');
-
-        applet.inject('applet_container');
-        $('#applet2d').click(function(event) {
-            ggbApplet.setPerspective('2');
-        });
-        $('#applet3d').click(function() {
-            ggbApplet.setPerspective('5');
-        });
-    },
-
     _translate: function () {
         var objects = Drawings.PaintPanel.paintPoints;
     	var paintPanel = this;
@@ -174,6 +140,7 @@ Drawings.PaintPanel.prototype = {
                     var segment = new Drawings.Segment(pointOne, pointTwo);
                     segment.setLength(item.value.substring(item.value.indexOf("= ")+2, item.value.length));
                     segment.name = Drawings.Utils.generateSegmentName(segment);
+                    $('#' + item.name).attr('id', segment.name);
                     paintPanel.model.addShape(segment);
                     break;
                 }
@@ -202,6 +169,7 @@ Drawings.PaintPanel.prototype = {
                         });
                     var line = new Drawings.Line(pointOne, pointTwo);
                     line.name = Drawings.Utils.generateLineName(line);
+                    $('#' + item.name).attr('id', line.name);
                     paintPanel.model.addShape(line);
                     break;
                 }
@@ -241,6 +209,7 @@ Drawings.PaintPanel.prototype = {
                     var angle = new Drawings.Angle(pointOne, pointTwo, pointThree);
                     angle.name = Drawings.Utils.generateAngleName(angle);
                     angle.setValue(item.value.substring(item.value.indexOf("= ")+2, pos = item.value.length-1));
+                    $('#' + item.name).attr('id', angle.name);
                     paintPanel.model.addShape(angle);
                     break;
                 }
@@ -272,6 +241,7 @@ Drawings.PaintPanel.prototype = {
                     circle.setRadius(Math.sqrt(Math.pow(pointOne.x-pointTwo.x,2)+Math.pow(pointOne.y-pointTwo.y,2)));                                                                     //radius
                     circle.setLength(circle.getRadius()*Math.PI*2);
                     circle.name = Drawings.Utils.generateCircleName(circle);
+                    $('#' + item.name).attr('id', circle.name);
                     paintPanel.model.addShape(circle);
                     break;
                 }
@@ -359,6 +329,7 @@ Drawings.PaintPanel.prototype = {
                     triangle.segment2 = segmentTwo;
                     triangle.segment3 = segmentThree;
                     paintPanel.model.addShape(triangle);
+                    $('#' + item.name).attr('id', triangle.name);
                     break;
                 }
             }
@@ -404,84 +375,6 @@ function translateObjTypesToSc(type) {
     }
 }
 
-function addObjectListener(objName) {
-    var objects = ggbApplet.getObjectType(objName) === 'point'
-        ? this.Drawings.PaintPanel.paintPoints
-        : this.Drawings.PaintPanel.paintObjects;
-    var object = ggbApplet.getObjectType(objName) === 'point' ?
-    {
-        'name': objName,
-        'type': ggbApplet.getObjectType(objName),
-        'xCoord': ggbApplet.getXcoord(objName),
-        'yCoord': ggbApplet.getYcoord(objName),
-        'zCoord': ggbApplet.getZcoord(objName),
-        'value': ggbApplet.getValueString(objName),
-        'definition': ggbApplet.getDefinitionString(objName)
-    }
-    : {
-        'name': objName,
-        'type': ggbApplet.getObjectType(objName),
-        'value': ggbApplet.getValueString(objName),
-        'definition': ggbApplet.getDefinitionString(objName)
-    };
-    objects.splice(objects, 0, object);
-    console.log(objects);
-    correctGeogebraTypes(objects);
-
-
-    $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
-    var type = object.type;
-    var scNode = translateObjTypesToSc(type);
-    var nodes;
-    SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
-            nodes = keynodes;
-            nodes[type] = keynodes[scNode];
-            $('#' + objName).attr('sc_addr', nodes[type]);
-        }
-    );
-    setTimeout(correctGeogebraStyles(objName), 0);
-};
-function removeObjectListener(objName) {
-    var objects = ggbApplet.getObjectType(objName) === 'point'
-        ? this.Drawings.PaintPanel.paintPoints
-        : this.Drawings.PaintPanel.paintObjects;
-    objects.forEach(function(item, i, objects) {
-        if (item.name === objName) {
-            objects.splice(i, 1);
-        }
-    });
-    console.log('objName', objects);
-    $('#' + objName).remove();
-}
-function renameObjectListener(oldObjName, newObjName) {
-    var objects = ggbApplet.getObjectType(objName) === 'point'
-        ? this.Drawings.PaintPanel.paintPoints
-        : this.Drawings.PaintPanel.paintObjects;
-    objects.forEach(function(item, i, objects) {
-        if (item.name === oldObjName) {
-            item.name = newObjName;
-        }
-    });
-    console.log('objName', objects);
-    $('#' + oldObjName).text(nexObjName);
-}
-function updateObjectListener(objName) {
-    var objects = ggbApplet.getObjectType(objName) === 'point'
-        ? this.Drawings.PaintPanel.paintPoints
-        : this.Drawings.PaintPanel.paintObjects;
-    objects.forEach(function(item, i, objects) {
-        if (item.name === objName) {
-            item.type = ggbApplet.getObjectType(objName);
-            item.xCoord = ggbApplet.getXcoord(objName);
-            item.yCoord = ggbApplet.getYcoord(objName);
-            item.zCoord = ggbApplet.getZcoord(objName);
-            item.value = ggbApplet.getValueString(objName);
-            item.definition = ggbApplet.getDefinitionString(objName);
-        }
-    });
-    console.log('objName', objects);
-}
-
 function correctGeogebraStyles(objName) {
     var elemNumber = $('.elem').length - 1;
     var elem = $('.elem')[elemNumber];
@@ -508,3 +401,4 @@ function correctGeogebraTypes(objects) {
 //у правильных многоугольников type poligon и definition состоит из 
 //"Многоугольник[вершины, количество]"
 //у неправильных четырехугольников type quadrilateral
+//параллелограмм, ромб, прямоугольник, трапеция

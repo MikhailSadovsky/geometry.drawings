@@ -667,17 +667,9 @@ Drawings.ScTranslator = {
 // foreach points add point-defined nodes and arcs
                     for (var i = 0; i < model.points.length; i++) {
                         var el = model.points[i];
-                        /* if (el.hasOwnProperty("sc_addr")) {
-                            document.getElementById(
-                                model.paintPanel._getJxgObjectById(el
-                                    .getId()).rendNode.id)
-                                .setAttribute('sc_addr', el.sc_addr);
-                            document.getElementById(
-                                model.paintPanel._getJxgObjectById(el
-                                    .getId()).rendNode.id)
-                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-
-                        }*/
+                        if (el.hasOwnProperty("sc_addr")) {
+                            $('#' + el.name).attr('sc_addr', el.sc_addr);
+                        }
                     }
                 });
         });
@@ -687,16 +679,13 @@ Drawings.ScTranslator = {
 // foreach shapes add shape-defined nodes and arcs
                     for (var i = 0; i < model.shapes.length; i++) {
                         var el = model.shapes[i];
-                       /* if (el.hasOwnProperty("sc_addr")) {
-                            document.getElementById(
-                                model.paintPanel._getJxgObjectById(el
-                                    .getId()).rendNode.id)
-                                .setAttribute('sc_addr', el.sc_addr);
-                            document.getElementById(
-                                model.paintPanel._getJxgObjectById(el
-                                    .getId()).rendNode.id)
-                                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-                        }*/
+                        if (el.hasOwnProperty("sc_addr")) {
+                            var name = el.name.replace(/\;/g, "\\;");
+                            name = name.replace(/\(/g, '\\(');
+                            name = name.replace(/\)/g, '\\)');
+                            console.log(name);
+                            $('#' + name).attr('sc_addr', el.sc_addr);
+                        }
                     }
                     SCWeb.ui.Locker.hide();
                 });

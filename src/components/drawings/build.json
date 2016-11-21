@@ -20,6 +20,7 @@
 
         "src/editor/drawings-controller.js",
         "src/editor/drawings-paintPanel.js",
+        "src/editor/drawings-applet.js",
 
         "src/editor/renderer/drawings-pointRenderer.js",
         "src/editor/renderer/drawings-lineRenderer.js",

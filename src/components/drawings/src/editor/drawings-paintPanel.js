@@ -140,7 +140,7 @@ Drawings.PaintPanel.prototype = {
                     var segment = new Drawings.Segment(pointOne, pointTwo);
                     segment.setLength(item.value.substring(item.value.indexOf("= ")+2, item.value.length));
                     segment.name = Drawings.Utils.generateSegmentName(segment);
-                    console.log(item);
+                    $('#' + item.name).attr('id', segment.name);
                     paintPanel.model.addShape(segment);
                     break;
                 }
@@ -169,6 +169,7 @@ Drawings.PaintPanel.prototype = {
                         });
                     var line = new Drawings.Line(pointOne, pointTwo);
                     line.name = Drawings.Utils.generateLineName(line);
+                    $('#' + item.name).attr('id', line.name);
                     paintPanel.model.addShape(line);
                     break;
                 }
@@ -208,6 +209,7 @@ Drawings.PaintPanel.prototype = {
                     var angle = new Drawings.Angle(pointOne, pointTwo, pointThree);
                     angle.name = Drawings.Utils.generateAngleName(angle);
                     angle.setValue(item.value.substring(item.value.indexOf("= ")+2, pos = item.value.length-1));
+                    $('#' + item.name).attr('id', angle.name);
                     paintPanel.model.addShape(angle);
                     break;
                 }
@@ -239,6 +241,7 @@ Drawings.PaintPanel.prototype = {
                     circle.setRadius(Math.sqrt(Math.pow(pointOne.x-pointTwo.x,2)+Math.pow(pointOne.y-pointTwo.y,2)));                                                                     //radius
                     circle.setLength(circle.getRadius()*Math.PI*2);
                     circle.name = Drawings.Utils.generateCircleName(circle);
+                    $('#' + item.name).attr('id', circle.name);
                     paintPanel.model.addShape(circle);
                     break;
                 }
@@ -326,6 +329,7 @@ Drawings.PaintPanel.prototype = {
                     triangle.segment2 = segmentTwo;
                     triangle.segment3 = segmentThree;
                     paintPanel.model.addShape(triangle);
+                    $('#' + item.name).attr('id', triangle.name);
                     break;
                 }
             }

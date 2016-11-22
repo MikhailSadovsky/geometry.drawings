@@ -55,24 +55,24 @@ Drawings.GeomDrawWindow = function (sandbox) {
             //console.log("pointswithIdtf Translated");
         /*    var res = drawAllSegments();
             res.done(function(r1){
-               // console.log("segments Translated");
+               // console.log("segments Translated");*/
                 var resOfLines = drawAllLines();
                 resOfLines.done(function (res){
                   //  console.log("lines Translated");
-                    var resOfCircles = drawAllCircles();
-                    resOfCircles.done(function(res2){
+            /*        var resOfCircles = drawAllCircles();
+                    resOfCircles.done(function(res2){*/
                         var resOfTriangles = drawAllTriangles();
                         resOfTriangles.done(function(res3){
-                            drawAllPolygons()
+                        /*    drawAllPolygons()
                             .done(function () {*/
                                 SCWeb.ui.Locker.hide();
-        /*                    });
+                          // });
                         });
-                    });
+                  //  });
 
                 });
 
-            });*/
+          //  });
         });
         dfd.resolve();
         return dfd.promise();
@@ -128,7 +128,11 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     }
                                     var triangle = new Drawings.Triangle(point1, point2, point3);
                                     triangle.sc_addr = end;
+                                    triangle.name = Drawings.Utils.generateTriangleName(triangle);
                                     self.model.addShape(triangle);
+                                    document.ggbApplet.evalCommand("Polygon[" + point1.name + "," + point2.name + "," + point3.name + "]");
+                                    $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle + "'></button>");
+ +                                  $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
      //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
      //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
@@ -147,7 +151,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                         self.model.updated([triangle]);
                                     });
                                     obj.translated = true;
-                                    //dfd.resolve();
+                                    dfd.resolve();
+
                                 });
                         })
                         .fail( function(){
@@ -389,7 +394,11 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     }
                                     var line = new Drawings.Line(point1, point2);
                                     line.sc_addr = end;
+                                    line.name = Drawings.Utils.generateLineName(line);
                                     self.model.addShape(line);
+                                    document.ggbApplet.evalCommand("Line[" + point1.name + "," + point2.name + "]");
+                                    $('#objects_button').append("<button type='button' id='" + line.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + line + "'></button>");
+ +                                  $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
      //                               document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
      //                                   document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
@@ -401,12 +410,11 @@ Drawings.GeomDrawWindow = function (sandbox) {
                         .fail( function(){
 
                           //  console.log("at fail___", end);
-                         //   dfd.resolve();
+                            dfd.resolve();
                         });
                 }
             }
         });
-
         dfd.resolve();
         return dfd.promise();
     }
@@ -619,7 +627,8 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 point.sc_addr = points[index];
                 self.model.addPoint(point);
                 document.ggbApplet.evalCommand(point.name + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
-                $('#' + point.name).attr('sc_addr', points[index]);
+                $('#objects_button').append("<button type='button' id='" + idtf + "' class='obj_button sc-no-default-cmd' sc_addr='" + points[index] + "'></button>");
+ +                        $('.marblePanel').css('display', 'none');
                 //adding sc-addr
     //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
     //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)

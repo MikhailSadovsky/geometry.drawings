@@ -614,7 +614,8 @@ Drawings.GeomDrawWindow = function(sandbox) {
                         self.model.addPoint(point);
                         //adding sc-addr
                         document.ggbApplet.evalCommand(idtf + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
-                        $('#' + idtf).attr('sc_addr', points[index]);
+                        $('#objects_button').append("<button type='button' id='" + idtf + "' class='obj_button sc-no-default-cmd' sc_addr='" + points[index] + "'></button>");
+                        $('.marblePanel').css('display', 'none');
                         //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
                         //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
                         //                    .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');

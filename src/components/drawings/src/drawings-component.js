@@ -132,7 +132,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     self.model.addShape(triangle);
                                     document.ggbApplet.evalCommand("Polygon[" + point1.name + "," + point2.name + "," + point3.name + "]");
                                     $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle + "'></button>");
- +                                  $('.marblePanel').css('display', 'none');
+                                    $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
      //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
      //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
@@ -398,7 +398,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                                     self.model.addShape(line);
                                     document.ggbApplet.evalCommand("Line[" + point1.name + "," + point2.name + "]");
                                     $('#objects_button').append("<button type='button' id='" + line.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + line + "'></button>");
- +                                  $('.marblePanel').css('display', 'none');
+                                    $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
      //                               document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
      //                                   document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
@@ -628,7 +628,7 @@ Drawings.GeomDrawWindow = function (sandbox) {
                 self.model.addPoint(point);
                 document.ggbApplet.evalCommand(point.name + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
                 $('#objects_button').append("<button type='button' id='" + idtf + "' class='obj_button sc-no-default-cmd' sc_addr='" + points[index] + "'></button>");
- +                        $('.marblePanel').css('display', 'none');
+                $('.marblePanel').css('display', 'none');
                 //adding sc-addr
     //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
     //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)

@@ -53,26 +53,25 @@ Drawings.GeomDrawWindow = function(sandbox) {
         var dfd2 = drawPointsWithIdtf(points);
         dfd2.done(function(r) {
             //console.log("pointswithIdtf Translated");
-            /*    var res = drawAllSegments();
-                res.done(function(r1){
-                   // console.log("segments Translated");
-                    var resOfLines = drawAllLines();
-                    resOfLines.done(function (res){
-                      //  console.log("lines Translated");
-                        var resOfCircles = drawAllCircles();
-                        resOfCircles.done(function(res2){
-                            var resOfTriangles = drawAllTriangles();
-                            resOfTriangles.done(function(res3){
-                                drawAllPolygons()
-                                .done(function () {*/
-            SCWeb.ui.Locker.hide();
-            /*                    });
-                            });
+        /*    var res = drawAllSegments();
+            res.done(function(r1){
+               // console.log("segments Translated");*/
+                var resOfLines = drawAllLines();
+                resOfLines.done(function (res){
+                  //  console.log("lines Translated");
+            /*        var resOfCircles = drawAllCircles();
+                    resOfCircles.done(function(res2){*/
+                        var resOfTriangles = drawAllTriangles();
+                        resOfTriangles.done(function(res3){
+                        /*    drawAllPolygons()
+                            .done(function () {*/
+                                SCWeb.ui.Locker.hide();
+                          // });
                         });
+                  //  });
 
                     });
-
-                });*/
+          //  });
         });
         dfd.resolve();
         return dfd.promise();
@@ -130,7 +129,11 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                     }
                                     var triangle = new Drawings.Triangle(point1, point2, point3);
                                     triangle.sc_addr = end;
+                                    triangle.name = Drawings.Utils.generateTriangleName(triangle);
                                     self.model.addShape(triangle);
+                                    document.ggbApplet.evalCommand("Polygon[" + point1.name + "," + point2.name + "," + point3.name + "]");
+                                    $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle + "'></button>");
+                                    $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
                                     //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id).setAttribute('sc_addr', end);
                                     //                               document.getElementById(self.model.paintPanel._getJxgObjectById(triangle.getId()).rendNode.id)
@@ -149,7 +152,8 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                         self.model.updated([triangle]);
                                     });
                                     obj.translated = true;
-                                    //dfd.resolve();
+                                    dfd.resolve();
+
                                 });
                         })
                         .fail(function() {
@@ -397,7 +401,11 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                     }
                                     var line = new Drawings.Line(point1, point2);
                                     line.sc_addr = end;
+                                    line.name = Drawings.Utils.generateLineName(line);
                                     self.model.addShape(line);
+                                    document.ggbApplet.evalCommand("Line[" + point1.name + "," + point2.name + "]");
+                                    $('#objects_button').append("<button type='button' id='" + line.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + line + "'></button>");
+                                    $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
                                     //                               document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id).setAttribute('sc_addr', end);
                                     //                                   document.getElementById(self.model.paintPanel._getJxgObjectById(line.getId()).rendNode.id)
@@ -408,13 +416,12 @@ Drawings.GeomDrawWindow = function(sandbox) {
                         })
                         .fail(function() {
 
-                            //  console.log("at fail___", end);
-                            //   dfd.resolve();
+                          //  console.log("at fail___", end);
+                            dfd.resolve();
                         });
                 }
             }
         });
-
         dfd.resolve();
         return dfd.promise();
     }
@@ -597,61 +604,59 @@ Drawings.GeomDrawWindow = function(sandbox) {
     }
 
     // points - array of points sc_addrs
-    function drawPointsWithIdtf(points) {
+        function drawPointsWithIdtf(points) {
         //console.log("points here" + points);
         var dfd = new jQuery.Deferred();
         for (var i = 0; i < points.length; i++) {
-            (function(index) {
-                var res1 = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
-                    points[i], sc_type_arc_common | sc_type_const,
-                    sc_type_link, sc_type_arc_pos_const_perm, self.keynodes.identifier
-                ]);
-                res1.done(function(res) {
-                    window.sctpClient.get_link_content(res[0][2], 'string').done(function(idtf) {
-                        var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                        point.name = idtf;
-                        point.sc_addr = points[index];
-                        self.model.addPoint(point);
-                        //adding sc-addr
-                        document.ggbApplet.evalCommand(idtf + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
-                        $('#objects_button').append("<button type='button' id='" + idtf + "' class='obj_button sc-no-default-cmd' sc_addr='" + points[index] + "'></button>");
-                        $('.marblePanel').css('display', 'none');
-                        //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                        //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
-                        //                    .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-                        // console.log("point with idtf");
-                        //  console.log("index="+index);
-                        if (index == points.length - 1) {
-                            //  console.log("resolved");
-                            dfd.resolve();
-                        }
-                        //dfd.resolve();
-                    });
-                });
-                res1.fail(function() {
+            ( function(index){
+            var res1 = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                points[i], sc_type_arc_common | sc_type_const,
+                sc_type_link, sc_type_arc_pos_const_perm, self.keynodes.identifier]);
+            res1.done(function (res) {
+                window.sctpClient.get_link_content(res[0][2], 'string').done(function (idtf) {
                     var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
-                    point.name = "Point_" + index;
+                    point.name = idtf;
                     point.sc_addr = points[index];
                     self.model.addPoint(point);
-                    document.ggbApplet.evalCommand(point.name + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
-                    $('#' + point.name).attr('sc_addr', points[index]);
                     //adding sc-addr
-                    //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
-                    //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
-                    //                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
-                    //console.log("point bez idtf");
-                    //console.log("index="+index);
-                    if (index == points.length - 1) {
-                        //console.log("resolved");
+                    document.ggbApplet.evalCommand(idtf + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
+                     $('#' + idtf).attr('sc_addr', points[index]);
+    //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
+    //                document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
+    //                    .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+                   // console.log("point with idtf");
+                  //  console.log("index="+index);
+                    if (index == points.length - 1){
+                      //  console.log("resolved");
                         dfd.resolve();
                     }
-
                     //dfd.resolve();
                 });
-            })(i);
+            });
+            res1.fail(function () {
+                var point = new Drawings.Point((Math.random() - 0.5) * 15.0, (Math.random() - 0.5) * 15.0);
+                point.name = "Point_" + index; 
+                point.sc_addr = points[index];
+                self.model.addPoint(point);
+                document.ggbApplet.evalCommand(point.name + "=(" + (Math.random() - 0.5) * 15.0 + "," + (Math.random() - 0.5) * 15.0 + ")");
+                $('#objects_button').append("<button type='button' id='" + idtf + "' class='obj_button sc-no-default-cmd' sc_addr='" + points[index] + "'></button>");
+                $('.marblePanel').css('display', 'none');
+                //adding sc-addr
+    //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id).setAttribute('sc_addr', points[index]);
+    //            document.getElementById(self.model.paintPanel._getJxgObjectById(point.getId()).rendNode.id)
+    //                .setAttribute('class', 'sc-no-default-cmd ui-no-tooltip');
+                //console.log("point bez idtf");
+                //console.log("index="+index);
+                if (index == points.length - 1){
+                    //console.log("resolved");
+                    dfd.resolve();
+                }
+
+                //dfd.resolve();
+            });})(i);
 
         }
-        //dfd.resolve();
+       //dfd.resolve();
         return dfd.promise();
     }
 

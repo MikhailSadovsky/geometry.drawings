@@ -112,7 +112,7 @@ Drawings.PaintPanel.prototype = {
             switch (item.type) {
                 case 'segment':
                     {
-                        var pointOneName = item.definition.substring(item.definition.indexOf("[") + 1, item.definition.indexOf(", "));
+                        var pointOneName = "Point_" + item.definition.substring(item.definition.indexOf("[") + 1, item.definition.indexOf(", "));
                         var pointOne = paintPanel.model.getPointByName(pointOneName);
                         if (pointOne == null)
                             objects.forEach(function(item, i, objects) {
@@ -122,7 +122,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointOne);
                                 }
                             });
-                        var pointTwoName = item.definition.substring(item.definition.indexOf(", ") + 2, item.definition.indexOf("]"));
+                        var pointTwoName = "Point_" + item.definition.substring(item.definition.indexOf(", ") + 2, item.definition.indexOf("]"));
                         var pointTwo = paintPanel.model.getPointByName(pointTwoName);
                         if (pointTwo == null)
                             objects.forEach(function(item, i, objects) {
@@ -142,7 +142,7 @@ Drawings.PaintPanel.prototype = {
                 case 'line':
                     {
                         var pos1 = 0;
-                        var pointOneName = item.definition.substring(13, pos1 = item.definition.indexOf(" ", 14));
+                        var pointOneName = "Point_" + item.definition.substring(13, pos1 = item.definition.indexOf(" ", 14));
                         var pointOne = paintPanel.model.getPointByName(pointOneName);
                         if (pointOne == null)
                             objects.forEach(function(item, i, objects) {
@@ -152,7 +152,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointOne);
                                 }
                             });
-                        var pointTwoName = item.definition.substring(pos1 + 3, item.definition.length);
+                        var pointTwoName = "Point_" + item.definition.substring(pos1 + 3, item.definition.length);
                         var pointTwo = paintPanel.model.getPointByName(pointTwoName);
                         if (pointTwo == null)
                             objects.forEach(function(item, i, objects) {
@@ -171,7 +171,7 @@ Drawings.PaintPanel.prototype = {
                 case 'angle':
                     {
                         var pos = 0;
-                        var pointOneName = item.definition.substring(15, pos = item.definition.indexOf(", ", 16));
+                        var pointOneName = "Point_" + item.definition.substring(15, pos = item.definition.indexOf(", ", 16));
                         var pointOne = paintPanel.model.getPointByName(pointOneName);
                         if (pointOne == null)
                             objects.forEach(function(item, i, objects) {
@@ -181,7 +181,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointOne);
                                 }
                             });
-                        var pointTwoName = item.definition.substring(pos + 2, pos = item.definition.indexOf(", ", pos + 1));
+                        var pointTwoName = "Point_" + item.definition.substring(pos + 2, pos = item.definition.indexOf(", ", pos + 1));
                         var pointTwo = paintPanel.model.getPointByName(pointTwoName);
                         if (pointTwo == null)
                             objects.forEach(function(item, i, objects) {
@@ -191,7 +191,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointTwo);
                                 }
                             });
-                        var pointThreeName = item.definition.substring(pos + 2, pos = item.definition.length);
+                        var pointThreeName = "Point_" + item.definition.substring(pos + 2, pos = item.definition.length);
                         var pointThree = paintPanel.model.getPointByName(pointThreeName);
                         if (pointThree == null)
                             objects.forEach(function(item, i, objects) {
@@ -211,7 +211,7 @@ Drawings.PaintPanel.prototype = {
                 case 'circle':
                     {
                         var pos = 0;
-                        var pointOneName = item.definition.substring(29, pos = item.definition.indexOf(" ", 30));
+                        var pointOneName = "Point_" + item.definition.substring(29, pos = item.definition.indexOf(" ", 30));
                         var pointOne = paintPanel.model.getPointByName(pointOneName);
                         if (pointOne == null)
                             objects.forEach(function(item, i, objects) {
@@ -221,7 +221,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointOne);
                                 }
                             });
-                        var pointTwoName = item.definition.substring(item.definition.indexOf("в ") + 2, item.definition.length);
+                        var pointTwoName = "Point_" + item.definition.substring(item.definition.indexOf("в ") + 2, item.definition.length);
                         var pointTwo = paintPanel.model.getPointByName(pointTwoName);
                         if (pointTwo == null)
                             objects.forEach(function(item, i, objects) {
@@ -243,7 +243,7 @@ Drawings.PaintPanel.prototype = {
                 case 'triangle':
                     {
                         var pos2 = 0;
-                        var pointOneName = item.definition.substring(8, pos2 = item.definition.indexOf(",", 8));
+                        var pointOneName = "Point_" + item.definition.substring(8, pos2 = item.definition.indexOf(",", 8));
                         var pointOne = paintPanel.model.getPointByName(pointOneName);
                         if (pointOne == null)
                             objects.forEach(function(item, i, objects) {
@@ -253,7 +253,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointOne);
                                 }
                             });
-                        var pointTwoName = item.definition.substring(pos2 + 2, pos2 = item.definition.indexOf(",", pos2 + 3));
+                        var pointTwoName = "Point_" + item.definition.substring(pos2 + 2, pos2 = item.definition.indexOf(",", pos2 + 3));
                         var pointTwo = paintPanel.model.getPointByName(pointTwoName);
                         if (pointTwo == null)
                             objects.forEach(function(item, i, objects) {
@@ -263,7 +263,7 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointTwo);
                                 }
                             });
-                        var pointThreeName = item.definition.substring(pos2 + 2, item.definition.length);
+                        var pointThreeName = "Point_" + item.definition.substring(pos2 + 2, item.definition.length);
                         var pointThree = paintPanel.model.getPointByName(pointThreeName);
                         if (pointThree == null)
                             objects.forEach(function(item, i, objects) {

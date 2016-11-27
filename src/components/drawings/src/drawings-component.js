@@ -61,7 +61,10 @@ Drawings.GeomDrawWindow = function(sandbox) {
                     console.log("lines Translated");
                     var resOfTriangles = drawAllTriangles();
                     resOfTriangles.done(function(res3){
-                        SCWeb.ui.Locker.hide();
+                        var resOfCircles = drawAllCircles();
+                        resOfCircles.done(function(resCircles) {
+                            SCWeb.ui.Locker.hide();
+                        });
                     });
                 });
 
@@ -308,7 +311,7 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                         self.model.addShape(circle);
                                         var point1Name = point1.name.substr(6,1);
                                         var point2Name = point2.name.substr(6,1);
-                                        document.ggbApplet.evalCommand("Circle[" + point1Name + "," + point2Name + "," + point3Name + "]");
+                                        document.ggbApplet.evalCommand("Circle[" + point1Name + "," + point2Name + "]");
                                         $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle.sc_addr + "'></button>");
                                         $('.marblePanel').css('display', 'none');
                                         //adding sc-addr

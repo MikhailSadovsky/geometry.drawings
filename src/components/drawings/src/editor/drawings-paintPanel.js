@@ -233,8 +233,8 @@ Drawings.PaintPanel.prototype = {
                             });
                         var circle = new Drawings.Circle(pointTwo, pointOne);
                         circle.setCenter(pointTwo);
-                        circle.setRadius(Math.sqrt(Math.pow(pointOne.x - pointTwo.x, 2) + Math.pow(pointOne.y - pointTwo.y, 2))); //radius
-                        circle.setLength(circle.getRadius() * Math.PI * 2);
+                        circle.setRadius(Math.sqrt(Math.pow(pointOne.x - pointTwo.x, 2) + Math.pow(pointOne.y - pointTwo.y, 2)) + ""); //radius
+                        circle.setLength(circle.getRadius() * Math.PI * 2 + "");
                         circle.name = Drawings.Utils.generateCircleName(circle);
                         $('#' + item.name).attr('id', circle.name);
                         paintPanel.model.addShape(circle);

@@ -51,27 +51,21 @@ Drawings.GeomDrawWindow = function(sandbox) {
                     alert(content);
                 });*/
         var dfd2 = drawPointsWithIdtf(points);
-        dfd2.done(function(r) {
+        dfd2.done(function(resPoints) {
             console.log("pointsTranslated");
-        /*    var res = drawAllSegments();
-            res.done(function(r1){
-               // console.log("segments Translated");*/
+            var resOfSegments = drawAllSegments();
+            resOfSegments.done(function(resSegments){
+                console.log("segments Translated");
                 var resOfLines = drawAllLines();
-                resOfLines.done(function (res){
-                  //  console.log("lines Translated");
-            /*        var resOfCircles = drawAllCircles();
-                    resOfCircles.done(function(res2){*/
-                        var resOfTriangles = drawAllTriangles();
-                        resOfTriangles.done(function(res3){
-                        /*    drawAllPolygons()
-                            .done(function () {*/
-                                SCWeb.ui.Locker.hide();
-                          // });
-                        });
-                  //  });
-
+                resOfLines.done(function (resLines){
+                    console.log("lines Translated");
+                    var resOfTriangles = drawAllTriangles();
+                    resOfTriangles.done(function(res3){
+                        SCWeb.ui.Locker.hide();
                     });
-          //  });
+                });
+
+            });
         });
         dfd.resolve();
         return dfd.promise();
@@ -131,7 +125,10 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                     triangle.sc_addr = end;
                                     triangle.name = Drawings.Utils.generateTriangleName(triangle);
                                     self.model.addShape(triangle);
-                                    document.ggbApplet.evalCommand("Polygon[" + point1.name + "," + point2.name + "," + point3.name + "]");
+                                    var point1Name = point1.name.substr(6,1);
+                                    var point2Name = point2.name.substr(6,1);
+                                    var point3Name = point3.name.substr(6,1);
+                                    document.ggbApplet.evalCommand("Polygon[" + point1Name + "," + point2Name + "," + point3Name + "]");
                                     $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle.sc_addr + "'></button>");
                                     $('.marblePanel').css('display', 'none');
                                     var translateSquare = translateRelation(end, self.keynodes.area);
@@ -399,7 +396,9 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                     line.sc_addr = end;
                                     line.name = Drawings.Utils.generateLineName(line);
                                     self.model.addShape(line);
-                                    document.ggbApplet.evalCommand("Line[" + point1.name + "," + point2.name + "]");
+                                    var point1Name = point1.name.substr(6,1);
+                                    var point2Name = point2.name.substr(6,1);
+                                    document.ggbApplet.evalCommand("Line[" + point1Name + "," + point2Name + "]");
                                     $('#objects_button').append("<button type='button' id='" + line.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + line + "'></button>");
                                     $('.marblePanel').css('display', 'none');
                                     //adding sc-addr
@@ -511,7 +510,13 @@ Drawings.GeomDrawWindow = function(sandbox) {
                         //console.log("point2="+point2_addr);
                         var segment = new Drawings.Segment(point1, point2);
                         segment.sc_addr = end;
+                        segment.name = Drawings.Utils.generateSegmentName(segment);
                         self.model.addShape(segment);
+                        var point1Name = point1.name.substr(6,1);
+                        var point2Name = point2.name.substr(6,1);
+                        document.ggbApplet.evalCommand("Segment[" + point1Name + "," + point2Name + "]");
+                        $('#objects_button').append("<button type='button' id='" + segment.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + segment.sc_addr + "'></button>");
+                        $('.marblePanel').css('display', 'none');
                         //adding sc-addr
                         // console.log("THe resvar is ", resvar);
                         // console.log("THe second end is ", end);
@@ -636,7 +641,8 @@ Drawings.GeomDrawWindow = function(sandbox) {
                 point.name = "Point_" + index; 
                 point.sc_addr = points[index];
                 self.model.addPoint(point);
-                document.ggbApplet.evalCommand(point.name + "=(" + (Math.random() - 0.5) * 10.0 + "," + (Math.random() - 0.5) * 10.0 + ")");
+                var pointName = point.name.substr(6,1);
+                document.ggbApplet.evalCommand(pointName + "=(" + (Math.random() - 0.5) * 10.0 + "," + (Math.random() - 0.5) * 10.0 + ")");
                 $('#objects_button').append("<button type='button' id='" + idtf + "' class='obj_button sc-no-default-cmd' sc_addr='" + points[index] + "'></button>");
                 $('.marblePanel').css('display', 'none');
                 //adding sc-addr

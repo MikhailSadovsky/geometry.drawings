@@ -6,6 +6,7 @@ Drawings.Polygon = function Polygon(points) {
     Drawings.Polygon.superclass.constructor.apply(this, [points]);
     this.square = null;
     this.perimeter = null;
+    this.type = null;
 };
 
 extend(Drawings.Polygon, Drawings.Shape);

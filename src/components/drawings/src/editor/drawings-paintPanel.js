@@ -364,6 +364,9 @@ Drawings.PaintPanel.prototype = {
                         $('#' + item.name).attr('id', triangle.name);
                         break;
                     }
+                case 'square': {
+                    console.log('TRANSLATE SQUARE', item);
+                }
             }
         });
         Drawings.ScTranslator.putModel(paintPanel.model);
@@ -400,14 +403,17 @@ function translateObjTypesToSc(type) {
         case 'angle':
             {
                 return 'concept_angle';
+                break;
             }
         case 'polygon':
             {
                 return 'concept_polygon';
+                break;
             }
         case 'square':
             {
                 return 'concept_square';
+                break;
             }
         default:
             {
@@ -424,19 +430,19 @@ function correctGeogebraStyles(objName) {
     $('.marblePanel').css('display', 'none');
 }
 
-function correctGeogebraTypes(objects) {
-    objects.forEach(function(object) {
-        if (object.type === 'polygon' && +object.definition.substr(20, 1) == 4) {
-            object.type = 'square';
-            var scNode = translateObjTypesToSc(object.type);
-            var nodes;
-            SCWeb.core.Server.resolveScAddr([scNode], function(keynodes) {
-                nodes = keynodes;
-                nodes[object.type] = keynodes[scNode];
-                $('#' + object.name).attr('sc_addr', nodes[object.type]);
-            });
-        }
-    });
+function correctGeogebraType(object) {
+    if (object.type === 'polygon' && +object.definition.substr(20, 1) == 4) {
+        object.type = 'square';
+        var scNode = translateObjTypesToSc(object.type);
+        console.log("CORRECT TYPES", object);
+        var nodes;
+        SCWeb.core.Server.resolveScAddr([scNode], function(keynodes) {
+            nodes = keynodes;
+            nodes[object.type] = keynodes[scNode];
+            $('#' + object.name).attr('sc_addr', nodes[object.type]);
+        });
+    }
+    return object;
 }
 
 //у правильных многоугольников type poligon и definition состоит из 

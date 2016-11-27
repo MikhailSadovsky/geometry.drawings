@@ -62,9 +62,8 @@ function addObjectListener(objName) {
         'value': ggbApplet.getValueString(objName),
         'definition': ggbApplet.getDefinitionString(objName)
     };
+    object = correctGeogebraType(object);
     objects.splice(objects, 0, object);
-    console.log(objects);
-    correctGeogebraTypes(objects);
 
 
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");

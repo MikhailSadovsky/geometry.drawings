@@ -304,7 +304,13 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                         }
                                         var circle = new Drawings.Circle(point1, point2);
                                         circle.sc_addr = end;
+                                        circle.name = Drawings.Utils.generateCircleName(circle);
                                         self.model.addShape(circle);
+                                        var point1Name = point1.name.substr(6,1);
+                                        var point2Name = point2.name.substr(6,1);
+                                        document.ggbApplet.evalCommand("Circle[" + point1Name + "," + point2Name + "," + point3Name + "]");
+                                        $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle.sc_addr + "'></button>");
+                                        $('.marblePanel').css('display', 'none');
                                         //adding sc-addr
                                         //                                       document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);
                                         //                                       document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id)

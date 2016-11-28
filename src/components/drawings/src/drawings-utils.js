@@ -118,7 +118,7 @@ Drawings.Utils = {
 
     generatePolygonName: function (polygon) {
         var points = polygon.getPoints();
-        var name = "Polygon(";
+        var name = polygon.type === 'square' ? 'Square(' :"Polygon(";
 
         for (var i = 0; i < points.length; i++) {
             var pointName = points[i].getName();
@@ -126,7 +126,7 @@ Drawings.Utils = {
             name += pointName;
             if (i < points.length - 1) name += ';';
         }
-
+        if (polygon.type === 'square') name += ';4';
         return name + ')';
     },
 

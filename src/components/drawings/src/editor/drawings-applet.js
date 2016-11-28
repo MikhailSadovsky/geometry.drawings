@@ -62,12 +62,13 @@ function addObjectListener(objName) {
         'value': ggbApplet.getValueString(objName),
         'definition': ggbApplet.getDefinitionString(objName)
     };
-    object = correctGeogebraType(object);
+    if (object.type === 'polygon' && +object.definition.substr(20, 1) == 4) {
+        object.type = 'square';
+    }
     objects.splice(objects, 0, object);
-
-
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
     var type = object.type;
+    console.log('ТИПэ', type, object.type);
     var scNode = translateObjTypesToSc(type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
@@ -77,6 +78,9 @@ function addObjectListener(objName) {
         }
     );
     setTimeout(correctGeogebraStyles(objName), 0);
+    for (var i = 0; i< Drawings.PaintPanel.paintObjects.length; i++) {
+        console.log('ЦИКЛ ', i, Drawings.PaintPanel.paintObjects[i].type);
+    }
 };
 function removeObjectListener(objName) {
     var objects = ggbApplet.getObjectType(objName) === 'point'
@@ -108,7 +112,9 @@ function updateObjectListener(objName) {
         : this.Drawings.PaintPanel.paintObjects;
     objects.forEach(function(item, i, objects) {
         if (item.name === objName) {
-            item.type = ggbApplet.getObjectType(objName);
+            if (item.type !== 'square') {
+                item.type = ggbApplet.getObjectType(objName);
+            }
             item.xCoord = ggbApplet.getXcoord(objName);
             item.yCoord = ggbApplet.getYcoord(objName);
             item.zCoord = ggbApplet.getZcoord(objName);

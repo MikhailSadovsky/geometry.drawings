@@ -365,7 +365,53 @@ Drawings.PaintPanel.prototype = {
                         break;
                     }
                 case 'square': {
-                    console.log('TRANSLATE SQUARE', item);
+                    var pointOneName = "Point_" + item.definition.substr(14, 1);
+                    console.log(pointOneName);
+                    var pointOne = paintPanel.model.getPointByName(pointOneName);
+                    if (pointOne == null)
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == pointOneName) {
+                                pointOne = new Drawings.Point(item.xCoord, item.yCoord);
+                                pointOne.setName(item.name);
+                                paintPanel.model.addPoint(pointOne);
+                            }
+                        });
+                    console.log("POINT ONE", pointOne);
+                    var pointTwoName = "Point_" + item.definition.substr(17, 1);
+                    var pointTwo = paintPanel.model.getPointByName(pointTwoName);
+                    if (pointTwo == null)
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == pointTwoName) {
+                                pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
+                                pointTwo.setName(item.name);
+                                paintPanel.model.addPoint(pointTwo);
+                            }
+                        });
+                    console.log('PONT TWO', pointTwo);
+                    var segmentName1 = "Segment(" + pointOneName + ";" + pointTwoName + ")";
+                        var segmentName2 = "Segment(" + pointTwoName + ";" + pointOneName + ")";
+                        var segment = paintPanel.model.getShapeByName(segmentName1);
+                        if (segment == null) {
+                            segment = paintPanel.model.getShapeByName(segmentName2);
+                            if (segment == null)
+                                objects.forEach(function(item, i, objects) {
+                                    if (item.name == segmentName1) {
+                                        segment = new Drawings.Segment(pointOne, pointTwo);
+                                        segment.setName(item.name);
+                                        paintPanel.model.addShape(segment);
+                                    }
+                                });
+                        }
+                        console.log('SEGMENT', segment);
+                        var square = new Drawings.Polygon(pointOne, pointTwo);
+                        square.type = 'square';
+                        square.name = Drawings.Utils.generatePolygonName(square);
+                        square.setSquare(segment.getLength() * segment.getLength() + "");
+                        square.setPerimeter(segment.getLength() * 4 + "");
+                        paintPanel.model.addShape(square);
+                        $('#' + item.name).attr('id', square.name);
+                        console.log(square);
+                        break;
                 }
             }
         });
@@ -428,21 +474,6 @@ function correctGeogebraStyles(objName) {
     var margin = ($(elem).outerHeight(true) - 20);
     $('#' + objName).css('margin', margin + 'px 0px');
     $('.marblePanel').css('display', 'none');
-}
-
-function correctGeogebraType(object) {
-    if (object.type === 'polygon' && +object.definition.substr(20, 1) == 4) {
-        object.type = 'square';
-        var scNode = translateObjTypesToSc(object.type);
-        console.log("CORRECT TYPES", object);
-        var nodes;
-        SCWeb.core.Server.resolveScAddr([scNode], function(keynodes) {
-            nodes = keynodes;
-            nodes[object.type] = keynodes[scNode];
-            $('#' + object.name).attr('sc_addr', nodes[object.type]);
-        });
-    }
-    return object;
 }
 
 //у правильных многоугольников type poligon и definition состоит из 

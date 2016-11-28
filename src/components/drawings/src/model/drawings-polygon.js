@@ -26,3 +26,7 @@ Drawings.Polygon.prototype.setPerimeter = function (perimeter) {
 Drawings.Polygon.prototype.getPerimeter = function () {
     return this.perimeter;
 };
+
+Drawings.Polygon.prototype.getPoints = function () {
+	return this.points;
+}

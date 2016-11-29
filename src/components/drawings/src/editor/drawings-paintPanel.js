@@ -366,9 +366,8 @@ Drawings.PaintPanel.prototype = {
                     }
                 case 'square': {
                     var pointOneName = "Point_" + item.definition.substr(14, 1);
-                    console.log(pointOneName);
                     var pointOne = paintPanel.model.getPointByName(pointOneName);
-                    if (pointOne == null)
+                    if (pointOne == null) {
                         objects.forEach(function(item, i, objects) {
                             if (item.name == pointOneName) {
                                 pointOne = new Drawings.Point(item.xCoord, item.yCoord);
@@ -376,10 +375,10 @@ Drawings.PaintPanel.prototype = {
                                 paintPanel.model.addPoint(pointOne);
                             }
                         });
-                    console.log("POINT ONE", pointOne);
+                    }
                     var pointTwoName = "Point_" + item.definition.substr(17, 1);
                     var pointTwo = paintPanel.model.getPointByName(pointTwoName);
-                    if (pointTwo == null)
+                    if (pointTwo == null) {
                         objects.forEach(function(item, i, objects) {
                             if (item.name == pointTwoName) {
                                 pointTwo = new Drawings.Point(item.xCoord, item.yCoord);
@@ -387,31 +386,91 @@ Drawings.PaintPanel.prototype = {
                                 paintPanel.model.addPoint(pointTwo);
                             }
                         });
-                    console.log('PONT TWO', pointTwo);
-                    var segmentName1 = "Segment(" + pointOneName + ";" + pointTwoName + ")";
-                        var segmentName2 = "Segment(" + pointTwoName + ";" + pointOneName + ")";
-                        var segment = paintPanel.model.getShapeByName(segmentName1);
-                        if (segment == null) {
-                            segment = paintPanel.model.getShapeByName(segmentName2);
-                            if (segment == null)
-                                objects.forEach(function(item, i, objects) {
-                                    if (item.name == segmentName1) {
-                                        segment = new Drawings.Segment(pointOne, pointTwo);
-                                        segment.setName(item.name);
-                                        paintPanel.model.addShape(segment);
-                                    }
-                                });
+                    }
+                    var pointThreeName = "Point_" + getNextPointName(item.definition.substr(17, 1));
+                    var pointThree = paintPanel.model.getPointByName(pointThreeName);
+                    if (pointThree == null) {
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == pointThreeName) {
+                                pointThree = new Drawings.Point(item.xCoord, item.yCoord);
+                                pointThree.setName(item.name);
+                                paintPanel.model.addPoint(pointThree);
+                            }
+                        });
+                    }
+                    var pointFourName = "Point_" + getNextPointName(getNextPointName(item.definition.substr(17, 1)));
+                    var pointFour = paintPanel.model.getPointByName(pointFourName);
+                    if (pointFour == null) {
+                        objects.forEach(function(item, i, objects) {
+                            if (item.name == pointFourName) {
+                                pointFour = new Drawings.Point(item.xCoord, item.yCoord);
+                                pointFour.setName(item.name);
+                                paintPanel.model.addPoint(pointFour);
+                            }
+                        });
+                    }
+                    var segmentOneName1 = "Segment(" + pointOneName + ";" + pointTwoName + ")";
+                    var segmentOneName2 = "Segment(" + pointTwoName + ";" + pointOneName + ")";
+                    var segmentOne = paintPanel.model.getShapeByName(segmentOneName1);
+                    if (segmentOne == null) {
+                        segmentOne = paintPanel.model.getShapeByName(segmentOneName2);
+                        if (segmentOne == null)
+                            objects.forEach(function(item, i, objects) {
+                                if (item.name == segmentOneName1) {
+                                    segmentOne = new Drawings.Segment(pointOne, pointTwo);
+                                    segmentOne.setName(item.name);
+                                    paintPanel.model.addShape(segmentOne);
+                                }
+                            });
+                    }
+                    var segmentTwoName2 = "Segment(" + pointTwoName + ";" + pointThreeName + ")";
+                    var segmentTwoName1 = "Segment(" + pointThreeName + ";" + pointTwoName + ")";
+                    var segmentTwo = paintPanel.model.getShapeByName(segmentTwoName1);
+                    if (segmentTwo == null) {
+                        segmentTwo = paintPanel.model.getShapeByName(segmentTwoName2);
+                        if (segmentTwo == null){
+                            segmentTwo = new Drawings.Segment(pointTwo, pointThree);
+                            segmentTwo.setName(Drawings.Utils.generateSegmentName(segmentTwo));
+                            segmentTwo.setLength(segmentOne.getLength());
+                            paintPanel.model.addShape(segmentTwo);
                         }
-                        console.log('SEGMENT', segment);
-                        var square = new Drawings.Polygon(pointOne, pointTwo);
-                        square.type = 'square';
-                        square.name = Drawings.Utils.generatePolygonName(square);
-                        square.setSquare(segment.getLength() * segment.getLength() + "");
-                        square.setPerimeter(segment.getLength() * 4 + "");
-                        paintPanel.model.addShape(square);
-                        $('#' + item.name).attr('id', square.name);
-                        console.log(square);
-                        break;
+                    }
+                    var segmentThreeName2 = "Segment(" + pointThreeName + ";" + pointFourName + ")";
+                    var segmentThreeName1 = "Segment(" + pointFourName + ";" + pointThreeName + ")";
+                    var segmentThree = paintPanel.model.getShapeByName(segmentThreeName1);
+                    if (segmentThree == null) {
+                        segmentThree = paintPanel.model.getShapeByName(segmentThreeName2);
+                        if (segmentThree == null){
+                            segmentThree = new Drawings.Segment(pointThree, pointFour);
+                            segmentThree.setName(Drawings.Utils.generateSegmentName(segmentThree));
+                            segmentThree.setLength(segmentOne.getLength());
+                            paintPanel.model.addShape(segmentThree);
+                        }
+                    }
+                    var segmentFourName2 = "Segment(" + pointFourName + ";" + pointOneName + ")";
+                    var segmentFourName1 = "Segment(" + pointOneName + ";" + pointFourName + ")";
+                    var segmentFour = paintPanel.model.getShapeByName(segmentFourName1);
+                    if (segmentFour == null) {
+                        segmentFour = paintPanel.model.getShapeByName(segmentFourName2);
+                        if (segmentFour == null) {
+                            segmentFour = new Drawings.Segment(pointFour, pointOne);
+                            segmentFour.setName(Drawings.Utils.generateSegmentName(segmentFour));
+                            segmentFour.setLength(segmentOne.getLength());
+                            paintPanel.model.addShape(segmentFour);
+                        }
+                    }
+                    var points = [pointOne, pointTwo, pointThree, pointFour];
+                    var square = new Drawings.Polygon(points);
+                    square.type = 'square';
+                    square.name = Drawings.Utils.generatePolygonName(square);
+                    square.setSquare(segmentOne.getLength() * segmentOne.getLength() + "");
+                    square.setPerimeter(segmentOne.getLength() * 4 + "");
+                    square.addSegment(segmentOne);
+                    square.addSegment(segmentTwo);
+                    square.addSegment(segmentThree);
+                    square.addSegment(segmentFour);
+                    paintPanel.model.addShape(square);
+                    $('#' + item.name).attr('id', square.name);
                 }
             }
         });
@@ -480,3 +539,13 @@ function correctGeogebraStyles(objName) {
 //"Многоугольник[вершины, количество]"
 //у неправильных четырехугольников type quadrilateral
 //параллелограмм, ромб, прямоугольник, трапеция
+function getNextPointName(name) {
+    var names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    var next
+    names.forEach(function(item, i) {
+        if (item === name) {
+            next = i + 1;
+        }
+    });
+    return names[next];
+}

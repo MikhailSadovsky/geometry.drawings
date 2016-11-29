@@ -7,6 +7,7 @@ Drawings.Polygon = function Polygon(points) {
     this.square = null;
     this.perimeter = null;
     this.type = null;
+    this.segments = [];
 };
 
 extend(Drawings.Polygon, Drawings.Shape);
@@ -29,4 +30,8 @@ Drawings.Polygon.prototype.getPerimeter = function () {
 
 Drawings.Polygon.prototype.getPoints = function () {
 	return this.points;
+}
+
+Drawings.Polygon.prototype.addSegment = function (segment) {
+	this.segments.splice(this.segments, 0, segment);
 }

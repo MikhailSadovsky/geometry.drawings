@@ -62,11 +62,10 @@ function addObjectListener(objName) {
         'value': ggbApplet.getValueString(objName),
         'definition': ggbApplet.getDefinitionString(objName)
     };
+    if (object.type === 'polygon' && +object.definition.substr(20, 1) == 4) {
+        object.type = 'square';
+    }
     objects.splice(objects, 0, object);
-    console.log(objects);
-    correctGeogebraTypes(objects);
-
-
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
     var type = object.type;
     var scNode = translateObjTypesToSc(type);
@@ -109,7 +108,9 @@ function updateObjectListener(objName) {
         : this.Drawings.PaintPanel.paintObjects;
     objects.forEach(function(item, i, objects) {
         if (item.name === objName) {
-            item.type = ggbApplet.getObjectType(objName);
+            if (item.type !== 'square') {
+                item.type = ggbApplet.getObjectType(objName);
+            }
             item.xCoord = ggbApplet.getXcoord(objName);
             item.yCoord = ggbApplet.getYcoord(objName);
             item.zCoord = ggbApplet.getZcoord(objName);

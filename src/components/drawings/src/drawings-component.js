@@ -50,12 +50,12 @@ Drawings.GeomDrawWindow = function(sandbox) {
                 searchDef.done(function(content){
                     alert(content);
                 });*/
-        var resOfPolygon = drawAllPolygons();
-        resOfPolygon.done(function(resPolygon) {
+        var dfd2 = drawPointsWithIdtf(points);
+        dfd2.done(function(resPoints) {
+            console.log("pointsTranslated");
+            var resOfPolygon = drawAllPolygons();
+            resOfPolygon.done(function(resPolygon) {
             console.log('drawAllPolygons');
-            var dfd2 = drawPointsWithIdtf(points);
-            dfd2.done(function(resPoints) {
-                console.log("pointsTranslated");
                 var resOfSegments = drawAllSegments();
                 resOfSegments.done(function(resSegments){
                     console.log("segments Translated");
@@ -171,19 +171,17 @@ Drawings.GeomDrawWindow = function(sandbox) {
 
     function drawAllPolygons() {
         var dfd = new jQuery.Deferred();
-
         for (var key in scElements) {
             var elem = scElements[key];
             if (!elem || elem.translated) continue;
 
             // check if element is an arc
             if (!(elem.data.type & sc_type_arc_pos_const_perm)) continue;
-
             var begin = elem.data.begin;
             var end = elem.data.end;
 
-            if (!end || (begin != self.keynodes.polygon)) continue;
-
+            console.log('HERE', self.keynodes.square);
+            if (!end || (begin != self.keynodes.square)) continue;
             window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                     end,
                     sc_type_arc_common | sc_type_const,
@@ -198,6 +196,7 @@ Drawings.GeomDrawWindow = function(sandbox) {
                             sc_type_node | sc_type_const
                         ])
                         .done(function(iteratingPoints) {
+                            console.log('here');
                             var pointsAddrs = [];
 
                             for (var resInd = 0; resInd < res.length; resInd++)
@@ -219,14 +218,15 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                     }
                                 }
                             }
-
                             var polygon = new Drawings.Polygon(polygonPoints);
                             polygon.type = 'square';
                             polygon.sc_addr = end;
                             polygon.name = Drawings.Utils.generatePolygonName(polygon);
                             self.model.addShape(polygon);
-                            var point1Name = polygonPoints[0].substr(6,1);
-                            var point2Name = polygonPoints[1].substr(6,1);
+                            var point1Name = polygonPoints[0].name.substr(6,1);
+                            var point2Name = polygonPoints[1].name.substr(6,1);
+                            var point3Name = polygonPoints[2].name.substr(6,1);
+                            var point4Name = polygonPoints[3].name.substr(6,1);
                             document.ggbApplet.evalCommand("Polygon[" + point1Name + "," + point2Name + ", 4]");
                             $('#objects_button').append("<button type='button' id='" + segment.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + segment.sc_addr + "'></button>");
                             $('.marblePanel').css('display', 'none');
@@ -254,8 +254,7 @@ Drawings.GeomDrawWindow = function(sandbox) {
                         });
                 });
         }
-
-        // dfd.resolve();
+        dfd.resolve();
         return dfd.promise();
     }
 
@@ -738,6 +737,11 @@ Drawings.GeomDrawWindow = function(sandbox) {
     });
     SCWeb.core.Server.resolveScAddr(['concept_circle', ], function(keynodes) {
         self.keynodes.circle = keynodes['concept_circle'];
+        self.needUpdate = true;
+        self.requestUpdate();
+    });
+    SCWeb.core.Server.resolveScAddr(['concept_square', ], function(keynodes) {
+        self.keynodes.square = keynodes['concept_square'];
         self.needUpdate = true;
         self.requestUpdate();
     });

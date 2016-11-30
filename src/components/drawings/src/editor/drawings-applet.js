@@ -68,7 +68,6 @@ function addObjectListener(objName) {
     objects.splice(objects, 0, object);
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
     var type = object.type;
-    console.log('ТИПэ', type, object.type);
     var scNode = translateObjTypesToSc(type);
     var nodes;
     SCWeb.core.Server.resolveScAddr([scNode], function (keynodes) {
@@ -78,9 +77,6 @@ function addObjectListener(objName) {
         }
     );
     setTimeout(correctGeogebraStyles(objName), 0);
-    for (var i = 0; i< Drawings.PaintPanel.paintObjects.length; i++) {
-        console.log('ЦИКЛ ', i, Drawings.PaintPanel.paintObjects[i].type);
-    }
 };
 function removeObjectListener(objName) {
     var objects = ggbApplet.getObjectType(objName) === 'point'

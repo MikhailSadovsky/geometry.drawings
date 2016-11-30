@@ -222,10 +222,12 @@ Drawings.ScTranslator = {
                     }
                     self.addFiveConstructionIntoBase(r, shape.vertex.sc_addr, self.nrel_vertex_of_angle,
                         self.chart_arguments, sc_type_arc_common | sc_type_const);
-                    self.addFiveConstructionIntoBase(r, shape.segment1.sc_addr, self.nrel_side_of_angle,
-                        self.chart_arguments, sc_type_arc_common | sc_type_const);
-                    self.addFiveConstructionIntoBase(r, shape.segment2.sc_addr, self.nrel_side_of_angle,
-                        self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    if (shape.segment1)
+                        self.addFiveConstructionIntoBase(r, shape.segment1.sc_addr, self.nrel_side_of_angle,
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
+                    if (shape.segment2)
+                        self.addFiveConstructionIntoBase(r, shape.segment2.sc_addr, self.nrel_side_of_angle,
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
                     if (shape.getValue()) {
                         self.addConstructionWithValueAndQuantity(self.nrel_angle_measure, shape.getValue());
                         var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_angle_measure);

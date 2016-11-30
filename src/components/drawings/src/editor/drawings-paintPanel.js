@@ -204,6 +204,46 @@ Drawings.PaintPanel.prototype = {
                         var angle = new Drawings.Angle(pointOne, pointTwo, pointThree);
                         angle.name = Drawings.Utils.generateAngleName(angle);
                         angle.setValue(item.value.substring(item.value.indexOf("= ") + 2, pos = item.value.length - 1));
+                        angle.vertex = pointTwo;
+
+                        var segmentOne = paintPanel.model.getShapeByName('Segment(' + pointOneName + ';' + pointTwoName + ')');
+                        if (segmentOne == null) {
+                            segmentOne = paintPanel.model.getShapeByName('Segment(' + pointTwoName + ';' + pointOneName + ')');
+                            if (segmentOne == null)
+                                objects.forEach(function(item, i, objects) {
+                                    var pOne = item.definition.substring(item.definition.indexOf("[") + 1, item.definition.indexOf(", "));
+                                    var pTwo = item.definition.substring(item.definition.indexOf(", ") + 2, item.definition.indexOf("]"));
+                                    var pOneName = pointOneName.substring(pointOneName.indexOf("_") + 1, pointOneName.length);
+                                    var pTwoName = pointTwoName.substring(pointTwoName.indexOf("_") + 1, pointTwoName.length);
+                                    if ((pOne ==  pOneName && pTwo ==  pTwoName)  ||  (pOne ==  pTwoName && pTwo ==  pOneName)) {
+                                        segmentOne = new Drawings.Segment(pointOne, pointTwo);
+                                        segmentOne.setLength(item.value.substring(item.value.indexOf("= ") + 2, item.value.length));
+                                        segmentOne.name = Drawings.Utils.generateSegmentName(segmentOne);
+                                        paintPanel.model.addShape(segmentOne);
+                                    }
+                                });
+                        }
+
+                        angle.segment1 = segmentOne;
+
+                        var segmentTwo = paintPanel.model.getShapeByName('Segment(' + pointTwoName + ';' + pointThreeName + ')');
+                        if (segmentTwo == null) {
+                            segmentTwo = paintPanel.model.getShapeByName('Segment(' + pointThreeName + ';' + pointTwoName + ')');
+                            if (segmentTwo == null)
+                                objects.forEach(function(item, i, objects) {
+                                    var pOne = item.definition.substring(item.definition.indexOf("[") + 1, item.definition.indexOf(", "));
+                                    var pTwo = item.definition.substring(item.definition.indexOf(", ") + 2, item.definition.indexOf("]"));
+                                    var pOneName = pointTwoName.substring(pointTwoName.indexOf("_") + 1, pointTwoName.length);
+                                    var pTwoName = pointThreeName.substring(pointThreeName.indexOf("_") + 1, pointThreeName.length);
+                                    if ((pOne ==  pOneName && pTwo ==  pTwoName)  ||  (pOne ==  pTwoName && pTwo ==  pOneName)) {
+                                        segmentTwo = new Drawings.Segment(pointTwo, pointThree);
+                                        segmentTwo.setLength(item.value.substring(item.value.indexOf("= ") + 2, item.value.length));
+                                        segmentTwo.name = Drawings.Utils.generateSegmentName(segmentTwo);
+                                        paintPanel.model.addShape(segmentTwo);
+                                    }
+                                });
+                        }
+                        angle.segment2 = segmentTwo;
                         $('#' + item.name).attr('id', angle.name);
                         paintPanel.model.addShape(angle);
                         break;

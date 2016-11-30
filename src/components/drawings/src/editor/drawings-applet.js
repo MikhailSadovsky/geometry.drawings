@@ -63,7 +63,7 @@ function addObjectListener(objName) {
         'definition': ggbApplet.getDefinitionString(objName)
     };
     objects.splice(objects, 0, object);
-    console.log(objects);
+    console.log(objects);0
     correctGeogebraTypes(objects);
 
 

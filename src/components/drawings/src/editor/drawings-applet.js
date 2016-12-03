@@ -1,7 +1,6 @@
 /**
  * sc applet.
  */
-
 Drawings.Applet = {
     initApplet: function() {
         var parameters = {
@@ -41,7 +40,7 @@ Drawings.Applet = {
         applet.registerUpdateListener('updateObjectListener');
     }
 }
-
+Drawings.Applet.drawFigures = [];
 function addObjectListener(objName) {
     var objects = ggbApplet.getObjectType(objName) === 'point'
         ? this.Drawings.PaintPanel.paintPoints
@@ -76,6 +75,9 @@ function addObjectListener(objName) {
             $('#' + objName).attr('sc_addr', nodes[type]);
         }
     );
+    if (object.type === 'circle') {
+        document.ggbApplet.evalCommand('Segment[' + object.definition.substr(29,1) + ',' + object.definition.substr(45,1) + ']')
+    }
     setTimeout(correctGeogebraStyles(objName), 0);
 };
 function removeObjectListener(objName) {

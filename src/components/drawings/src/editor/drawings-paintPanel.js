@@ -273,8 +273,21 @@ Drawings.PaintPanel.prototype = {
                             });
                         var circle = new Drawings.Circle(pointTwo, pointOne);
                         circle.setCenter(pointTwo);
-                        circle.setRadius(Math.sqrt(Math.pow(pointOne.x - pointTwo.x, 2) + Math.pow(pointOne.y - pointTwo.y, 2)) + ""); //radius
-                        circle.setLength(circle.getRadius() * Math.PI * 2 + "");
+                        var segmentOneName1 = "Segment(" + pointOneName + ";" + pointTwoName + ")";
+                        var segmentOneName2 = "Segment(" + pointTwoName + ";" + pointOneName + ")";
+                        var segmentOne = paintPanel.model.getShapeByName(segmentOneName1);
+                        if (segmentOne == null) {
+                            segmentOne = paintPanel.model.getShapeByName(segmentOneName2);
+                            if (segmentOne == null)
+                                objects.forEach(function(item, i, objects) {
+                                    if (item.name == segmentOneName1) {
+                                        segmentOne = new Drawings.Segment(pointTwo, pointOne);
+                                        segmentOne.setName(item.name);
+                                        paintPanel.model.addShape(segmentOne);
+                                    }
+                                });
+                        }
+                        circle.radius = segmentOne;
                         circle.name = Drawings.Utils.generateCircleName(circle);
                         $('#' + item.name).attr('id', circle.name);
                         paintPanel.model.addShape(circle);

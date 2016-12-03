@@ -708,11 +708,8 @@ Drawings.ScTranslator = {
             SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
                 function (data) {
                     var cmd = data["ui_menu_view_full_semantic_neighborhood"];
-                    SCWeb.core.Server.doCommand(cmd,
+                    SCWeb.core.Main.doCommand(cmd,
                         [addr], function (result) {
-                            if (result.question != undefined) {
-                                SCWeb.ui.WindowManager.appendHistoryItem(result.question);
-                            }
                         });
                 });
         });

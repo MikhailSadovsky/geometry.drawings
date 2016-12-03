@@ -77,10 +77,15 @@ Drawings.PaintPanel.prototype = {
         SCWeb.core.Server.resolveScAddr(['ui_applet3d', ], function(keynodes) {
             applet3d.attr("sc_addr", keynodes['ui_applet3d']);
         });
+        geometry_editor_container.append("<button type='button' id='viewButton' class='btn btn-success sc-no-default-cmd'>транслит</button>");
         geometry_editor_container.append("<button type='button' id='synchronize' class='btn btn-success sc-no-default-cmd'>синхронизация</button>");
         var synchronize = $('#synchronize');
         SCWeb.core.Server.resolveScAddr(['ui_control_synchronization_button', ], function(keynodes) {
             synchronize.attr("sc_addr", keynodes['ui_control_synchronization_button']);
+        });
+        SCWeb.core.Server.resolveScAddr(['ui_control_view_chart_arguments_button',
+        ], function (keynodes) {
+            $('#viewButton').attr("sc_addr", keynodes['ui_control_view_chart_arguments_button']);
         });
         geometry_editor_container.append("<div id='applet_container'></div>");
 
@@ -96,7 +101,16 @@ Drawings.PaintPanel.prototype = {
             }
             paintPanel._translate();
         });
+         $('#viewButton').click(function () {
+            paintPanel._viewBasedKeyNode();
+        });
+
     },
+
+     _viewBasedKeyNode: function () {
+        Drawings.ScTranslator.viewBasedKeyNode();
+    },
+
     _translate: function() {
         var objects = Drawings.PaintPanel.paintPoints;
         var paintPanel = this;

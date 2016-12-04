@@ -554,14 +554,6 @@ function translateObjTypesToSc(type) {
     }
 }
 
-function correctGeogebraStyles(objName) {
-    var elemNumber = $('.elem').length - 1;
-    var elem = $('.elem')[elemNumber];
-    var margin = ($(elem).outerHeight(true) - 20);
-    $('#' + objName).css('margin', margin + 'px 0px');
-    $('.marblePanel').css('display', 'none');
-}
-
 //у правильных многоугольников type poligon и definition состоит из 
 //"Многоугольник[вершины, количество]"
 //у неправильных четырехугольников type quadrilateral

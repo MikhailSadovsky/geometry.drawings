@@ -273,7 +273,7 @@ Drawings.ScTranslator = {
                     if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
-                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (createdNode) {
+                        /*window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (createdNode) {
                             window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, createdNode);
                             self.addFiveConstructionIntoBase(r, createdNode, self.nrel_radius,
                                 self.chart_arguments, sc_type_arc_common | sc_type_const);
@@ -305,7 +305,7 @@ Drawings.ScTranslator = {
                                     });
                                 });
                             });
-                        });
+                        });*/
                     }
                     if (shape.length) {
                         var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);

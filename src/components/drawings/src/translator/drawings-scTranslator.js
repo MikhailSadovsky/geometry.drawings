@@ -307,7 +307,15 @@ Drawings.ScTranslator = {
                             });
                         });*/
                     }
-                    if (shape.length) {
+                    var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
+                    arc1.done(function (r1) {
+                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
+                            self.addFiveConstructionIntoBase(r, quality_node, self.nrel_length,
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
+                        });
+                    });
+                    /*if (shape.length) {
                         var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
                         arc1.done(function (r1) {
                             var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
@@ -337,7 +345,7 @@ Drawings.ScTranslator = {
                             });
                         });
 
-                    }
+                    }*/
                 }
                 if (shape.className == 'Triangle') {
                     shapeType = self.concept_triangle;

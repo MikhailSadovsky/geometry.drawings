@@ -554,10 +554,6 @@ function translateObjTypesToSc(type) {
     }
 }
 
-//у правильных многоугольников type poligon и definition состоит из 
-//"Многоугольник[вершины, количество]"
-//у неправильных четырехугольников type quadrilateral
-//параллелограмм, ромб, прямоугольник, трапеция
 function getNextPointName(name) {
     var names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     var next

@@ -65,6 +65,7 @@ function addObjectListener(objName) {
         object.type = 'square';
     }
     objects.splice(objects, 0, object);
+    Drawings.Applet.drawFigures.splice(Drawings.Applet.drawFigures, 0, object);
     $('#objects_button').append("<button type='button' id='" + objName + "' class='obj_button sc-no-default-cmd'></button>");
     var type = object.type;
     var scNode = translateObjTypesToSc(type);
@@ -78,7 +79,7 @@ function addObjectListener(objName) {
     if (object.type === 'circle') {
         document.ggbApplet.evalCommand('Segment[' + object.definition.substr(29,1) + ',' + object.definition.substr(45,1) + ']')
     }
-    setTimeout(correctGeogebraStyles(objName), 0);
+    setTimeout(function() {correctGeogebraStyles(objName)}, 10);
 };
 function removeObjectListener(objName) {
     var objects = ggbApplet.getObjectType(objName) === 'point'
@@ -121,4 +122,16 @@ function updateObjectListener(objName) {
         }
     });
     console.log('objName', objects);
+}
+function correctGeogebraStyles(objName) {
+    var number;
+    Drawings.Applet.drawFigures.forEach(function(item, i) {
+        if (item.name == objName) {
+            number = Drawings.Applet.drawFigures.length - (i + 1);
+        }
+    });
+    var elem = $('.elem')[number];
+    var margin = ($(elem).outerHeight(true) - 20);
+    $('#' + objName).css('margin', margin - 2 + 'px 0px ' + margin / 2 + 'px');
+    $('.marblePanel').css('display', 'none');
 }

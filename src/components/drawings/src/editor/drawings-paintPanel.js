@@ -77,8 +77,8 @@ Drawings.PaintPanel.prototype = {
         SCWeb.core.Server.resolveScAddr(['ui_applet3d', ], function(keynodes) {
             applet3d.attr("sc_addr", keynodes['ui_applet3d']);
         });
-        geometry_editor_container.append("<button type='button' id='viewButton' class='btn btn-success sc-no-default-cmd'>транслит</button>");
-        geometry_editor_container.append("<button type='button' id='synchronize' class='btn btn-success sc-no-default-cmd'>синхронизация</button>");
+        geometry_editor_container.append("<button type='button' id='viewButton' class='btn btn-success sc-no-default-cmd'>Просмотр чертежа</button>");
+        geometry_editor_container.append("<button type='button' id='synchronize' class='btn btn-success sc-no-default-cmd'>Синхронизация</button>");
         var synchronize = $('#synchronize');
         SCWeb.core.Server.resolveScAddr(['ui_control_synchronization_button', ], function(keynodes) {
             synchronize.attr("sc_addr", keynodes['ui_control_synchronization_button']);
@@ -87,6 +87,8 @@ Drawings.PaintPanel.prototype = {
         ], function (keynodes) {
             $('#viewButton').attr("sc_addr", keynodes['ui_control_view_chart_arguments_button']);
         });
+        geometry_editor_container.append("<button type='button' id='questionfor' class='btn btn-primary sc-no-default-cmd'>Задать вопрос</button>");
+        geometry_editor_container.append("<input type='text' id='questionarea' placeholder='Введите вопрос' class = 'noname'></input>");
         geometry_editor_container.append("<div id='applet_container'></div>");
 
         Drawings.Applet.initApplet();
@@ -94,6 +96,11 @@ Drawings.PaintPanel.prototype = {
         setTimeout(function() {
             Drawings.Applet.addListeners();
         }, 6000);
+
+        $('#questionfor').click(function() {
+            var text = document.getElementById('questionarea');
+            alert(text.value);
+        });
 
         $('#synchronize').click(function() {
             if ($('#arguments_add_button').hasClass('btn btn-success argument-wait')) {

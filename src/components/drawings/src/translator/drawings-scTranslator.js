@@ -169,7 +169,16 @@ Drawings.ScTranslator = {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_boundary_point,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
                     }
-                    if (shape.length) {
+                    var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
+                    arc1.done(function (r1) {
+                        window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
+                            self.addFiveConstructionIntoBase(r, quality_node, self.nrel_length,
+                            self.chart_arguments, sc_type_arc_common | sc_type_const);
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.concept_quantity, quality_node);
+                        });
+                    });
+                    /*if (shape.length) {
                         self.addConstructionWithValueAndQuantity(self.nrel_length, shape.length);
                         var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
                         arc1.done(function (r1) {
@@ -199,7 +208,7 @@ Drawings.ScTranslator = {
                                 });
                             });
                         });
-                    }
+                    }*/
                 }
                 if (shape.className == 'Line') {
                     shapeType = self.concept_straight_line;
@@ -313,6 +322,7 @@ Drawings.ScTranslator = {
                             window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
                             self.addFiveConstructionIntoBase(r, quality_node, self.nrel_length,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.concept_quantity, quality_node);
                         });
                     });
                     /*if (shape.length) {
@@ -724,42 +734,45 @@ Drawings.ScTranslator = {
         });
     },
 
-    viewCircleLength: function (phrase) {
+    viewCircleLength: function(phrase) {
 
         var circleName = phrase.substring(23);
-        console.log(circleName);
         var addr;
-        $('#objects_button button').each(function (i, item) {
+        $('#objects_button button').each(function(i, item) {
             console.log(item);
             if ($(item).attr('id') === circleName) {
                 addr = $(item).attr('sc_addr');
             }
         });
-        /*714*/
+        console.log(addr);
         var length;
+        var question;
+        var rrel1;
+        var rrel2;
         var self = Drawings.GeomDrawWindow;
         if (addr) {
-            SCWeb.core.Server.resolveScAddr(['nrel_length', ], function(keynodes) {
+            var self = this;
+            SCWeb.core.Server.resolveScAddr(['nrel_length', 'concept_question'], function(keynodes) {
                 length = keynodes['nrel_length'];
+                question = keynodes['concept_question'];
+                rrel1 = keynodes['rrel_1'];
+                rrel2 = keynodes['rrel_2'];
                 self.needUpdate = true;
-                self.requestUpdate();
-            });
-            var res1 = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                 addr, sc_type_arc_common | sc_type_const,
-                sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, length]);
-            console.log(res1);
-        }
-        SCWeb.core.Server.resolveScAddr(['chart_arguments'], function (keynodes) {
-            addr = keynodes['chart_arguments'];
-            SCWeb.core.Server.resolveScAddr(["ui_menu_file_for_finding_value_task"],
-                function (data) {
-                    var cmd = data["ui_menu_file_for_finding_value_task"];
-                    SCWeb.core.Server.doCommand(cmd,
-                        [addr], function (result) {
+                sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, length
+                ]).done(function(lengthNode) {
+                    window.sctpClient.create_node(sc_type_node | sc_type_const)
+                        .done(function (question_combo_task) {
+                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, question, question_combo_task);
+                            self.addFiveConstruction(question_combo_task, self.chart_arguments, rrel1, sc_type_arc_pos_const_perm);
+                            self.addFiveConstruction(question_combo_task, addr, rrel2, sc_type_arc_pos_const_perm);
                         });
                 });
-        });
+            });
+        }
     },
+
 
     putModel: function (model) {
         SCWeb.ui.Locker.show();

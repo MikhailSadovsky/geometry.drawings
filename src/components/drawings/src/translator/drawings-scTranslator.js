@@ -1,7 +1,7 @@
 /**
  * sc translator.
  */
-
+var phrase = 'найти длину окружности Circle(Point_A;Point_B)';
 Drawings.ScTranslator = {
 
 
@@ -708,15 +708,53 @@ Drawings.ScTranslator = {
             }
         }
     },
-
+/*712*/
     viewBasedKeyNode: function () {
         var addr;
+        /*714*/
         SCWeb.core.Server.resolveScAddr(['chart_arguments'], function (keynodes) {
             addr = keynodes['chart_arguments'];
             SCWeb.core.Server.resolveScAddr(["ui_menu_view_full_semantic_neighborhood"],
                 function (data) {
                     var cmd = data["ui_menu_view_full_semantic_neighborhood"];
                     SCWeb.core.Main.doCommand(cmd,
+                        [addr], function (result) {
+                        });
+                });
+        });
+    },
+
+    viewCircleLength: function (phrase) {
+
+        var circleName = phrase.substring(23);
+        console.log(circleName);
+        var addr;
+        $('#objects_button button').each(function (i, item) {
+            console.log(item);
+            if ($(item).attr('id') === circleName) {
+                addr = $(item).attr('sc_addr');
+            }
+        });
+        /*714*/
+        var length;
+        var self = Drawings.GeomDrawWindow;
+        if (addr) {
+            SCWeb.core.Server.resolveScAddr(['nrel_length', ], function(keynodes) {
+                length = keynodes['nrel_length'];
+                self.needUpdate = true;
+                self.requestUpdate();
+            });
+            var res1 = window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                addr, sc_type_arc_common | sc_type_const,
+                sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, length]);
+            console.log(res1);
+        }
+        SCWeb.core.Server.resolveScAddr(['chart_arguments'], function (keynodes) {
+            addr = keynodes['chart_arguments'];
+            SCWeb.core.Server.resolveScAddr(["ui_menu_file_for_finding_value_task"],
+                function (data) {
+                    var cmd = data["ui_menu_file_for_finding_value_task"];
+                    SCWeb.core.Server.doCommand(cmd,
                         [addr], function (result) {
                         });
                 });
@@ -762,6 +800,6 @@ Drawings.ScTranslator = {
                     SCWeb.ui.Locker.hide();
                 });
         });
-    }
+    } 
 };
 

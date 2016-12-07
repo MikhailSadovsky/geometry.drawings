@@ -180,7 +180,6 @@ Drawings.GeomDrawWindow = function(sandbox) {
             var begin = elem.data.begin;
             var end = elem.data.end;
 
-            console.log('HERE', self.keynodes.square);
             if (!end || (begin != self.keynodes.square)) continue;
             window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
                     end,
@@ -317,11 +316,12 @@ Drawings.GeomDrawWindow = function(sandbox) {
                                         var circle = new Drawings.Circle(point1, point2);
                                         circle.sc_addr = end;
                                         circle.name = Drawings.Utils.generateCircleName(circle);
+                                        console.log('revert circle', circle);
                                         self.model.addShape(circle);
                                         var point1Name = point1.name.substr(6,1);
                                         var point2Name = point2.name.substr(6,1);
                                         document.ggbApplet.evalCommand("Circle[" + point1Name + "," + point2Name + "]");
-                                        $('#objects_button').append("<button type='button' id='" + triangle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + triangle.sc_addr + "'></button>");
+                                        $('#objects_button').append("<button type='button' id='" + circle.name + "' class='obj_button sc-no-default-cmd' sc_addr='" + circle.sc_addr + "'></button>");
                                         $('.marblePanel').css('display', 'none');
                                         //adding sc-addr
                                         //                                       document.getElementById(self.model.paintPanel._getJxgObjectById(circle.getId()).rendNode.id).setAttribute('sc_addr', end);

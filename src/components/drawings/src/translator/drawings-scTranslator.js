@@ -768,7 +768,7 @@ Drawings.ScTranslator = {
                         .done(function (question_combo_task) {
                             window.sctpClient.create_arc(sc_type_arc_pos_const_perm, question, question_combo_task);
                             self.addFiveConstruction(question_combo_task, self.chart_arguments, rrel1, sc_type_arc_pos_const_perm);
-                            self.addFiveConstruction(question_combo_task, addr, rrel2, sc_type_arc_pos_const_perm);
+                            self.addFiveConstruction(question_combo_task, lengthNode, rrel2, sc_type_arc_pos_const_perm);
                             SCWeb.core.Server.resolveScAddr(["ui_menu_file_for_finding_value_task"], function (data) {
                                 var cmd = data["ui_menu_file_for_finding_value_task"];
                                 SCWeb.core.Server.doCommand(cmd, [lengthNode], function (result) {

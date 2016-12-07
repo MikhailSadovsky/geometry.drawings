@@ -45,6 +45,7 @@ Drawings.Model.prototype = {
 
     getShapeByName: function (name) {    
         for (var i = 0; i<this.shapes.length; i++){
+            console.log('shapes[i]', this.shapes[i]);
             if (this.shapes[i].name == name)
                 return this.shapes[i];
         }

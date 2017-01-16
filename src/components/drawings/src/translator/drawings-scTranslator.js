@@ -322,7 +322,10 @@ Drawings.ScTranslator = {
                             window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, quality_node);
                             self.addFiveConstructionIntoBase(r, quality_node, self.nrel_length,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
-                            window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.concept_quantity, quality_node);
+                            var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.concept_quantity, quality_node);
+                            arc2.done(function (r2) {
+                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, r2);
+                            });
                         });
                     });
                     /*if (shape.length) {
@@ -451,9 +454,44 @@ Drawings.ScTranslator = {
                     }
                 }
                 if (shape.square) {
+                    var circleName = phrase.substring(23);
+                    var addr;
+                    console.log(459);
+                    $('#objects_button button').each(function(i, item) {
+                        if ($(item).attr('id') === circleName) {
+                            addr = $(item).attr('sc_addr');
+                        }
+                    });
                     var rrelSqSm;
-                        SCWeb.core.Server.resolveScAddr(['rrel_sq_sm'], function(keynodes) {
+                    var number1;
+                    var ident;
+                    var decimal;
+                    SCWeb.core.Server.resolveScAddr(['nrel_length', 'question','rrel_1','rrel_2'], function(keynodes) {
+                        length = keynodes['nrel_length'];
+                        question = keynodes['question'];
+                        rrel1 = keynodes['rrel_1'];
+                        rrel2 = keynodes['rrel_2'];
+                        debugger;
+                        console.log('addr', addr);
+                        window.sctpClient.iterate_elements(SctpIteratorType.SCTP_ITERATOR_5F_A_A_A_F, [
+                            addr, sc_type_arc_common | sc_type_const,
+                            sc_type_node | sc_type_const, sc_type_arc_pos_const_perm, length
+                        ]).done(function(lengthNode) {
+                            console.log('lengthNode', lengthNode);
+                            window.sctpClient.create_node(sc_type_node | sc_type_const)
+                                .done(function (question_combo_task) {
+                                    debugger;
+                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, question, question_combo_task);
+                                    self.addFiveConstruction(question_combo_task, self.chart_arguments, rrel1, sc_type_arc_pos_const_perm);
+                                    self.addFiveConstruction(question_combo_task, lengthNode[0][2], rrel2, sc_type_arc_pos_const_perm);
+                                });
+                            });
+                    });
+                        SCWeb.core.Server.resolveScAddr(['rrel_sq_sm','number','nrel_identification','rrel_decimal'], function(keynodes) {
                             rrelSqSm = keynodes['rrel_sq_sm'];
+                            number1 = keynodes['number'];
+                            ident = keynodes['nrel_identification'];
+                            decimal = keynodes['rrel_decimal'];
                             var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_area);
                             arc1.done(function (r1) {
                                 var arc2 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_value);
@@ -472,7 +510,21 @@ Drawings.ScTranslator = {
                                                     self.chart_arguments, sc_type_arc_common | sc_type_const);
                                                 /*self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);*/
                                                 self.addFiveConstructionIntoBase(value_node, answer_node, rrelSqSm,
-                                                    self.chart_arguments, sc_type_arc_common | sc_type_const);
+                                                    self.chart_arguments, sc_type_arc_pos_const_perm);
+                                                window.sctpClient.create_arc(sc_type_arc_pos_const_perm, number1, answer_node).done(function (arc_number){
+                                                     window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, arc_number);  
+                                                });
+                                                window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (decimal_node){
+                                                self.addFiveConstructionIntoBase(decimal_node, answer_node, ident,
+                                                    self.chart_arguments, sc_type_arc_common | sc_type_const); 
+                                                    window.sctpClient.create_link().done(function (tenNode) {
+                                                       self.addFiveConstructionIntoBase(decimal_node, tenNode, decimal,
+                                                    self.chart_arguments, sc_type_arc_pos_const_perm); 
+                                                    window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, tenNode);
+                                                     window.sctpClient.set_link_content(tenNode, shape.square);
+                                                    });   
+
+                                                });
                                                 window.sctpClient.create_link().done(function (res) {
                                                     window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, res);
                                                     window.sctpClient.set_link_content(res, shape.square);
@@ -754,9 +806,9 @@ Drawings.ScTranslator = {
         var self = Drawings.GeomDrawWindow;
         if (addr) {
             var self = this;
-            SCWeb.core.Server.resolveScAddr(['nrel_length', 'concept_question'], function(keynodes) {
+            SCWeb.core.Server.resolveScAddr(['nrel_length', 'question'], function(keynodes) {
                 length = keynodes['nrel_length'];
-                question = keynodes['concept_question'];
+                question = keynodes['question'];
                 rrel1 = keynodes['rrel_1'];
                 rrel2 = keynodes['rrel_2'];
                 self.needUpdate = true;
@@ -768,12 +820,13 @@ Drawings.ScTranslator = {
                         .done(function (question_combo_task) {
                             window.sctpClient.create_arc(sc_type_arc_pos_const_perm, question, question_combo_task);
                             self.addFiveConstruction(question_combo_task, self.chart_arguments, rrel1, sc_type_arc_pos_const_perm);
-                            self.addFiveConstruction(question_combo_task, lengthNode, rrel2, sc_type_arc_pos_const_perm);
+                            self.addFiveConstruction(question_combo_task, lengthNode[0][2], rrel2, sc_type_arc_pos_const_perm);
                             SCWeb.core.Server.resolveScAddr(["ui_menu_file_for_finding_value_task"], function (data) {
                                 var cmd = data["ui_menu_file_for_finding_value_task"];
-                                SCWeb.core.Server.doCommand(cmd, [lengthNode], function (result) {
+                                SCWeb.core.Server.doCommand(cmd, [lengthNode[0][2]], function (result) {
                                     console.log('OUR RESULT', result);
                                 });
+                            
                             });
                         });
                 });

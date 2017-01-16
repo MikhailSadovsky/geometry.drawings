@@ -18,6 +18,7 @@ Drawings.PaintPanel.paintPoints = [];
 Drawings.PaintPanel.prototype = {
 
     init: function() {
+        console.log(this);
         this._initMarkup(this.containerId);
 
         this.controller = new Drawings.Controller(this, this.model);
@@ -97,7 +98,7 @@ Drawings.PaintPanel.prototype = {
         }, 6000);
 
         $('#questionForm').click(function() {
-            alert ($('#questionArea').val());
+            Drawings.ScTranslator.viewCircleLength($('#questionArea').val());
         });
 
         $('#synchronize').click(function() {
@@ -151,6 +152,8 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointTwo);
                                 }
                             });
+                        var Name = 
+                        if(paintPanel.)
                         var segment = new Drawings.Segment(pointOne, pointTwo);
                         segment.setLength(item.value.substring(item.value.indexOf("= ") + 2, item.value.length));
                         segment.name = Drawings.Utils.generateSegmentName(segment);

@@ -33,11 +33,10 @@ Drawings.Applet = {
         });
     },
     addListeners: function() {
-        var applet = document.ggbApplet;
-        applet.registerAddListener('addObjectListener');
-        applet.registerRemoveListener('removeObjectListener');
-        applet.registerRenameListener('renameObjectListener');
-        applet.registerUpdateListener('updateObjectListener');
+        ggbApplet.registerAddListener('addObjectListener');
+        ggbApplet.registerRemoveListener('removeObjectListener');
+        ggbApplet.registerRenameListener('renameObjectListener');
+        ggbApplet.registerUpdateListener('updateObjectListener');
     }
 }
 Drawings.Applet.drawFigures = [];

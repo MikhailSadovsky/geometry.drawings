@@ -152,13 +152,17 @@ Drawings.PaintPanel.prototype = {
                                     paintPanel.model.addPoint(pointTwo);
                                 }
                             });
-                        var Name = 
-                        if(paintPanel.)
-                        var segment = new Drawings.Segment(pointOne, pointTwo);
-                        segment.setLength(item.value.substring(item.value.indexOf("= ") + 2, item.value.length));
-                        segment.name = Drawings.Utils.generateSegmentName(segment);
-                        $('#' + item.name).attr('id', segment.name);
-                        paintPanel.model.addShape(segment);
+                        var Name = "Segment(" + pointOneName + ";" + pointTwoName + ")";
+                        if(paintPanel.model.getShapeByName(Name) == null){
+                        	Name = "Segment(" + pointTwoName + ";" + pointOneName + ")";
+                        	if(paintPanel.model.getShapeByName(Name) == null){
+                        		var segment = new Drawings.Segment(pointOne, pointTwo);
+                        		segment.setLength(item.value.substring(item.value.indexOf("= ") + 2, item.value.length));
+                        		segment.name = Drawings.Utils.generateSegmentName(segment);
+                        		$('#' + item.name).attr('id', segment.name);
+                        		paintPanel.model.addShape(segment);
+                        	}
+                    	}
                         break;
                     }
                 case 'line':

@@ -113,9 +113,12 @@ function updateObjectListener(objName) {
             if (item.type !== 'square') {
                 item.type = ggbApplet.getObjectType(objName);
             }
-            item.xCoord = ggbApplet.getXcoord(objName);
-            item.yCoord = ggbApplet.getYcoord(objName);
-            item.zCoord = ggbApplet.getZcoord(objName);
+            if (item.type !== 'square')
+            {
+                item.xCoord = ggbApplet.getXcoord(objName);
+                item.yCoord = ggbApplet.getYcoord(objName);
+                item.zCoord = ggbApplet.getZcoord(objName);
+            }
             item.value = ggbApplet.getValueString(objName);
             item.definition = ggbApplet.getDefinitionString(objName);
         }

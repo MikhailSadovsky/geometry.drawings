@@ -22,7 +22,8 @@ Drawings.Applet = {
             "useBrowserForJS": true,
             "allowStyleBar": false
         };
-        var applet = new GGBApplet(parameters, '5.0');
+        var applet = new GGBApplet(parameters, true);
+        applet.setHTML5Codebase('https://app.geogebra.org/5.0/web3d/');
 
         applet.inject('applet_container');
         $('#applet2d').click(function(event) {
@@ -113,9 +114,12 @@ function updateObjectListener(objName) {
             if (item.type !== 'square') {
                 item.type = ggbApplet.getObjectType(objName);
             }
-            item.xCoord = ggbApplet.getXcoord(objName);
-            item.yCoord = ggbApplet.getYcoord(objName);
-            item.zCoord = ggbApplet.getZcoord(objName);
+            if (item.type !== 'square')
+            {
+                item.xCoord = ggbApplet.getXcoord(objName);
+                item.yCoord = ggbApplet.getYcoord(objName);
+                item.zCoord = ggbApplet.getZcoord(objName);
+            }
             item.value = ggbApplet.getValueString(objName);
             item.definition = ggbApplet.getDefinitionString(objName);
         }

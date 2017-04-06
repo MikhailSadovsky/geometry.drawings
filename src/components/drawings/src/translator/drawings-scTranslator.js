@@ -57,6 +57,8 @@ Drawings.ScTranslator = {
         my_array.push(this.getKeyNode("concept_square"));
         my_array.push(this.getKeyNode("chart_arguments"));
         my_array.push(this.getKeyNode("concept_polygon"));
+        my_array.push(this.getKeyNode("rrel_sq_sm"));
+        my_array.push(this.getKeyNode("rrel_decimal"));
         my_array.push(this.getKeyNode("sc_garbage")); // 15
         $.when.apply($, my_array).done(function () {
             dfd.resolve(my_array);
@@ -165,10 +167,10 @@ Drawings.ScTranslator = {
                 var shapeType = self.concept_geometric_point;
                 if (shape.className == 'Segment') {
                     shapeType = self.concept_segment;
-                    for (var i = 0; i < points.length; i++) {
+                    /*for (var i = 0; i < points.length; i++) {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_boundary_point,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
-                    }
+                    }*/
                     /*var arc1 = window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, self.nrel_length);
                     arc1.done(function (r1) {
                         window.sctpClient.create_node(sc_type_node | sc_type_const).done(function (quality_node) {
@@ -274,11 +276,11 @@ Drawings.ScTranslator = {
                 }
                 if (shape.className == 'Circle') {
                     shapeType = self.concept_circle;
-                    if (shape.center) {
+                    /*if (shape.center) {
                         self.addFiveConstructionIntoBase(r, points[0].sc_addr, self.nrel_center_of_circle,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
                         self.addFiveConstruction(r, points[1].sc_addr, self.chart_arguments, sc_type_arc_pos_const_perm);
-                    }
+                    }*/
                     if (shape.radius) {
                         self.addFiveConstructionIntoBase(r, shape.radius.sc_addr, self.nrel_radius,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
@@ -444,10 +446,10 @@ Drawings.ScTranslator = {
                     shapeType = shape.type === 'square'
                         ? self.concept_square           
                         : self.concept_polygon;
-                    for (var i = 0; i < points.length; i++) {
+                    /*for (var i = 0; i < points.length; i++) {
                         self.addFiveConstructionIntoBase(r, points[i].sc_addr, self.nrel_vertex,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
-                    }
+                    }*/
                     for (var i = 0; i < shape.segments.length; i++) {
                         self.addFiveConstructionIntoBase(r, shape.segments[i].sc_addr, self.nrel_side,
                             self.chart_arguments, sc_type_arc_common | sc_type_const);
@@ -509,7 +511,7 @@ Drawings.ScTranslator = {
                                                 self.addFiveConstructionIntoBase(value_node, quality_node, self.nrel_value,
                                                     self.chart_arguments, sc_type_arc_common | sc_type_const);
                                                 self.addFiveConstruction(value_node, answer_node, self.chart_arguments, sc_type_arc_pos_const_perm);
-                                                self.addFiveConstructionIntoBase(value_node, answer_node, rrelSqSm,
+                                                self.addFiveConstructionIntoBase(value_node, answer_node, self.rrel_sq_sm,
                                                     self.chart_arguments, sc_type_arc_pos_const_perm);
                                                 window.sctpClient.create_arc(sc_type_arc_pos_const_perm, number1, answer_node).done(function (arc_number){
                                                      window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, arc_number);  
@@ -518,7 +520,7 @@ Drawings.ScTranslator = {
                                                 self.addFiveConstructionIntoBase(decimal_node, answer_node, ident,
                                                     self.chart_arguments, sc_type_arc_common | sc_type_const); 
                                                     window.sctpClient.create_link().done(function (tenNode) {
-                                                       self.addFiveConstructionIntoBase(decimal_node, tenNode, decimal,
+                                                       self.addFiveConstructionIntoBase(decimal_node, tenNode, self.rrel_decimal,
                                                     self.chart_arguments, sc_type_arc_pos_const_perm); 
                                                     window.sctpClient.create_arc(sc_type_arc_pos_const_perm, self.chart_arguments, tenNode);
                                                      window.sctpClient.set_link_content(tenNode, shape.square);
@@ -660,6 +662,8 @@ Drawings.ScTranslator = {
         sysArray.push(self.concept_square);
         sysArray.push(self.chart_arguments);
         sysArray.push(self.concept_polygon);
+        sysArray.push(self.rrel_sq_sm);
+        sysArray.push(self.rrel_decimal);
         sysArray.push(self.sc_garbage);
         dfd.resolve(sysArray);
         return dfd.promise();
